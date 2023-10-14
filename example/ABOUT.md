@@ -1,0 +1,3 @@
+# About examples
+
+In this directory is dedicated to the code for all small tests of our project. These samples should be used as examples. For exemple : Reading the CPU temperature or using leds...
