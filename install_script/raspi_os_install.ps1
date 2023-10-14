@@ -2,7 +2,7 @@
 # - Olivier Palvadeau
 #Description :
 # A simple script to install a Raspberry OS image on an SD card.
-#
+# Currently only reset to normal usage (one NTFS partition) the SD card.
 #
 #Requires -RunAsAdministrator
 
@@ -22,10 +22,14 @@ Get-Disk | Select-Object -Property Number, FriendlyName, TotalSize, OperationalS
 
 #asking for a disk number
 $diskNum = Read-Host -Prompt "Choose a disk number (carefully)"
-#TODO while not a digit
+
+while(-not($diskNum -match "^\d+$")){
+    $diskNum = Read-Host -Prompt "Choose a disk number (carefully)"
+}
 $disk = Get-Disk $diskNum | Out-String
 
 #can't select disk 0
+
 if($diskNum -eq "0") {
     Write-Error "User disk selected"
     exit 1
@@ -47,4 +51,9 @@ Get-Partition -DiskNumber $diskNum -PartitionNumber 1 | Format-Volume -FileSyste
 Set-Partition -DiskNumber $diskNum -PartitionNumber 1 -NewDriveLetter E
 Set-Partition -DiskNumber $diskNum -PartitionNumber 1 -IsActive $true
 
+
 #TODO mount and copy the image file with ssh and auto login
+# Mount-DiskImage -ImagePath is not working on windows because the raspberry image.img
+# is easily readable a windows
+# using WSL could be a solution 
+#
