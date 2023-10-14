@@ -54,6 +54,6 @@ Set-Partition -DiskNumber $diskNum -PartitionNumber 1 -IsActive $true
 
 #TODO mount and copy the image file with ssh and auto login
 # Mount-DiskImage -ImagePath is not working on windows because the raspberry image.img
-# is easily readable a windows
+# is not easily readable a windows
 # using WSL could be a solution 
-#
+# (but for now not working, probably an unsupported filesystem)
