@@ -1,25 +1,25 @@
-import RPi.GPIO as gpio
+import RPi.GPIO as GPIO
 import time
 
 
-gpio.setmode(gpio.BOARD)
+GPIO.setmode(GPIO.BOARD)
 
 led1 = 27
 led2 = 22
 led3 = 23
 
-gpio.setup(led1, gpio.OUT)
-gpio.setup(led2, gpio.OUT)
-gpio.setup(led3, gpio.OUT)
+GPIO.setup(led1, GPIO.OUT)
+GPIO.setup(led2, GPIO.OUT)
+GPIO.setup(led3, GPIO.OUT)
 
 while True :
-    gipo.output(led1, gpio.HIGH)
-    gipo.output(led2, gpio.HIGH)
-    gipo.output(led3, gpio.HIGH)
+    GPIO.output(led1, GPIO.HIGH)
+    GPIO.output(led2, GPIO.HIGH)
+    GPIO.output(led3, GPIO.HIGH)
     time.sleep(1)
-    gipo.output(led1, gpio.LOW)
-    gipo.output(led2, gpio.LOW)
-    gipo.output(led3, gpio.LOW)
+    GPIO.output(led1, GPIO.LOW)
+    GPIO.output(led2, GPIO.LOW)
+    GPIO.output(led3, GPIO.LOW)
     time.sleep(1)
 
-gpio.cleanup()
+GPIO.cleanup()
