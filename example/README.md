@@ -5,7 +5,7 @@ This directory is dedicated to the code for all small tests of our project. Thes
 ## What is an example
 
 Examples must be runnable as single files, with visible results, not only functions intended to the final product. 
-And it must not be a final product. Just small showcases. Examples are small runnable programs that explain easyly how to use APIs or how to deal with some concepts.
+And it must not be a final product. Just small showcases. Examples are small runnable programs that explain easyly how to use APIs or how to deal with some concepts. An example is always made in a teaching way.
 
 ## Please keep this in mind
 

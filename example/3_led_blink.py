@@ -1,5 +1,10 @@
+# This is a simple program which makes blinking
+# three leds fastly on a line
+
+#imports
 import RPi.GPIO as GPIO
 import time
+
 
 #defining all led pins
 led1 = 22
