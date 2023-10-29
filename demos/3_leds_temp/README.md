@@ -7,3 +7,7 @@ No libraries required to install since you already have installed Raspberry OS o
 ## Wiring
 
 Here is the blueprint #TODO
+
+## Run
+
+    python main.py
