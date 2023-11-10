@@ -6,8 +6,10 @@ No libraries required to install since you already have installed Raspberry OS o
 
 ## Wiring
 
-Here is the blueprint ![](3_leds_temp_circuit.png)
+ ![](3_leds_temp_circuit.png)
 
 ## Run
 
+Run the command  ```
     python main.py
+    ``` in this directory.
