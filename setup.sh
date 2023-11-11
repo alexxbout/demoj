@@ -47,16 +47,21 @@ done
 
 echo "Starting setup"
 #ADD THINGS TO INSTALL/SETUP HERE
+echo "System update"
 sudo apt-get update -y
+echo "System upgrade"
 sudo apt-get upgrade -y
-sudo apt-get python3-pip -y
+echo "Install python3-pip"
+sudo apt-get install python3-pip -y
+echo "Install build-essential"
 sudo apt-get install build-essential -y
-sudo pip install smbus --break-system-packages -y
+echo "Install smbus"
+sudo pip install smbus --break-system-packages
 echo "Setup I2C"
 #enabling I2C
-if sudo raspi-config nonint get_i2c
+if [ $(sudo raspi-config nonint get_i2c) -eq 0 ]
 then
-echo "I2C currently enabled"
+echo "I2C already enabled"
 else
 sudo raspi-config nonint do_i2c 0
 echo "I2C enabled!"
