@@ -27,6 +27,6 @@ Repository for the DemoJ project
     1. ```cd demoj``` 
 
 
-    2. ```sudo ./setup.sh```
+    2. ```source ./setup.sh```
 
 6. You are good to run anything you want from this repo.
