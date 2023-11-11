@@ -71,6 +71,6 @@ echo "Setup the python path variable"
 
 export PYTHONPATH=$PWD"/lib"
 
-echo "export PYTHONPATH="$PWD"/lib" >> ~/.bashrc
-
+echo "export PYTHONPATH="$PYTHONPATH >> ~/.bashrc
+echo $PYTHONPATH
 echo "DONE"
