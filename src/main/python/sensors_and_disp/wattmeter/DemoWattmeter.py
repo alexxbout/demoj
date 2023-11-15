@@ -4,8 +4,14 @@ import sys
 import time
 # sys.path.append("../lib") not if PYTHONPATH is defined into env.
 from dfrobot.DFRobot_INA219 import INA219
-import WattmeterTimeout
 
+class WattmeterTimeout(Exception):
+    """
+    When a timeout error occurs during the wattmeter execution
+    """
+    def __init__(self, message="A timeout occured during the wattmeter execution"):
+        self.message = message
+        super().__init__(self.message)
 
 class Wattmeter:
     """

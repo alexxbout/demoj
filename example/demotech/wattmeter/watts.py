@@ -1,9 +1,8 @@
 import time
 import sys
-sys.path.append("../../../src/main/python/sensors_and_display")
+sys.path.append("../../../src/main/python/sensors_and_disp/wattmeter")
 
-import wattmeter.Wattmeter
-import wattmeter.WattmeterTimeout
+from DemoWattmeter import Wattmeter, WattmeterTimeout
 
 try:
     w = Wattmeter()
