@@ -1,6 +1,6 @@
 #!/usr/bin/sudo bash
 
-echo "
+echo -e "\033[1;32m
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.@@
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.....
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@...@
@@ -15,7 +15,7 @@ echo "
 @@***@@@@///////@@@@@@@@@///////&@@@@@//@@@@@@///@@@@@@///@@@@@///////@@@@...@@@
 @@@@****&@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@,...&@@@@
 @@@@@@@/******************************************************,,,,,,,,,,@@@@@@@@
-"
+\033[0m"
 
 echo "Welcome to our setup script!" 
 
@@ -25,6 +25,7 @@ This script will :
   - udpdate and upgrade your system 
   - install pip
   - install smbus
+  - install rpi_ws281x
   - enable i2C bus
   - setup python path
 "
@@ -56,7 +57,9 @@ sudo apt-get install python3-pip -y
 echo "Install build-essential"
 sudo apt-get install build-essential -y
 echo "Install smbus"
-sudo pip install smbus --break-system-packages
+sudo pip3 install smbus --break-system-packages
+echo "Install strip led API"
+sudo pip3 install rpi_ws281x --break-system-packages
 echo "Setup I2C"
 #enabling I2C
 if [ $(sudo raspi-config nonint get_i2c) -eq 0 ]
@@ -70,7 +73,8 @@ fi
 echo "Setup the python path variable"
 
 export PYTHONPATH=$PWD"/lib"
-
+grep -vwE "export PYTHONPATH=" ~/.bashrc > tmpsetup
+mv tmpsetup ~/.bashrc
 echo "export PYTHONPATH="$PYTHONPATH >> ~/.bashrc
-echo $PYTHONPATH
+echo "PTHONPATH variable set to "$PYTHONPATH
 echo "DONE"
