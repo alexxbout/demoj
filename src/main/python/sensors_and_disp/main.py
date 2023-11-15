@@ -1,8 +1,8 @@
 import RPi.GPIO as GPIO
 import time
 import sys
-from leds import Color, lightOn, lightOff
-from temp import getCPUtemperature
+from leds.leds import Color, lightOn, lightOff
+from temperature.temp import getCPUtemperature
 
 default_increment = 20
 default_sleep = 0.5

@@ -1,3 +1,4 @@
+# AUTHORS of this file : DEMOTECH
 class WattmeterTimeout(Exception):
     """
     When a timeout error occurs during the wattmeter execution

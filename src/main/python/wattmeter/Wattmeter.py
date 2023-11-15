@@ -1,8 +1,9 @@
 # DFRobot Library: https://github.com/DFRobot/DFRobot_INA219/
+# AUTHORS of this file : DEMOTECH
 import sys
 import time
 # sys.path.append("../lib") not if PYTHONPATH is defined into env.
-from sensors.DFRobot_INA219 import INA219
+from dfrobot.DFRobot_INA219 import INA219
 import WattmeterTimeout
 
 
