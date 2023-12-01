@@ -24,7 +24,7 @@ MAXTEMP = 80 # Temperature (en degrés Celcius) max affichable
 MAXPOW = 10 # Puissance (en Watts) max affichable
 
 # Paramètres par défaut de DemoJ1
-PIN = 1_
+PIN = 17
 FREQ = 800000
 DMA = 10
 BRIGHTNESS = 100
@@ -32,7 +32,7 @@ INVERT = False
 CHANNEL = 0
 
 # Initialisation
-strip = PixelStrip(NBLEDS*2, PIN, FREQ, DMA, INVERT, BRIGHTNESS, CHANNEL)
+strip = PixelStrip(NBLEDS, PIN, FREQ, DMA, INVERT, BRIGHTNESS, CHANNEL)
 strip.begin()
 
 """Usage de la bande LED"""
@@ -54,6 +54,7 @@ def getColor(n):
     if((n<NBLEDSTEMP/3) or (n>=NBLEDSTEMP and n<NBLEDSTEMP+(NBLEDSPOW/3))): return GREEN
     elif((n<(NBLEDSTEMP/3)*2) or (n>=NBLEDSTEMP+(NBLEDSPOW/3) and n<NBLEDSTEMP+((NBLEDSPOW/3)*2))): return YELLOW
     else: return RED
+   
 
 # Eteint l'ensemble des LEDs
 def turnOff():
