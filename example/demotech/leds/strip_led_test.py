@@ -24,7 +24,7 @@ MAXTEMP = 80 # Temperature (en degrés Celcius) max affichable
 MAXPOW = 10 # Puissance (en Watts) max affichable
 
 # Paramètres par défaut de DemoJ1
-PIN = 17
+PIN = 18
 FREQ = 800000
 DMA = 10
 BRIGHTNESS = 100
