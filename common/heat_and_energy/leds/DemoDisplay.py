@@ -67,7 +67,7 @@ class Gauges:
             - end Should be greater than begin (exclusive)
         """
         for i in range(begin, end):
-            self.strip.setPixelColor(i, NO_COLOR)
+            self.__strip.setPixelColor(i, NO_COLOR)
 
     def __gradiantLeds(self, begin: int, end: int, maxStep: int):
         """
@@ -78,7 +78,7 @@ class Gauges:
             - maxStep The max value for a step
         """
         for i in range(begin, end):
-            self.strip.setPixelColor(i, self.__gradiant(i, maxStep, self.__begin_color, self.__ending_color))
+            self.__strip.setPixelColor(i, self.__gradiant(i, maxStep, self.__begin_color, self.__ending_color))
 
     def displayTemp(self, degrees: float): 
         """
@@ -91,7 +91,7 @@ class Gauges:
         gaugeEnd = self.__ledsPerGauge
         self.__gradiantLeds(0, colored_leds, gaugeEnd)
         self.__clearLeds(colored_leds, gaugeEnd)
-        self.strip.show() #show at the end of calculation
+        self.__strip.show() #show at the end of calculation
 
     def displayWatts(self, miliWatts: float): 
         """
@@ -104,7 +104,7 @@ class Gauges:
         colorEnd = self.__ledsPerGauge+colored_leds
         self.__gradiantLeds(self.__ledsPerGauge, colorEnd, self.__ledsPerGauge)
         self.__clearLeds(colorEnd, self.__led_count)
-        self.strip.show() #show at the end of calculation
+        self.__strip.show() #show at the end of calculation
         
     def clearAll(self):
         """Clear all the leds"""

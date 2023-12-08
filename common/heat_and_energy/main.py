@@ -14,6 +14,7 @@ if __name__ == "__main__":
             temp: float = getCPUtemperature()
             gauges.displayTemp(temp)
             time.sleep(SPEED)
+            print(f"temperature : {temp}")
     except KeyboardInterrupt:
         pass
     finally:
