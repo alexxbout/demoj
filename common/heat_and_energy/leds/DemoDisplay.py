@@ -3,7 +3,7 @@
 from rpi_ws281x import PixelStrip, Color
 import time
 
-MAX_TEMP = 80
+MAX_TEMP = 65
 MIN_TEMP = 30
 MAX_WATTS = 12500 # 2,5 A * 5 V
 NB_OF_GAUGES = 2
@@ -28,7 +28,7 @@ class Gauges:
         """
         # LED strip configuration:
         self.__led_count = led_count # Number of LED pixels.
-        self.__ledsPerGauge = led_count/NB_OF_GAUGES
+        self.__ledsPerGauge = int(led_count/NB_OF_GAUGES)
         self.__tempStep = self.__ledsPerGauge/(MAX_TEMP - MIN_TEMP)
         self.__wattStep = self.__ledsPerGauge/MAX_WATTS
         LED_PIN = led_pin          # GPIO pin connected to the pixels (18 uses PWM!).
