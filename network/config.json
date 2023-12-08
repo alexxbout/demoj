@@ -10,15 +10,28 @@
           "id": 0,
           "name": "Perte de paquets",
           "type": "percentage",
-          "isActive": true,
-          "value": 10
+          "isActive": false,
+          "value": 50
         },
         {
           "id": 1,
           "name": "Latence",
           "type": "percentage",
           "isActive": false,
-          "value": 10
+          "value": 50
+        },
+        {
+          "id": 2,
+          "name": "VPN",
+          "type": "boolean",
+          "isActive": false
+        },
+        {
+          "id": 3,
+          "name": "Limite de bande passante (Mbps)",
+          "type": "number",
+          "isActive": false,
+          "value": "1234"
         }
       ]
     },
