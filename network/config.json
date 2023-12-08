@@ -1,0 +1,49 @@
+{
+  "modules": {
+    "terminal": {
+      "isConnected": true
+    },
+    "network": {
+      "isConnected": true,
+      "parameters": [
+        {
+          "id": 0,
+          "name": "Perte de paquets",
+          "type": "percentage",
+          "isActive": true,
+          "value": 10
+        },
+        {
+          "id": 1,
+          "name": "Latence",
+          "type": "percentage",
+          "isActive": false,
+          "value": 10
+        }
+      ]
+    },
+    "server": {
+      "isConnected": false
+    }
+  },
+  "scenarios": [
+    {
+      "name": "Calculs complexes",
+      "description": "Effectuez des calculs avanc\u00e9s, d\u00e9montrant la puissance de traitement du serveur dans des t\u00e2ches informatiques complexes.",
+      "id": 0,
+      "to": "T",
+      "multipleInstance": true,
+      "parameters": [
+        {
+          "name": "Niveau de complexit\u00e9",
+          "value": 10
+        }
+      ],
+      "instances": [
+        {
+          "pid": 0
+        }
+      ]
+    }
+  ]
+}
