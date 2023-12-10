@@ -12,7 +12,7 @@ class API {
                 return response.data as IConfig;
             })
             .catch((error) => {
-                // console.error(error);
+                console.error(error);
                 return null;
             });
     }
@@ -46,21 +46,54 @@ class API {
         return parameters;
     }
 
-    async setParameterState(name: string, id: number, isActive: boolean): Promise<boolean> {
-        console.log(name, id, isActive);
-        
-        await axios
-            .post(this.serverIP + `/modules/${name}/params/${id}`, { isActive: isActive }, { timeout: this.timeout })
+    async setParameterState(device: DeviceTypes, id: number, isActive: boolean): Promise<boolean> {
+        return await axios
+            .post(this.serverIP + `/modules/${device}/params/${id}`, { isActive: isActive }, { timeout: this.timeout })
             .then((response) => {
-                console.log(response);
                 return true;
             })
             .catch((error) => {
                 console.error(error);
                 return false;
             });
+    }
 
-        return false;
+    async setParameterValue(device: DeviceTypes, id: number, value: number): Promise<boolean> {
+        return await axios
+            .post(this.serverIP + `/modules/${device}/params/${id}`, { value: value }, { timeout: this.timeout })
+            .then((response) => {
+                return true;
+            })
+            .catch((error) => {
+                console.error(error);
+                return false;
+            });
+    }
+
+    async restartModule(): Promise<boolean> {
+        // TODO Add restart specific module
+        return await axios
+            .get(this.serverIP + `/restart`, { timeout: this.timeout })
+            .then((response) => {
+                return true;
+            })
+            .catch((error) => {
+                console.log(error);
+                return false;
+            });
+    }
+
+    async stopModule(): Promise<boolean> {
+        // TODO Add stop specific module
+        return await axios
+            .get(this.serverIP + `/stop`, { timeout: this.timeout })
+            .then((response) => {
+                return true;
+            })
+            .catch((error) => {
+                console.error(error);
+                return false;
+            });
     }
 }
 

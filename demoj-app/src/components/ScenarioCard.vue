@@ -2,7 +2,7 @@
     <ion-card>
         <ion-card-header>
             <ion-card-title>{{ props.data.title }}</ion-card-title>
-            <ion-card-subtitle>{{ props.data.subtitle }}</ion-card-subtitle>
+            <!-- <ion-card-subtitle>{{ props.data.subtitle }}</ion-card-subtitle> -->
         </ion-card-header>
 
         <ion-grid style="--ion-grid-padding: 25px;">
@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonGrid, IonIcon, IonRow } from "@ionic/vue";
+import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonGrid, IonIcon, IonRow } from "@ionic/vue";
 import { useRouter } from "vue-router";
 
 const props = defineProps<{

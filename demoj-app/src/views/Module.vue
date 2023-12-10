@@ -31,8 +31,9 @@
                 <ion-item v-for="param in parameters">
                     <ion-grid style="padding: 0px">
                         <ion-row>
-                            <ion-toggle v-model="param.isActive" @click="onParameterToggle(param)" :disabled="!isConnected">{{ param.name }}</ion-toggle>
-                            <ion-range v-if="param.type == 'percentage'" v-model="param.value" v-show="param.isActive" :pin="true" :pin-formatter="pinFormatter" :disabled="!isConnected" />
+                            <ion-toggle v-model="param.isActive" @ion-change="onParameterToggle(param)" :disabled="!isConnected">{{ param.name }}</ion-toggle>
+                            <ion-range v-if="param.type == 'percentage'" v-model="param.value" @ion-change="onParameterUpdate(param)" v-show="param.isActive" :pin="true" :pin-formatter="pinFormatter" :disabled="!isConnected" />
+                            <ion-input v-else-if="param.type == 'number'" v-model="param.value" @ion-change="onParameterUpdate(param)" v-show="param.isActive" label="Valeur" type="number"></ion-input>
                         </ion-row>
                     </ion-grid>
                 </ion-item>
@@ -40,9 +41,12 @@
         </ion-content>
 
         <ion-footer class="ion-padding">
-            <ion-button class="ion-margin-vertical" expand="block" :color="isConnected ? 'primary' : 'medium'" :disabled="!isConnected">Redémarrer</ion-button>
-            <ion-button expand="block" :color="isConnected ? 'danger' : 'medium'" :disabled="!isConnected">Arrêter</ion-button>
+            <ion-button id="open-action-sheet-restart" class="ion-margin-vertical" expand="block" :color="isConnected ? 'primary' : 'medium'" :disabled="!isConnected">Redémarrer</ion-button>
+            <ion-button id="open-action-sheet-stop" expand="block" :color="isConnected ? 'danger' : 'medium'" :disabled="!isConnected">Arrêter</ion-button>
         </ion-footer>
+
+        <ion-action-sheet trigger="open-action-sheet-restart" header="Etes-vous sûr ?" @didDismiss="handleRestartSheet" :buttons="actionSheetButtonsRestart"></ion-action-sheet>
+        <ion-action-sheet trigger="open-action-sheet-stop" header="Etes-vous sûr ?" @didDismiss="handleStopSheet" :buttons="actionSheetButtonsStop"></ion-action-sheet>
     </ion-page>
 </template>
 
@@ -51,8 +55,8 @@ import ConnectStatus from "@/components/ConnectStatus.vue";
 import router from "@/router";
 import API from "@/services/API";
 import type { DeviceTypes, IParameter } from "@/types/IConfig";
-import { IonButton, IonCol, IonContent, IonFooter, IonGrid, IonHeader, IonItem, IonList, IonPage, IonRange, IonRefresher, IonRefresherContent, IonRow, IonTitle, IonToggle, IonToolbar } from "@ionic/vue";
-import { computed, onMounted, ref, watch } from "vue";
+import { ActionSheetButton, IonActionSheet, IonButton, IonCol, IonContent, IonFooter, IonGrid, IonHeader, IonInput, IonItem, IonList, IonPage, IonRange, IonRefresher, IonRefresherContent, IonRow, IonTitle, IonToggle, IonToolbar } from "@ionic/vue";
+import { computed, onMounted, ref } from "vue";
 
 const props = defineProps<{
     device: DeviceTypes;
@@ -72,18 +76,64 @@ const name = computed<string>(() => {
 const isConnected = ref(false);
 const parameters = ref<IParameter[]>([]);
 
-// const onPacketLossRangeUpdate = (event: any) => {
-//     packetLossRange.value = event.detail.value;
-// };
+const actionSheetButtonsRestart = ref<ActionSheetButton[]>([
+    {
+        text: "Redémarrer immédiatement",
+        role: "destructive",
+    },
+    {
+        text: "Annuler",
+        role: "cancel",
+    },
+]);
 
-const onParameterToggle = async (parameter: IParameter) => {    
+const actionSheetButtonsStop = ref<ActionSheetButton[]>([
+    {
+        text: "Arrêter immédiatement",
+        role: "destructive",
+    },
+    {
+        text: "Annuler",
+        role: "cancel",
+    },
+]);
+
+const handleRestartSheet = async (event: CustomEvent) => {
+    if (event.detail.role == "destructive") {
+        console.log("Restarting module...");
+        if (await API.restartModule()) {
+            console.log("Module is restarting...");
+            isConnected.value = false;
+
+            setTimeout(async () => {
+                await update();
+            }, 5000);
+        }
+    }
+};
+
+const handleStopSheet = async (event: CustomEvent) => {
+    if (event.detail.role == "destructive") {
+        console.log("Stopping module...");
+        if (await API.stopModule()) {
+            console.log("Module is stopping...");
+            isConnected.value = false;
+        }
+    }
+};
+
+const onParameterToggle = async (parameter: IParameter) => {
     await API.setParameterState(props.device, parameter.id, parameter.isActive);
+};
+
+const onParameterUpdate = async (parameter: IParameter) => {
+    await API.setParameterValue(props.device, parameter.id, parameter.value!);
 };
 
 const pinFormatter = (value: number) => `${value}%`;
 
 const handleRefresh = async (event: any) => {
-    await updateStatus();
+    await update();
     setTimeout(() => {
         event.target.complete();
     }, 500);
@@ -101,11 +151,13 @@ const getParameters = async () => {
     });
 };
 
-onMounted(async () => {
+const update = async () => {
     await updateStatus();
-    if (isConnected.value) {
-        getParameters();
-    }
+    if (isConnected.value) await getParameters();
+};
+
+onMounted(async () => {
+    await update();
 });
 
 router.beforeEach(async (to, from, next) => {
@@ -115,10 +167,9 @@ router.beforeEach(async (to, from, next) => {
 
     next();
 
-    await updateStatus();
+    await update();
 });
 
-watch(parameters, (newValue) => {
-    console.log(newValue);
-}, { deep: true });
+// watch(parameters, (newValue) => {
+// }, { deep: true });
 </script>
