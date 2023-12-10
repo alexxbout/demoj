@@ -1,11 +1,16 @@
+#!/usr/bin/env python3
+
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import json
+import os
+import subprocess
 
 app = Flask(__name__)
 CORS(app)
 
-config = "network/config.json"
+path = "/home/network/demoj/network"
+config = path + "/config.json"
 
 # ! Route to receive data
 @app.route('/receive_data', methods=['POST'])
@@ -14,6 +19,26 @@ def receive_data():
     print("Received data:", data)
 
     return jsonify({"message": "Data received successfully"})
+
+@app.route('/restart', methods=['GET'])
+def restart_module():
+    try:
+        subprocess.Popen(['sudo', 'reboot'])
+        # TODO Restart other modules using HTTP requests or SSH
+        return jsonify({"message": "Successfully restarted Raspberry Pi"})
+    except Exception as e:
+        print(f"Error restarting Raspberry Pi: {str(e)}")
+        return jsonify({"error": str(e)}), 500
+    
+@app.route('/stop', methods=['GET'])
+def stop_module():
+    try:
+        subprocess.Popen(['sudo', 'shutdown', '-h', 'now'])
+        # TODO Stop other modules using HTTP requests or SSH
+        return jsonify({"message": "Successfully stopped Raspberry Pi"})
+    except Exception as e:
+        print(f"Error stopping Raspberry Pi: {str(e)}")
+        return jsonify({"error": str(e)}), 500
 
 # ! Route to get config data
 @app.route('/config', methods=['GET'])

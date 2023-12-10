@@ -11,7 +11,7 @@
           "name": "Perte de paquets",
           "type": "percentage",
           "isActive": false,
-          "value": 50
+          "value": 53
         },
         {
           "id": 1,
@@ -36,7 +36,7 @@
       ]
     },
     "server": {
-      "isConnected": false
+      "isConnected": true
     }
   },
   "scenarios": [
