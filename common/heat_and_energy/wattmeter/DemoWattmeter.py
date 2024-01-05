@@ -2,7 +2,7 @@
 # AUTHORS of this file : DEMOTECH
 import sys
 import time
-# sys.path.append("../lib") not if PYTHONPATH is defined into env.
+sys.path.append("../../lib/") #not if PYTHONPATH is defined into env.
 from dfrobot.DFRobot_INA219 import INA219
 
 class WattmeterTimeout(Exception):
