@@ -1,12 +1,12 @@
 # DEMOTECH
 
 from rpi_ws281x import PixelStrip, Color
-import time
+#import time if you want to add cool transitions
 
-MAX_TEMP = 55
+MAX_TEMP = 45
 MIN_TEMP = 36
 MIN_WATTS = 2000
-MAX_WATTS = 3000 # value reached at approximatly 50 degrees
+MAX_WATTS = 3500 # value reached at approximatly 50 degrees
 NB_OF_GAUGES = 2
 NO_COLOR = Color(0, 0, 0, 0)
 
@@ -87,7 +87,7 @@ class Gauges:
             begin = end
             end = begin
         for i in range(begin, end):
-            self.__strip.setPixelColor(i, self.__gradiant(i, maxStep, self.__begin_color, self.__ending_color))
+            self.__strip.setPixelColor(i, self.__gradiant(i-begin, maxStep, self.__begin_color, self.__ending_color))
 
     def displayTemp(self, degrees: float): 
         """
@@ -96,8 +96,10 @@ class Gauges:
         PARAMS:
             - degrees The temperature in celsius degrees
         """
+        if degrees > MAX_TEMP:
+            degrees = MAX_TEMP
         colored_leds: int = int((degrees - MIN_TEMP) * self.__tempStep)
-        gaugeEnd = self.__ledsPerGauge
+        gaugeEnd: int = self.__ledsPerGauge
         self.__gradiantLeds(0, colored_leds, gaugeEnd)
         self.__clearLeds(colored_leds, gaugeEnd)
         self.__strip.show() #show at the end of calculation
@@ -109,8 +111,10 @@ class Gauges:
         PARAMS:
             - miliWatts The power in miliwatts
         """
+        if miliWatts > MAX_WATTS:
+            miliWatts = MAX_WATTS
         colored_leds: int = int((miliWatts - MIN_WATTS) * self.__wattStep)
-        colorEnd = self.__ledsPerGauge+colored_leds
+        colorEnd: int = self.__ledsPerGauge+colored_leds
         self.__gradiantLeds(self.__ledsPerGauge, colorEnd, self.__ledsPerGauge)
         self.__clearLeds(colorEnd, self.__led_count)
         self.__strip.show() #show at the end of calculation

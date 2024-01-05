@@ -16,6 +16,7 @@ if __name__ == "__main__":
             temp: float = getCPUtemperature()
             watts: float = wattmeter.getWattsMW()
             gauges.displayTemp(temp)
+            gauges.displayWatts(watts)
             time.sleep(SPEED)
             print(f"temperature : {temp}")
             print(f"watts: {watts/1000}")
