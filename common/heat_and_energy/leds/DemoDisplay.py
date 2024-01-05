@@ -3,8 +3,9 @@
 from rpi_ws281x import PixelStrip, Color
 import time
 
-MAX_TEMP = 65
-MIN_TEMP = 30
+MAX_TEMP = 55
+MIN_TEMP = 36
+MIN_WATTS = 2000
 MAX_WATTS = 12500 # 2,5 A * 5 V
 NB_OF_GAUGES = 2
 NO_COLOR = Color(0, 0, 0, 0)
@@ -30,7 +31,7 @@ class Gauges:
         self.__led_count = led_count # Number of LED pixels.
         self.__ledsPerGauge = int(led_count/NB_OF_GAUGES)
         self.__tempStep = self.__ledsPerGauge/(MAX_TEMP - MIN_TEMP)
-        self.__wattStep = self.__ledsPerGauge/MAX_WATTS
+        self.__wattStep = self.__ledsPerGauge/(MAX_WATTS - MIN_WATTS)
         LED_PIN = led_pin          # GPIO pin connected to the pixels (18 uses PWM!).
         LED_FREQ_HZ = 800000  # LED signal frequency in hertz (usually 800khz)
         LED_DMA = 10          # DMA channel to use for generating signal (try 10)
@@ -100,7 +101,7 @@ class Gauges:
         PARAMS:
             - miliWatts The power in miliwatts
         """
-        colored_leds: int = int(miliWatts * self.__wattStep)
+        colored_leds: int = int((miliWatts - MIN_WATTS) * self.__wattStep)
         colorEnd = self.__ledsPerGauge+colored_leds
         self.__gradiantLeds(self.__ledsPerGauge, colorEnd, self.__ledsPerGauge)
         self.__clearLeds(colorEnd, self.__led_count)
