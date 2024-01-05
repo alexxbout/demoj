@@ -6,7 +6,7 @@ import time
 MAX_TEMP = 55
 MIN_TEMP = 36
 MIN_WATTS = 2000
-MAX_WATTS = 12500 # 2,5 A * 5 V
+MAX_WATTS = 3000 # value reached at approximatly 50 degrees
 NB_OF_GAUGES = 2
 NO_COLOR = Color(0, 0, 0, 0)
 
@@ -67,6 +67,10 @@ class Gauges:
             - begin Should be less than end (inclusive)
             - end Should be greater than begin (exclusive)
         """
+        if begin >= end-1 :
+            tmp = begin
+            begin = end
+            end = begin
         for i in range(begin, end):
             self.__strip.setPixelColor(i, NO_COLOR)
 
@@ -78,6 +82,10 @@ class Gauges:
             - end Should be greater than begin (exclusive)
             - maxStep The max value for a step
         """
+        if begin >= end-1 :
+            tmp = begin
+            begin = end
+            end = begin
         for i in range(begin, end):
             self.__strip.setPixelColor(i, self.__gradiant(i, maxStep, self.__begin_color, self.__ending_color))
 
