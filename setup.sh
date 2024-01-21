@@ -47,11 +47,26 @@ esac
 done
 
 echo "Starting setup"
-#ADD THINGS TO INSTALL/SETUP HERE
+
 echo "System update"
 sudo apt-get update -y
 echo "System upgrade"
-sudo apt-get upgrade -y
+
+while true; do
+
+read -p "Do you want to upgrade the system? (y/n) " yn
+
+case $yn in 
+	[yY] ) sudo apt-get upgrade -y;
+		break;;
+	[nN] ) echo installation skipped...;
+		break;;
+	* ) echo invalid response;;
+esac
+
+done
+
+#ADD THINGS TO INSTALL/SETUP HERE
 echo "Install python3-pip"
 sudo apt-get install python3-pip -y
 echo "Install build-essential"
@@ -76,5 +91,10 @@ export PYTHONPATH=$PWD"/lib"
 grep -vwE "export PYTHONPATH=" ~/.bashrc > tmpsetup
 mv tmpsetup ~/.bashrc
 echo "export PYTHONPATH="$PYTHONPATH >> ~/.bashrc
+
+#sudo grep -vwE "export PYTHONPATH=" /root/.bashrc > tmpsetup
+#sudo mv tmpsetup /root/.bashrc
+#sudo echo "export PYTHONPATH="$PYTHONPATH >> /root/.bashrc
+
 echo "PTHONPATH variable set to "$PYTHONPATH
 echo "DONE"

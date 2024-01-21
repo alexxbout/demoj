@@ -4,7 +4,7 @@
 import sys
 import time
 # sys.path.append("../lib") if PYTHONPATH is not defined into env.
-from sensors.DFRobot_INA219 import INA219
+from dfrobot.DFRobot_INA219 import INA219
 
 ina219_reading_mA = 1000 # The current measured by INA219 (before calibration)
 ext_meter_reading_mA = 1000 # Actual measured current
