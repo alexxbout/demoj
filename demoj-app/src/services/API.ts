@@ -2,7 +2,7 @@ import { DeviceTypes, IConfig, IParameter } from "@/types/IConfig";
 import axios from "axios";
 
 class API {
-    private timeout = 3000;
+    private timeout = 2000;
     private terminalIP = "http://" + import.meta.env.VITE_IP_TERMINAL + ":" + import.meta.env.VITE_PORT;
     private networkIP = "http://" + import.meta.env.VITE_IP_NETWORK + ":" + import.meta.env.VITE_PORT;
     private serverIP = "http://" + import.meta.env.VITE_IP_SERVER + ":" + import.meta.env.VITE_PORT;

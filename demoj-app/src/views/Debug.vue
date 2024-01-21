@@ -9,12 +9,22 @@
         <ion-content :fullscreen="true">
             <ion-header collapse="condense">
                 <ion-toolbar>
-                    <ion-title size="large">Debug</ion-title>
+                    <ion-grid style="padding: 0px">
+                        <ion-row class="ion-align-items-end">
+                            <ion-col>
+                                <ion-title size="large">Debug</ion-title>
+                            </ion-col>
+
+                            <ion-col size="fullscreen">
+                                <ion-spinner v-show="isLoading"></ion-spinner>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
                 </ion-toolbar>
             </ion-header>
 
             <ion-list class="ion-padding">
-                <Ping />
+                <Ping @@start="isLoading = true" @@end="isLoading = false" />
                 <ion-button class="ion-margin-vertical" @click="isOpen = true" expand="block">Test</ion-button>
             </ion-list>
 
@@ -34,13 +44,14 @@
 </template>
 
 <script setup lang="ts">
-import { IonButton, IonButtons, IonContent, IonHeader, IonList, IonModal, IonPage, IonTitle, IonToolbar } from "@ionic/vue";
+import { IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonList, IonModal, IonPage, IonRow, IonSpinner, IonTitle, IonToolbar } from "@ionic/vue";
 import { onMounted, ref } from "vue";
 import Ping from "./debug/Ping.vue";
 
 const page = ref();
 const isOpen = ref(false);
 const presentingElement = ref();
+const isLoading = ref(false);
 
 onMounted(() => {
     presentingElement.value = page.value.$el;

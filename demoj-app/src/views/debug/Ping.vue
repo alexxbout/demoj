@@ -1,14 +1,19 @@
 <template>
     <ion-button :id="trigger" expand="block">Ping...</ion-button>
-    <ion-alert :trigger="trigger" :header="title" :buttons="alertButtons" :inputs="alertInputs"></ion-alert>
+    <ion-action-sheet @didDismiss="handleDismiss" :trigger="trigger" :header="header" :buttons="actionSheetButtons"></ion-action-sheet>
     <ion-toast @didDismiss="toastOpen = false" @click="toastOpen = false" :is-open="toastOpen" swipe-gesture="vertical" position="top" :message="toastMessage" :duration="toastDuration" :icon="toastIcon" :color="toastColor"></ion-toast>
 </template>
 
 <script setup lang="ts">
 import API from "@/services/API";
-import { IonAlert, IonButton, IonToast } from "@ionic/vue";
+import { IonActionSheet, IonButton, IonToast } from "@ionic/vue";
 import { alertCircle, checkmarkCircle, radioButtonOff } from "ionicons/icons";
 import { ref } from "vue";
+
+const emits = defineEmits<{
+    (e: "@start"): void;
+    (e: "@end"): void;
+}>();
 
 const toastOpen = ref(false);
 const toastMessage = ref("");
@@ -31,53 +36,58 @@ const toastIcon = ref(toastTheme.value.default.icon);
 const toastColor = ref(toastTheme.value.default.color);
 
 const trigger = ref("ping");
-const title = ref("Ping");
-const alertButtons = ref([
+const header = ref("Ping");
+
+const actionSheetButtons = ref([
+    {
+        text: "Tout",
+        data: {
+            type: "all",
+        },
+    },
+    {
+        text: "Terminal",
+        data: {
+            type: "terminal",
+        },
+    },
+    {
+        text: "Serveur",
+        data: {
+            type: "server",
+        },
+    },
     {
         text: "Annuler",
         role: "cancel",
     },
-    {
-        text: "Valider",
-        handler: async (value: any) => {
-            switch (value) {
-                case "all":
-                    if ((await API.ping("terminal")) && (await API.ping("network"))) {
-                        showToast("Ping réussi", true);
-                    } else {
-                        showToast("Ping échoué", false);
-                    }
-                    break;
-                case "terminal":
-                case "network":
-                    if (await API.ping(value)) {
-                        showToast("Ping réussi", true);
-                    } else {
-                        showToast("Ping échoué", false);
-                    }
-                    break;
-            }
-        },
-    },
 ]);
-const alertInputs = ref([
-    {
-        label: "Tous",
-        type: "radio",
-        value: "all",
-        checked: true,
-    },
-    {
-        label: "Terminal",
-        type: "radio",
-        value: "terminal",
-    },
-    {
-        label: "Serveur",
-        type: "radio",
-        value: "network",
-    },
-]);
+
+const handleDismiss = async (event: CustomEvent) => {
+    console.log(event.detail);
+
+    if (event.detail.data && event.detail.data.type) {
+        emits("@start");
+        switch (event.detail.data.type) {
+            case "all":
+                if ((await API.ping("terminal")) && (await API.ping("server"))) {
+                    showToast("Ping réussi", true);
+                } else {
+                    showToast("Ping échoué", false);
+                }
+                break;
+            case "terminal":
+            case "server":
+                if (await API.ping(event.detail.data.type)) {
+                    showToast("Ping réussi", true);
+                } else {
+                    showToast("Ping échoué", false);
+                }
+                break;
+        }
+        emits("@end");
+    }
+};
 
 const showToast = (message: string, isSuccess: boolean) => {
     toastMessage.value = message;
