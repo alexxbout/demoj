@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from const import IP_TERMINAL, IP_NETWORK, IP_SERVER
-from testing import ping
+from utils import ping, execute_command
 
 from flask import Flask, jsonify, request
 from flask_cors import CORS
@@ -16,14 +16,6 @@ CONFIG_PATH = "/home/network/demoj/module/config/config.json"
 
 RESTART_CMD = ['sudo', 'reboot']
 STOP_CMD = ['sudo', 'shutdown', '-h', 'now']
-
-def execute_command(command):
-    try:
-        subprocess.Popen(command)
-        return jsonify({"message": f"Successfully executed command: {command}"})
-    except Exception as e:
-        print(f"Error executing command: {str(e)}")
-        return jsonify({"error": str(e)}), 500
 
 @app.route('/')
 def index():
