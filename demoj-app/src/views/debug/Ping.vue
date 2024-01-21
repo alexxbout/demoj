@@ -43,20 +43,16 @@ const alertButtons = ref([
             switch (value) {
                 case "all":
                     if ((await API.ping("terminal")) && (await API.ping("network"))) {
-                        console.log(value + " - Ping success");
                         showToast("Ping réussi", true);
                     } else {
-                        console.log(value + " - Ping failed");
                         showToast("Ping échoué", false);
                     }
                     break;
                 case "terminal":
                 case "network":
                     if (await API.ping(value)) {
-                        console.log(value + " - Ping success");
                         showToast("Ping réussi", true);
                     } else {
-                        console.log(value + " - Ping failed");
                         showToast("Ping échoué", false);
                     }
                     break;
