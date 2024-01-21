@@ -41,12 +41,14 @@
         </ion-content>
 
         <ion-footer class="ion-padding">
-            <ion-button id="open-action-sheet-restart" class="ion-margin-vertical" expand="block" :color="isConnected ? 'primary' : 'medium'" :disabled="!isConnected">Redémarrer</ion-button>
-            <ion-button id="open-action-sheet-stop" expand="block" :color="isConnected ? 'danger' : 'medium'" :disabled="!isConnected">Arrêter</ion-button>
+            <ion-button :id="actionSheetRestartTrigger" class="ion-margin-vertical" expand="block" :color="isConnected ? 'primary' : 'medium'" :disabled="!isConnected">Redémarrer</ion-button>
+            <ion-button :id="actionSheetStopTrigger" expand="block" :color="isConnected ? 'danger' : 'medium'" :disabled="!isConnected">Arrêter</ion-button>
         </ion-footer>
 
-        <ion-action-sheet trigger="open-action-sheet-restart" header="Etes-vous sûr ?" @didDismiss="handleRestartSheet" :buttons="actionSheetButtonsRestart"></ion-action-sheet>
-        <ion-action-sheet trigger="open-action-sheet-stop" header="Etes-vous sûr ?" @didDismiss="handleStopSheet" :buttons="actionSheetButtonsStop"></ion-action-sheet>
+        <ion-action-sheet :trigger="actionSheetRestartTrigger" :header="actionSheetHeader" @didDismiss="handleRestartSheet" :buttons="actionSheetButtonsRestart"></ion-action-sheet>
+        <ion-action-sheet :trigger="actionSheetStopTrigger" :header="actionSheetHeader" @didDismiss="handleStopSheet" :buttons="actionSheetButtonsStop"></ion-action-sheet>
+
+        <ion-toast @didDismiss="toastOpen = false" @click="toastOpen = false" :is-open="toastOpen" swipe-gesture="vertical" position="bottom" :message="toastMessage" :duration="toastDuration" :icon="checkmarkCircle"></ion-toast>
     </ion-page>
 </template>
 
@@ -55,8 +57,11 @@ import ConnectStatus from "@/components/ConnectStatus.vue";
 import router from "@/router";
 import API from "@/services/API";
 import type { DeviceTypes, IParameter } from "@/types/IConfig";
-import { ActionSheetButton, IonActionSheet, IonButton, IonCol, IonContent, IonFooter, IonGrid, IonHeader, IonInput, IonItem, IonList, IonPage, IonRange, IonRefresher, IonRefresherContent, IonRow, IonTitle, IonToggle, IonToolbar } from "@ionic/vue";
+import { ActionSheetButton, IonActionSheet, IonButton, IonCol, IonContent, IonFooter, IonGrid, IonHeader, IonInput, IonItem, IonList, IonPage, IonRange, IonRefresher, IonRefresherContent, IonRow, IonTitle, IonToast, IonToggle, IonToolbar } from "@ionic/vue";
+import { checkmarkCircle } from "ionicons/icons";
 import { computed, onMounted, ref } from "vue";
+
+// TODO : Faire un check toutes les x secondes pour voir si le module est connecté ou non
 
 const props = defineProps<{
     device: DeviceTypes;
@@ -72,6 +77,9 @@ const name = computed<string>(() => {
             return "Terminal";
     }
 });
+
+const actionSheetRestartTrigger = ref("restart-" + name.value);
+const actionSheetStopTrigger = ref("stop-" + name.value);
 
 const isConnected = ref(false);
 const parameters = ref<IParameter[]>([]);
@@ -98,17 +106,25 @@ const actionSheetButtonsStop = ref<ActionSheetButton[]>([
     },
 ]);
 
+const actionSheetHeader = ref("Etes-vous sûr ?");
+
+const toastMessage = ref("Action effectuée avec succès");
+const toastDuration = ref(5000);
+const toastOpen = ref(false);
+
 const handleRestartSheet = async (event: CustomEvent) => {
     if (event.detail.role == "destructive") {
         console.log("Restarting module...");
-        if (await API.restartModule()) {
+        // if (await API.restartModule()) {
             console.log("Module is restarting...");
             isConnected.value = false;
+            toastOpen.value = true;
 
+            // Automatically update the status of the module after 5 seconds
             setTimeout(async () => {
                 await update();
             }, 5000);
-        }
+        // }
     }
 };
 
@@ -118,6 +134,7 @@ const handleStopSheet = async (event: CustomEvent) => {
         if (await API.stopModule()) {
             console.log("Module is stopping...");
             isConnected.value = false;
+            toastOpen.value = true;
         }
     }
 };

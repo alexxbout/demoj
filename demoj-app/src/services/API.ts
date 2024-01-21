@@ -3,11 +3,13 @@ import axios from "axios";
 
 class API {
     private timeout = 3000;
-    private serverIP = "http://192.168.64.21:5000";
+    private terminalIP = "http://" + import.meta.env.VITE_IP_TERMINAL + ":" + import.meta.env.VITE_PORT;
+    private networkIP = "http://" + import.meta.env.VITE_IP_NETWORK + ":" + import.meta.env.VITE_PORT;
+    private serverIP = "http://" + import.meta.env.VITE_IP_SERVER + ":" + import.meta.env.VITE_PORT;
 
     private async getConfig(): Promise<IConfig | null> {
         return await axios
-            .get(this.serverIP + "/config", { timeout: this.timeout })
+            .get(this.networkIP + "/config", { timeout: this.timeout })
             .then((response) => {
                 return response.data as IConfig;
             })
@@ -17,39 +19,41 @@ class API {
             });
     }
 
-    async refreshConfig(): Promise<void> {
-        await this.getConfig();
-    }
-
     async isConnected(device: DeviceTypes): Promise<boolean> {
         const config = await this.getConfig();
 
-        if (config === null) {
+        if (config == null) return false;
+
+        try {
+            return config.modules[device].isConnected;
+        } catch (error) {
+            console.error("Unable to get connection status for device: " + device);
+            console.error(error);
             return false;
         }
-
-        return config.modules[device].isConnected;
     }
 
-    async getModuleParameters(device: DeviceTypes, shared: boolean = true): Promise<IParameter[]> {
+    async getModuleParameters(device: DeviceTypes): Promise<IParameter[]> {
         const config = await this.getConfig();
 
-        if (config === null) {
+        if (config == null) return [];
+
+        try {
+            const parameters = config.modules[device].parameters;
+            if (parameters == null) return [];
+
+            return parameters;
+        } catch (error) {
+            console.error("Unable to get parameters for device: " + device);
+            console.error(error);
             return [];
         }
-
-        const parameters = config.modules[device].parameters;
-        if (parameters === undefined) {
-            return [];
-        }
-
-        return parameters;
     }
 
     async setParameterState(device: DeviceTypes, id: number, isActive: boolean): Promise<boolean> {
         return await axios
-            .post(this.serverIP + `/modules/${device}/params/${id}`, { isActive: isActive }, { timeout: this.timeout })
-            .then((response) => {
+            .post(this.networkIP + `/modules/${device}/params/${id}`, { isActive: isActive }, { timeout: this.timeout })
+            .then(() => {
                 return true;
             })
             .catch((error) => {
@@ -60,8 +64,8 @@ class API {
 
     async setParameterValue(device: DeviceTypes, id: number, value: number): Promise<boolean> {
         return await axios
-            .post(this.serverIP + `/modules/${device}/params/${id}`, { value: value }, { timeout: this.timeout })
-            .then((response) => {
+            .post(this.networkIP + `/modules/${device}/params/${id}`, { value: value }, { timeout: this.timeout })
+            .then(() => {
                 return true;
             })
             .catch((error) => {
@@ -73,8 +77,8 @@ class API {
     async restartModule(): Promise<boolean> {
         // TODO Add restart specific module
         return await axios
-            .get(this.serverIP + `/restart`, { timeout: this.timeout })
-            .then((response) => {
+            .get(this.networkIP + `/restart`, { timeout: this.timeout })
+            .then(() => {
                 return true;
             })
             .catch((error) => {
@@ -86,8 +90,8 @@ class API {
     async stopModule(): Promise<boolean> {
         // TODO Add stop specific module
         return await axios
-            .get(this.serverIP + `/stop`, { timeout: this.timeout })
-            .then((response) => {
+            .get(this.networkIP + `/stop`, { timeout: this.timeout })
+            .then(() => {
                 return true;
             })
             .catch((error) => {
