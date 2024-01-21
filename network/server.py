@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from testing import ping
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import json
@@ -12,7 +13,14 @@ CORS(app)
 path = "/home/network/demoj/network"
 config = path + "/config.json"
 
-# ! Route to receive data
+ip_terminal = "192.168.64.100"
+ip_network = "192.168.64.101"
+ip_server = "192.168.64.102"
+
+@app.route('/')
+def index():
+    return jsonify({"message": "Server is running"})
+
 @app.route('/receive_data', methods=['POST'])
 def receive_data():
     data = request.get_json()
@@ -40,7 +48,6 @@ def stop_module():
         print(f"Error stopping Raspberry Pi: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
-# ! Route to get config data
 @app.route('/config', methods=['GET'])
 def get_config():
     try:
@@ -53,7 +60,6 @@ def get_config():
         print(f"Error reading config file: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
-# ! Route to update parameter status and value
 @app.route('/modules/<module>/params/<id_param>', methods=['POST'])
 def update_parameter(module, id_param):
     try:
@@ -82,6 +88,17 @@ def update_parameter(module, id_param):
     except Exception as e:
         print(f"Error toggling parameter: {str(e)}")
         return jsonify({"error": str(e)}), 500
+    
+@app.route('/ping/<module>', methods=['GET'])
+def ping_module(module):
+    if module == 'terminal':
+        return jsonify(ping(ip_terminal))
+    elif module == 'server':
+        return jsonify(ping(ip_server))
+    elif module == 'all':
+        return jsonify(ping(ip_terminal) and ping(ip_server))
+    else:
+        return jsonify({"error": "Invalid module"}), 400
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

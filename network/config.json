@@ -10,8 +10,8 @@
           "id": 0,
           "name": "Perte de paquets",
           "type": "percentage",
-          "isActive": false,
-          "value": 53
+          "isActive": true,
+          "value": 46
         },
         {
           "id": 1,
