@@ -15,12 +15,34 @@
 
             <ion-list class="ion-padding">
                 <Ping />
+                <ion-button @click="isOpen = true" expand="block">Test</ion-button>
             </ion-list>
+
+            <ion-modal :is-open="isOpen" :presenting-element="presentingElement">
+                <ion-header>
+                    <ion-toolbar>
+                        <ion-title>Modal</ion-title>
+                        <ion-buttons slot="end">
+                            <ion-button @click="isOpen = false">Close</ion-button>
+                        </ion-buttons>
+                    </ion-toolbar>
+                </ion-header>
+                <ion-content> </ion-content>
+            </ion-modal>
         </ion-content>
     </ion-page>
 </template>
 
 <script setup lang="ts">
-import { IonContent, IonHeader, IonList, IonPage, IonTitle, IonToolbar } from "@ionic/vue";
+import { IonButton, IonButtons, IonContent, IonHeader, IonList, IonModal, IonPage, IonTitle, IonToolbar } from "@ionic/vue";
+import { onMounted, ref } from "vue";
 import Ping from "./debug/Ping.vue";
+
+const page = ref();
+const isOpen = ref(false);
+const presentingElement = ref();
+
+onMounted(() => {
+    presentingElement.value = page.value.$el;
+});
 </script>
