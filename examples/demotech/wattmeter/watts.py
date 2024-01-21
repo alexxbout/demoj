@@ -1,7 +1,5 @@
-import time
 import sys
-sys.path.append("../../../src/main/python/sensors_and_disp/wattmeter")
-
+sys.path.append("../../common/heat_and_energy/wattmeter")
 from DemoWattmeter import Wattmeter, WattmeterTimeout
 
 try:
