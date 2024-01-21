@@ -12,10 +12,15 @@
                     <ion-title size="large">Debug</ion-title>
                 </ion-toolbar>
             </ion-header>
+
+            <ion-list class="ion-padding">
+                <Ping />
+            </ion-list>
         </ion-content>
     </ion-page>
 </template>
 
 <script setup lang="ts">
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from "@ionic/vue";
+import { IonContent, IonHeader, IonList, IonPage, IonTitle, IonToolbar } from "@ionic/vue";
+import Ping from "./debug/Ping.vue";
 </script>

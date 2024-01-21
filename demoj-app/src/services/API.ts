@@ -99,6 +99,18 @@ class API {
                 return false;
             });
     }
+
+    async ping(device: DeviceTypes): Promise<boolean> {
+        return await axios
+            .get(this.networkIP + `/ping/${device}`, { timeout: this.timeout })
+            .then(() => {
+                return true;
+            })
+            .catch((error) => {
+                console.error(error);
+                return false;
+            });
+    }
 }
 
 export default new API();

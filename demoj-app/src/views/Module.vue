@@ -48,7 +48,7 @@
         <ion-action-sheet :trigger="actionSheetRestartTrigger" :header="actionSheetHeader" @didDismiss="handleRestartSheet" :buttons="actionSheetButtonsRestart"></ion-action-sheet>
         <ion-action-sheet :trigger="actionSheetStopTrigger" :header="actionSheetHeader" @didDismiss="handleStopSheet" :buttons="actionSheetButtonsStop"></ion-action-sheet>
 
-        <ion-toast @didDismiss="toastOpen = false" @click="toastOpen = false" :is-open="toastOpen" swipe-gesture="vertical" position="bottom" :message="toastMessage" :duration="toastDuration" :icon="checkmarkCircle"></ion-toast>
+        <ion-toast @didDismiss="toastOpen = false" @click="toastOpen = false" :is-open="toastOpen" swipe-gesture="vertical" position="top" :message="toastMessage" :duration="toastDuration" :icon="checkmarkCircle" color="success"></ion-toast>
     </ion-page>
 </template>
 
