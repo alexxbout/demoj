@@ -4,18 +4,14 @@ from testing import ping
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import json
-import os
 import subprocess
+from ..const import IP_TERMINAL, IP_NETWORK, IP_SERVER
 
 app = Flask(__name__)
 CORS(app)
 
 path = "/home/network/demoj/network"
 config = path + "/config.json"
-
-ip_terminal = "192.168.64.100"
-ip_network = "192.168.64.101"
-ip_server = "192.168.64.102"
 
 @app.route('/')
 def index():
@@ -92,11 +88,11 @@ def update_parameter(module, id_param):
 @app.route('/ping/<module>', methods=['GET'])
 def ping_module(module):
     if module == 'terminal':
-        return jsonify(ping(ip_terminal))
+        return jsonify(ping(IP_TERMINAL))
     elif module == 'server':
-        return jsonify(ping(ip_server))
+        return jsonify(ping(IP_SERVER))
     elif module == 'all':
-        return jsonify(ping(ip_terminal) and ping(ip_server))
+        return jsonify(ping(IP_TERMINAL) and ping(IP_SERVER))
     else:
         return jsonify({"error": "Invalid module"}), 400
 
