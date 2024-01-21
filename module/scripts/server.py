@@ -1,17 +1,29 @@
 #!/usr/bin/env python3
 
+from const import IP_TERMINAL, IP_NETWORK, IP_SERVER
 from testing import ping
+
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+
 import json
 import subprocess
-from ..const import IP_TERMINAL, IP_NETWORK, IP_SERVER
 
 app = Flask(__name__)
 CORS(app)
 
-path = "/home/network/demoj/network"
-config = path + "/config.json"
+CONFIG_PATH = "/home/network/demoj/module/config/config.json"
+
+RESTART_CMD = ['sudo', 'reboot']
+STOP_CMD = ['sudo', 'shutdown', '-h', 'now']
+
+def execute_command(command):
+    try:
+        subprocess.Popen(command)
+        return jsonify({"message": f"Successfully executed command: {command}"})
+    except Exception as e:
+        print(f"Error executing command: {str(e)}")
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/')
 def index():
@@ -26,28 +38,16 @@ def receive_data():
 
 @app.route('/restart', methods=['GET'])
 def restart_module():
-    try:
-        subprocess.Popen(['sudo', 'reboot'])
-        # TODO Restart other modules using HTTP requests or SSH
-        return jsonify({"message": "Successfully restarted Raspberry Pi"})
-    except Exception as e:
-        print(f"Error restarting Raspberry Pi: {str(e)}")
-        return jsonify({"error": str(e)}), 500
-    
+    return execute_command(RESTART_CMD)
+
 @app.route('/stop', methods=['GET'])
 def stop_module():
-    try:
-        subprocess.Popen(['sudo', 'shutdown', '-h', 'now'])
-        # TODO Stop other modules using HTTP requests or SSH
-        return jsonify({"message": "Successfully stopped Raspberry Pi"})
-    except Exception as e:
-        print(f"Error stopping Raspberry Pi: {str(e)}")
-        return jsonify({"error": str(e)}), 500
+    return execute_command(STOP_CMD)
 
 @app.route('/config', methods=['GET'])
 def get_config():
     try:
-        with open(config, 'r') as config_file:
+        with open(CONFIG_PATH, 'r') as config_file:
             config_data = json.load(config_file)
             return jsonify(config_data)
     except FileNotFoundError:
@@ -63,7 +63,7 @@ def update_parameter(module, id_param):
         is_active = data.get('isActive')
         value = data.get('value')
 
-        with open(config, 'r+') as config_file:
+        with open(CONFIG_PATH, 'r+') as config_file:
             config_data = json.load(config_file)
 
         if 'modules' in config_data and module in config_data['modules']:
@@ -77,7 +77,7 @@ def update_parameter(module, id_param):
                             param['value'] = value
                         # TODO : toggle parameter on module
 
-        with open(config, 'w') as config_file:
+        with open(CONFIG_PATH, 'w') as config_file:
             json.dump(config_data, config_file, indent=2)
 
         return jsonify({"message": "Parameter toggled successfully"})

@@ -10,7 +10,7 @@
           "id": 0,
           "name": "Perte de paquets",
           "type": "percentage",
-          "isActive": true,
+          "isActive": false,
           "value": 46
         },
         {
