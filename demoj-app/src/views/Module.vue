@@ -115,7 +115,7 @@ const toastOpen = ref(false);
 const handleRestartSheet = async (event: CustomEvent) => {
     if (event.detail.role == "destructive") {
         console.log("Restarting module...");
-        // if (await API.restartModule()) {
+        if (await API.restartModule()) {
             console.log("Module is restarting...");
             isConnected.value = false;
             toastOpen.value = true;
@@ -124,7 +124,7 @@ const handleRestartSheet = async (event: CustomEvent) => {
             setTimeout(async () => {
                 await update();
             }, 5000);
-        // }
+        }
     }
 };
 

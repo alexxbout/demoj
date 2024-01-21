@@ -15,10 +15,10 @@
 
             <ion-list class="ion-padding">
                 <Ping />
-                <ion-button @click="isOpen = true" expand="block">Test</ion-button>
+                <ion-button class="ion-margin-vertical" @click="isOpen = true" expand="block">Test</ion-button>
             </ion-list>
 
-            <ion-modal :is-open="isOpen" :presenting-element="presentingElement">
+            <ion-modal :is-open="isOpen" :presenting-element="presentingElement" @willDismiss="isOpen = false">
                 <ion-header>
                     <ion-toolbar>
                         <ion-title>Modal</ion-title>
