@@ -13,7 +13,7 @@
 
             <ion-header collapse="condense">
                 <ion-toolbar>
-                    <ion-grid style="padding: 0px">
+                    <ion-grid>
                         <ion-row class="ion-align-items-end">
                             <ion-col>
                                 <ion-title size="large">{{ name }}</ion-title>
@@ -27,9 +27,9 @@
                 </ion-toolbar>
             </ion-header>
 
-            <ion-list class="ion-padding">
+            <ion-list class="ion-margin" :inset="true">
                 <ion-item v-for="param in parameters">
-                    <ion-grid style="padding: 0px">
+                    <ion-grid>
                         <ion-row>
                             <ion-toggle v-model="param.isActive" @ion-change="onParameterToggle(param)" :disabled="!isConnected">{{ param.name }}</ion-toggle>
                             <ion-range v-if="param.type == 'percentage'" v-model="param.value" @ion-change="onParameterUpdate(param)" v-show="param.isActive" :pin="true" :pin-formatter="pinFormatter" :disabled="!isConnected" />
@@ -41,7 +41,7 @@
         </ion-content>
 
         <ion-footer class="ion-padding">
-            <ion-button :id="actionSheetRestartTrigger" class="ion-margin-vertical" expand="block" :color="isConnected ? 'primary' : 'medium'" :disabled="!isConnected">Redémarrer</ion-button>
+            <ion-button :id="actionSheetRestartTrigger" expand="block" :color="isConnected ? 'primary' : 'medium'" :disabled="!isConnected">Redémarrer</ion-button>
             <ion-button :id="actionSheetStopTrigger" expand="block" :color="isConnected ? 'danger' : 'medium'" :disabled="!isConnected">Arrêter</ion-button>
         </ion-footer>
 
@@ -186,7 +186,4 @@ router.beforeEach(async (to, from, next) => {
 
     await update();
 });
-
-// watch(parameters, (newValue) => {
-// }, { deep: true });
 </script>

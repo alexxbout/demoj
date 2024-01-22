@@ -23,12 +23,12 @@
                 </ion-toolbar>
             </ion-header>
 
-            <ion-list class="ion-padding">
+            <ion-content class="ion-padding">
                 <ion-button color="success" expand="block">{{ executeAll }}</ion-button>
                 <Ping @@start="isLoading = true" @@end="isLoading = false" />
                 <Flask @@start="isLoading = true" @@end="isLoading = false" />
                 <!-- <ion-button @click="isOpen = true" expand="block">Modal</ion-button> -->
-            </ion-list>
+            </ion-content>
 
             <!-- <ion-modal :is-open="isOpen" :presenting-element="presentingElement" @willDismiss="isOpen = false">
                 <ion-header>
@@ -46,7 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import { IonButton, IonCol, IonContent, IonGrid, IonHeader, IonList, IonPage, IonRow, IonSpinner, IonTitle, IonToolbar } from "@ionic/vue";
+import { IonButton, IonCol, IonContent, IonGrid, IonHeader, IonPage, IonRow, IonSpinner, IonTitle, IonToolbar } from "@ionic/vue";
 import { ref } from "vue";
 import Flask from "./debug/Flask.vue";
 import Ping from "./debug/Ping.vue";

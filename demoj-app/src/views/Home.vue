@@ -40,12 +40,6 @@ const handleClick = () => {
         debugModeEnabled.value = !debugModeEnabled.value; // Inverser l'état du mode développeur
         localStorage.setItem("debugMode", debugModeEnabled.value.toString()); // Enregistrer le mode développeur dans le local storage
         clickCount.value = 0; // Réinitialiser le compteur
-
-        if (debugModeEnabled.value) {
-            console.log("Mode debug activé !");
-        } else {
-            console.log("Mode debug désactivé !");
-        }
     }
 };
 </script>
@@ -60,5 +54,8 @@ const handleClick = () => {
     align-content: center;
     height: 100vh;
     gap: 1rem;
+    padding-left: 30px;
+    padding-right: 30px;
+    background: white;
 }
 </style>
