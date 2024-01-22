@@ -35,8 +35,8 @@ const toastTheme = ref({
 const toastIcon = ref(toastTheme.value.default.icon);
 const toastColor = ref(toastTheme.value.default.color);
 
-const trigger = ref("ping");
-const header = ref("Ping");
+const trigger = ref("flask");
+const header = ref("Flask");
 
 const actionSheetButtons = ref([
     {
@@ -64,24 +64,22 @@ const actionSheetButtons = ref([
 ]);
 
 const handleDismiss = async (event: CustomEvent) => {
-    console.log(event.detail);
-
     if (event.detail.data && event.detail.data.type) {
         emits("@start");
         switch (event.detail.data.type) {
             case "all":
-                if ((await API.ping("terminal")) && (await API.ping("server"))) {
-                    showToast("Ping réussi", true);
+                if ((await API.checkStatus("terminal")) && (await API.checkStatus("server"))) {
+                    showToast("Communication au serveur Flask réussie", true);
                 } else {
-                    showToast("Ping échoué", false);
+                    showToast("Communication au serveur Flask échouée", false);
                 }
                 break;
             case "terminal":
             case "server":
-                if (await API.ping(event.detail.data.type)) {
-                    showToast("Ping réussi", true);
+                if (await API.checkStatus(event.detail.data.type)) {
+                    showToast("Communication au serveur Flask réussie", true);
                 } else {
-                    showToast("Ping échoué", false);
+                    showToast("Communication au serveur Flask échouée", false);
                 }
                 break;
         }

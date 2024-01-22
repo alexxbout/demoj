@@ -24,11 +24,13 @@
             </ion-header>
 
             <ion-list class="ion-padding">
+                <ion-button color="success" expand="block">{{ executeAll }}</ion-button>
                 <Ping @@start="isLoading = true" @@end="isLoading = false" />
-                <ion-button class="ion-margin-vertical" @click="isOpen = true" expand="block">Test</ion-button>
+                <Flask @@start="isLoading = true" @@end="isLoading = false" />
+                <!-- <ion-button @click="isOpen = true" expand="block">Modal</ion-button> -->
             </ion-list>
 
-            <ion-modal :is-open="isOpen" :presenting-element="presentingElement" @willDismiss="isOpen = false">
+            <!-- <ion-modal :is-open="isOpen" :presenting-element="presentingElement" @willDismiss="isOpen = false">
                 <ion-header>
                     <ion-toolbar>
                         <ion-title>Modal</ion-title>
@@ -37,23 +39,25 @@
                         </ion-buttons>
                     </ion-toolbar>
                 </ion-header>
-                <ion-content> </ion-content>
-            </ion-modal>
+                <ion-content></ion-content>
+            </ion-modal> -->
         </ion-content>
     </ion-page>
 </template>
 
 <script setup lang="ts">
-import { IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonList, IonModal, IonPage, IonRow, IonSpinner, IonTitle, IonToolbar } from "@ionic/vue";
-import { onMounted, ref } from "vue";
+import { IonButton, IonCol, IonContent, IonGrid, IonHeader, IonList, IonPage, IonRow, IonSpinner, IonTitle, IonToolbar } from "@ionic/vue";
+import { ref } from "vue";
+import Flask from "./debug/Flask.vue";
 import Ping from "./debug/Ping.vue";
 
-const page = ref();
-const isOpen = ref(false);
-const presentingElement = ref();
+// const page = ref();
+// const isOpen = ref(false);
+// const presentingElement = ref();
 const isLoading = ref(false);
+const executeAll = ref("Éxécuter tous les tests");
 
-onMounted(() => {
-    presentingElement.value = page.value.$el;
-});
+// onMounted(() => {
+//     presentingElement.value = page.value.$el;
+// });
 </script>
