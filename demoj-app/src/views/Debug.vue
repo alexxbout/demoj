@@ -24,7 +24,6 @@
             </ion-header>
 
             <ion-content class="ion-padding">
-                <ion-button color="success" expand="block">{{ executeAll }}</ion-button>
                 <Ping @@start="isLoading = true" @@end="isLoading = false" />
                 <Flask @@start="isLoading = true" @@end="isLoading = false" />
                 <!-- <ion-button @click="isOpen = true" expand="block">Modal</ion-button> -->
@@ -46,7 +45,7 @@
 </template>
 
 <script setup lang="ts">
-import { IonButton, IonCol, IonContent, IonGrid, IonHeader, IonPage, IonRow, IonSpinner, IonTitle, IonToolbar } from "@ionic/vue";
+import { IonCol, IonContent, IonGrid, IonHeader, IonPage, IonRow, IonSpinner, IonTitle, IonToolbar } from "@ionic/vue";
 import { ref } from "vue";
 import Flask from "./debug/Flask.vue";
 import Ping from "./debug/Ping.vue";
@@ -62,5 +61,4 @@ import Ping from "./debug/Ping.vue";
 // beforeEnter, chech if debug mode is enabled
 
 const isLoading = ref(false);
-const executeAll = ref("Éxécuter tous les tests");
 </script>
