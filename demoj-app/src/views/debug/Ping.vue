@@ -64,8 +64,6 @@ const actionSheetButtons = ref([
 ]);
 
 const handleDismiss = async (event: CustomEvent) => {
-    console.log(event.detail);
-
     if (event.detail.data && event.detail.data.type) {
         emits("@start");
         switch (event.detail.data.type) {

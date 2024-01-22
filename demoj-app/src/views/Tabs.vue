@@ -24,7 +24,7 @@
                 </ion-tab-button>
 
                 <ion-tab-button v-show="debugModeEnabled" tab="debug" href="/tabs/debug">
-                    <ion-icon aria-hidden="true" :icon="bug" />
+                    <ion-icon aria-hidden="true" :icon="hardwareChip" />
                     <ion-label>Debug</ion-label>
                 </ion-tab-button>
             </ion-tab-bar>
@@ -34,7 +34,7 @@
 
 <script setup lang="ts">
 import { IonIcon, IonLabel, IonPage, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs } from "@ionic/vue";
-import { bug, desktop, layers, terminal, wifi } from "ionicons/icons";
+import { desktop, hardwareChip, layers, terminal, wifi } from "ionicons/icons";
 import { onMounted, ref } from "vue";
 
 const debugModeEnabled = ref(false);

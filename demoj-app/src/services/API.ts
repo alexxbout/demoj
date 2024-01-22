@@ -121,8 +121,8 @@ class API {
     async checkStatus(device: DeviceTypes): Promise<boolean> {
         return await axios
             .get(this.networkIP + `/check_status/${device}`, { timeout: this.timeout })
-            .then(() => {
-                return true;
+            .then((response) => {
+                return response.data as boolean;
             })
             .catch((error) => {
                 console.error(error);
