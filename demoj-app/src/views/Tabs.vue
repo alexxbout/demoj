@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <ion-tabs>
-      <ion-router-outlet></ion-router-outlet>
+      <ion-router-outlet animated="true" />
       <ion-tab-bar slot="bottom">
         <ion-tab-button tab="scenarios" href="/tabs/scenarios">
           <ion-icon aria-hidden="true" :icon="layers" />
