@@ -1,11 +1,11 @@
-import { DeviceTypes, IConfig, IParameter } from "@/types/IConfig";
+import { DeviceTypes, IConfig, IParameter, IScenario } from "@/types/IConfig";
 import axios from "axios";
 
 class API {
     private timeout = 2000;
-    private terminalIP = "http://" + import.meta.env.VITE_IP_TERMINAL + ":" + import.meta.env.VITE_PORT;
     private networkIP = "http://" + import.meta.env.VITE_IP_NETWORK + ":" + import.meta.env.VITE_PORT;
-    private serverIP = "http://" + import.meta.env.VITE_IP_SERVER + ":" + import.meta.env.VITE_PORT;
+
+    // Getters from config file
 
     private async getConfig(): Promise<IConfig | null> {
         return await axios
@@ -17,20 +17,6 @@ class API {
                 console.error(error);
                 return null;
             });
-    }
-
-    async isConnected(device: DeviceTypes): Promise<boolean> {
-        const config = await this.getConfig();
-
-        if (config == null) return false;
-
-        try {
-            return config.modules[device].isConnected;
-        } catch (error) {
-            console.error("Unable to get connection status for device: " + device);
-            console.error(error);
-            return false;
-        }
     }
 
     async getModuleParameters(device: DeviceTypes): Promise<IParameter[]> {
@@ -49,6 +35,22 @@ class API {
             return [];
         }
     }
+
+    async getScenarios(): Promise<IScenario[]> {
+        const config = await this.getConfig();
+
+        if (config == null) return [];
+
+        try {
+            return config.scenarios;
+        } catch (error) {
+            console.error("Unable to get scenarios");
+            console.error(error);
+            return [];
+        }
+    }
+
+    // Setters
 
     async setParameterState(device: DeviceTypes, id: number, isActive: boolean): Promise<boolean> {
         return await axios
@@ -73,6 +75,8 @@ class API {
                 return false;
             });
     }
+
+    // Actions
 
     async restartModule(): Promise<boolean> {
         // TODO Add restart specific module
@@ -110,6 +114,22 @@ class API {
                 console.error(error);
                 return false;
             });
+    }
+
+    // Others
+
+    async isConnected(device: DeviceTypes): Promise<boolean> {
+        const config = await this.getConfig();
+
+        if (config == null) return false;
+
+        try {
+            return config.modules[device].isConnected;
+        } catch (error) {
+            console.error("Unable to get connection status for device: " + device);
+            console.error(error);
+            return false;
+        }
     }
 
     async checkStatus(device: DeviceTypes): Promise<boolean> {

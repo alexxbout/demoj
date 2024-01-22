@@ -9,20 +9,23 @@ export interface IParameter {
     value?: number;
 }
 
+export interface IScenario {
+    name: string;
+    description: string;
+    id: number;
+    to: keyof DeviceTypes;
+    multipleInstance: boolean;
+    parameters: {
+        name: string;
+        value: number;
+    }[];
+    instances: {
+        pid: number;
+    }[];
+    icon?: string;
+}
+
 export interface IConfig {
     modules: { [key in DeviceTypes]: { isConnected: boolean; parameters?: IParameter[] } };
-    scenarios: {
-        name: string;
-        description: string;
-        id: number;
-        to: keyof DeviceTypes;
-        multipleInstance: boolean;
-        parameters: {
-            name: string;
-            value: number;
-        }[];
-        instances: {
-            pid: number;
-        }[];
-    }[];
+    scenarios: IScenario[];
 }

@@ -13,24 +13,21 @@
                 </ion-toolbar>
             </ion-header>
 
-            <scenario-card :data="sc[0]" />
+            <scenario-card v-for="scenario in scenarios" :data="scenario" />
         </ion-content>
     </ion-page>
 </template>
 
 <script setup lang="ts">
 import ScenarioCard from "@/components/ScenarioCard.vue";
+import API from "@/services/API";
+import type { IScenario } from "@/types/IConfig";
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from "@ionic/vue";
-import { calculator } from "ionicons/icons";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 
-const sc = ref([
-    {
-        id: 1,
-        title: "Calculs complexes",
-        subtitle: "Terminal",
-        icon: calculator,
-        description: "Effectuez des calculs avancés, démontrant la puissance de traitement du serveur dans des tâches informatiques complexes.",
-    }
-]);
+const scenarios = ref<IScenario[]>([]);
+
+onMounted(async () => {
+    scenarios.value = await API.getScenarios();
+});
 </script>
