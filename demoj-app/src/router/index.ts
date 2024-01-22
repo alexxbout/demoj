@@ -14,7 +14,7 @@ const routes: Array<RouteRecordRaw> = [
     children: [
       {
         path: 'scenarios',
-        name: ' ',
+        name: 'scenarios',
         component: () => import('@/views/Scenarios.vue')
       },
       {
