@@ -31,13 +31,16 @@ def receive_data():
 
     return jsonify({"message": "Data received successfully"})
 
+# TODO: For restart and stop, we should send a response before executing the command
 @app.route('/restart', methods=['GET'])
 def restart_module():
-    return execute_command(RESTART_CMD)
+    execute_command(RESTART_CMD)
+    # return jsonify({"message": "Module is restarting..."})
 
 @app.route('/stop', methods=['GET'])
 def stop_module():
-    return execute_command(STOP_CMD)
+    execute_command(STOP_CMD)
+    # return jsonify({"message": "Module is shutting down..."})
 
 @app.route('/config', methods=['GET'])
 def get_config():
@@ -98,6 +101,8 @@ def check_status(module):
             return jsonify(requests.get('http://' + IP_TERMINAL + ':5000').status_code == 200)
         elif module == 'server':
             return jsonify(requests.get('http://' + IP_SERVER + ':5000').status_code == 200)
+        elif module == 'network':
+            return jsonify(True)
         else:
             return jsonify({"error": "Invalid module"}), 400
     except Exception as e:

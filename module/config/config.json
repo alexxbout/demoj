@@ -1,17 +1,14 @@
 {
   "modules": {
-    "terminal": {
-      "isConnected": true
-    },
+    "terminal": {},
     "network": {
-      "isConnected": true,
       "parameters": [
         {
           "id": 0,
           "name": "Perte de paquets",
           "type": "percentage",
-          "isActive": true,
-          "value": 46
+          "isActive": false,
+          "value": 50
         },
         {
           "id": 1,
@@ -35,14 +32,12 @@
         }
       ]
     },
-    "server": {
-      "isConnected": false
-    }
+    "server": {}
   },
   "scenarios": [
     {
       "name": "Calculs complexes",
-      "description": "Effectuez des calculs avanc\u00e9s, d\u00e9montrant la puissance de traitement du serveur dans des t\u00e2ches informatiques complexes.",
+      "description": "Effectuez des calculs avanc\u00e9s. Choisissez le niveau de complexit\u00e9 et l'endroit o\u00f9 le calcul sera effectu\u00e9.",
       "id": 0,
       "to": "T",
       "multipleInstance": true,
@@ -52,11 +47,16 @@
           "value": 10
         }
       ],
-      "instances": [
-        {
-          "pid": 0
-        }
-      ]
+      "instances": []
+    },
+    {
+      "name": "Streaming vid\u00e9o",
+      "description": "Regardez des vid\u00e9os en streaming. Celles-ci seront t\u00e9l\u00e9charg\u00e9es sur le serveur et envoy\u00e9es au terminal.",
+      "id": 0,
+      "to": "T",
+      "multipleInstance": true,
+      "parameters": [],
+      "instances": []
     }
   ]
 }
