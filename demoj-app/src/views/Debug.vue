@@ -54,10 +54,13 @@ import Ping from "./debug/Ping.vue";
 // const page = ref();
 // const isOpen = ref(false);
 // const presentingElement = ref();
-const isLoading = ref(false);
-const executeAll = ref("Éxécuter tous les tests");
 
 // onMounted(() => {
 //     presentingElement.value = page.value.$el;
 // });
+
+// beforeEnter, chech if debug mode is enabled
+
+const isLoading = ref(false);
+const executeAll = ref("Éxécuter tous les tests");
 </script>
