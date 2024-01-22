@@ -7,7 +7,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 import json
-import subprocess
+import requests
 
 app = Flask(__name__)
 CORS(app)
@@ -21,6 +21,9 @@ STOP_CMD = ['sudo', 'shutdown', '-h', 'now']
 def index():
     return jsonify({"message": "Server is running"})
 
+#################################################################
+# DémoJ Connect routes
+#################################################################
 @app.route('/receive_data', methods=['POST'])
 def receive_data():
     data = request.get_json()
@@ -87,6 +90,22 @@ def ping_module(module):
         return jsonify(ping(IP_TERMINAL) and ping(IP_SERVER))
     else:
         return jsonify({"error": "Invalid module"}), 400
+    
+@app.route('/check_status/<module>', methods=['GET'])
+def check_status(module):
+    try:
+        if module == 'terminal':
+            return jsonify(requests.get('http://' + IP_TERMINAL + ':5000').status_code == 200)
+        elif module == 'server':
+            return jsonify(requests.get('http://' + IP_SERVER + ':5000').status_code == 200)
+        else:
+            return jsonify({"error": "Invalid module"}), 400
+    except Exception as e:
+        return jsonify(False), 200
+    
+#################################################################
+# Scenarios routes
+#################################################################
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
