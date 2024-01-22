@@ -26,6 +26,6 @@ export interface IScenario {
 }
 
 export interface IConfig {
-    modules: { [key in DeviceTypes]: { isConnected: boolean; parameters?: IParameter[] } };
+    modules: { [key in DeviceTypes]: { parameters?: IParameter[] } };
     scenarios: IScenario[];
 }

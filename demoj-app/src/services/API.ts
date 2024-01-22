@@ -118,20 +118,6 @@ class API {
 
     // Others
 
-    async isConnected(device: DeviceTypes): Promise<boolean> {
-        const config = await this.getConfig();
-
-        if (config == null) return false;
-
-        try {
-            return config.modules[device].isConnected;
-        } catch (error) {
-            console.error("Unable to get connection status for device: " + device);
-            console.error(error);
-            return false;
-        }
-    }
-
     async checkStatus(device: DeviceTypes): Promise<boolean> {
         return await axios
             .get(this.networkIP + `/check_status/${device}`, { timeout: this.timeout })

@@ -157,9 +157,7 @@ const handleRefresh = async (event: any) => {
 };
 
 const updateStatus = async () => {
-    await API.isConnected(props.device).then((response) => {
-        isConnected.value = response;
-    });
+    isConnected.value = await API.checkStatus(props.device);
 };
 
 const getParameters = async () => {
