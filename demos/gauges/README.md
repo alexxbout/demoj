@@ -2,7 +2,7 @@
 
 This directory contains the program which displays CPU temperature and energy power on the leds
 
-# Wireing
+# Wiring
 
 ![wire](/docs/circuit_diagrams/realistic_gauges_circuit.png)
 
