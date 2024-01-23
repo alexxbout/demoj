@@ -48,7 +48,7 @@ def restart_module(module):
 @app.route('/stop/<module>', methods=['GET'])
 def stop_module(module):
     if module == 'terminal':
-        return jsonify(requests.get(geHttpAddress + '/stop').status_code == 200)
+        return jsonify(requests.get(geHttpAddress(IP_TERMINAL) + '/stop').status_code == 200)
     elif module == 'server':
         return jsonify(requests.get(geHttpAddress(IP_SERVER) + '/stop').status_code == 200)
     elif module == 'network':
