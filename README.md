@@ -1,10 +1,28 @@
 # Demoj
 
-Repository for the DemoJ project
+![logo](docs/logos/demoj.png)
+
+>Repository for the DemoJ project
 
 # Authors
 
-# Libraries
+- Alexandre Boutinaud (Scrum master)
+- Arthur Adam (Scrum master)
+- Olivier Palvadeau (In charge of documentation)
+- Yasmine Tellache
+- Hadrien Moulhérat
+- Cameron Salomé
+- Yann Lainé Odic
+- Anaelle Dumand
+- Charly Piaud
+
+# Libraries & frameworks
+
+- DFRobot INA 219
+- Rpi ws281x
+- Flask
+- VueJS
+- Ionic
 
 ## Setup
 
