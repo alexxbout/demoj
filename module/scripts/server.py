@@ -31,16 +31,27 @@ def receive_data():
 
     return jsonify({"message": "Data received successfully"})
 
-# TODO: For restart and stop, we should send a response before executing the command
-@app.route('/restart', methods=['GET'])
-def restart_module():
-    execute_command(RESTART_CMD)
-    # return jsonify({"message": "Module is restarting..."})
+@app.route('/restart/<module>', methods=['GET'])
+def restart_module(module):
+    if module == 'terminal':
+        return jsonify(requests.get('http://' + IP_TERMINAL + ':5000' + '/restart').status_code == 200)
+    elif module == 'server':
+        return jsonify(requests.get('http://' + IP_SERVER + ':5000' + '/restart').status_code == 200)
+    elif module == 'network':
+        return jsonify(execute_command(RESTART_CMD));
+    else:
+        return jsonify({"error": "Invalid module"}), 400
 
-@app.route('/stop', methods=['GET'])
-def stop_module():
-    execute_command(STOP_CMD)
-    # return jsonify({"message": "Module is shutting down..."})
+@app.route('/stop/<module>', methods=['GET'])
+def stop_module(module):
+    if module == 'terminal':
+        return jsonify(requests.get('http://' + IP_TERMINAL + ':5000' + '/stop').status_code == 200)
+    elif module == 'server':
+        return jsonify(requests.get('http://' + IP_SERVER + ':5000' + '/stop').status_code == 200)
+    elif module == 'network':
+        return jsonify(execute_command(STOP_CMD));
+    else:
+        return jsonify({"error": "Invalid module"}), 400
 
 @app.route('/config', methods=['GET'])
 def get_config():
