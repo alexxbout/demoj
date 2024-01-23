@@ -1,5 +1,5 @@
 <template>
-    <ion-page ref="page">
+    <ion-page>
         <ion-header>
             <ion-toolbar>
                 <ion-title>Scénarios</ion-title>

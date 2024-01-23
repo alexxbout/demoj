@@ -36,7 +36,7 @@ const toastIcon = ref(toastTheme.value.default.icon);
 const toastColor = ref(toastTheme.value.default.color);
 
 const trigger = ref("ping");
-const header = ref("Ping");
+const header = ref("Tester la connectivité (ping)");
 
 const actionSheetButtons = ref([
     {

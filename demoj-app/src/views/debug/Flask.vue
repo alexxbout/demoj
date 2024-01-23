@@ -36,7 +36,7 @@ const toastIcon = ref(toastTheme.value.default.icon);
 const toastColor = ref(toastTheme.value.default.color);
 
 const trigger = ref("flask");
-const header = ref("Flask");
+const header = ref("Tester la connectivité (flask)");
 
 const actionSheetButtons = ref([
     {

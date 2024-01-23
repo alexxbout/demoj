@@ -19,9 +19,7 @@ export interface IScenario {
         name: string;
         value: number;
     }[];
-    instances: {
-        pid: number;
-    }[];
+    instances: {}[];
     icon?: string;
 }
 

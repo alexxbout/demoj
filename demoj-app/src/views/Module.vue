@@ -8,18 +8,17 @@
 
         <ion-content :fullscreen="true">
             <ion-refresher slot="fixed" :pull-factor="0.5" :pull-min="100" :pull-max="200" @ionRefresh="handleRefresh">
-                <ion-refresher-content></ion-refresher-content>
+                <ion-refresher-content />
             </ion-refresher>
 
             <ion-header collapse="condense">
                 <ion-toolbar>
-                    <ion-grid>
-                        <ion-row class="ion-align-items-end">
-                            <ion-col>
+                    <ion-grid style="--ion-grid-padding: 0px;">
+                        <ion-row class="ion-align-items-center ion-justify-content-between">
+                            <ion-col size="auto" style="--ion-grid-column-padding: 0px;">
                                 <ion-title size="large">{{ name }}</ion-title>
                             </ion-col>
-
-                            <ion-col size="fullscreen">
+                            <ion-col size="auto" style="--ion-grid-column-padding: 0px;">
                                 <connect-status :is-connected="isConnected" />
                             </ion-col>
                         </ion-row>

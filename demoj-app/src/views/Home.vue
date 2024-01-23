@@ -53,9 +53,15 @@ const handleClick = () => {
     justify-items: center;
     align-content: center;
     height: 100vh;
-    gap: 1rem;
+    gap: 2rem;
     padding-left: 30px;
     padding-right: 30px;
     background: white;
+}
+
+@media (prefers-color-scheme: dark) {
+    .content {
+        background: black;
+    }
 }
 </style>

@@ -9,13 +9,13 @@
         <ion-content :fullscreen="true">
             <ion-header collapse="condense">
                 <ion-toolbar>
-                    <ion-grid style="padding: 0px">
-                        <ion-row class="ion-align-items-end">
-                            <ion-col>
+                    <ion-grid style="--ion-grid-padding: 0px;">
+                        <ion-row class="ion-align-items-end ion-justify-content-between">
+                            <ion-col size="auto" style="--ion-grid-column-padding: 0px;">
                                 <ion-title size="large">Debug</ion-title>
                             </ion-col>
 
-                            <ion-col size="fullscreen">
+                            <ion-col size="auto" style="--ion-grid-column-padding: 0px;">
                                 <ion-spinner v-show="isLoading"></ion-spinner>
                             </ion-col>
                         </ion-row>
@@ -24,41 +24,26 @@
             </ion-header>
 
             <ion-content class="ion-padding">
+                <Running :presenting="presenting" />
                 <Ping @@start="isLoading = true" @@end="isLoading = false" />
                 <Flask @@start="isLoading = true" @@end="isLoading = false" />
-                <!-- <ion-button @click="isOpen = true" expand="block">Modal</ion-button> -->
             </ion-content>
-
-            <!-- <ion-modal :is-open="isOpen" :presenting-element="presentingElement" @willDismiss="isOpen = false">
-                <ion-header>
-                    <ion-toolbar>
-                        <ion-title>Modal</ion-title>
-                        <ion-buttons slot="end">
-                            <ion-button @click="isOpen = false">Close</ion-button>
-                        </ion-buttons>
-                    </ion-toolbar>
-                </ion-header>
-                <ion-content></ion-content>
-            </ion-modal> -->
         </ion-content>
     </ion-page>
 </template>
 
 <script setup lang="ts">
 import { IonCol, IonContent, IonGrid, IonHeader, IonPage, IonRow, IonSpinner, IonTitle, IonToolbar } from "@ionic/vue";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import Flask from "./debug/Flask.vue";
 import Ping from "./debug/Ping.vue";
+import Running from "./debug/Running.vue";
 
-// const page = ref();
-// const isOpen = ref(false);
-// const presentingElement = ref();
-
-// onMounted(() => {
-//     presentingElement.value = page.value.$el;
-// });
-
-// beforeEnter, chech if debug mode is enabled
-
+const page = ref();
+const presenting = ref();
 const isLoading = ref(false);
+
+onMounted(() => {
+    presenting.value = page.value.$el;
+});
 </script>
