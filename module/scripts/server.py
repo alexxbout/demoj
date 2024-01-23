@@ -17,6 +17,9 @@ CONFIG_PATH = "/home/network/demoj/module/config/config.json"
 RESTART_CMD = ['sudo', 'reboot']
 STOP_CMD = ['sudo', 'shutdown', '-h', 'now']
 
+def geHttpAddress(ip):
+    return 'http://' + ip + ':5000'
+
 @app.route('/')
 def index():
     return jsonify({"message": "Server is running"})
@@ -34,9 +37,9 @@ def receive_data():
 @app.route('/restart/<module>', methods=['GET'])
 def restart_module(module):
     if module == 'terminal':
-        return jsonify(requests.get('http://' + IP_TERMINAL + ':5000' + '/restart').status_code == 200)
+        return jsonify(requests.get(geHttpAddress(IP_TERMINAL) + '/restart').status_code == 200)
     elif module == 'server':
-        return jsonify(requests.get('http://' + IP_SERVER + ':5000' + '/restart').status_code == 200)
+        return jsonify(requests.get(geHttpAddress(IP_SERVER) + '/restart').status_code == 200)
     elif module == 'network':
         return jsonify(execute_command(RESTART_CMD));
     else:
@@ -45,9 +48,9 @@ def restart_module(module):
 @app.route('/stop/<module>', methods=['GET'])
 def stop_module(module):
     if module == 'terminal':
-        return jsonify(requests.get('http://' + IP_TERMINAL + ':5000' + '/stop').status_code == 200)
+        return jsonify(requests.get(geHttpAddress + '/stop').status_code == 200)
     elif module == 'server':
-        return jsonify(requests.get('http://' + IP_SERVER + ':5000' + '/stop').status_code == 200)
+        return jsonify(requests.get(geHttpAddress(IP_SERVER) + '/stop').status_code == 200)
     elif module == 'network':
         return jsonify(execute_command(STOP_CMD));
     else:
@@ -109,9 +112,9 @@ def ping_module(module):
 def check_status(module):
     try:
         if module == 'terminal':
-            return jsonify(requests.get('http://' + IP_TERMINAL + ':5000').status_code == 200)
+            return jsonify(requests.get(geHttpAddress(IP_TERMINAL)).status_code == 200)
         elif module == 'server':
-            return jsonify(requests.get('http://' + IP_SERVER + ':5000').status_code == 200)
+            return jsonify(requests.get(geHttpAddress(IP_SERVER)).status_code == 200)
         elif module == 'network':
             return jsonify(True)
         else:
