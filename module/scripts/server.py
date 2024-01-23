@@ -19,5 +19,17 @@ STOP_CMD = ['sudo', 'shutdown', '-h', 'now']
 def index():
     return jsonify({"message": "Server is running"})
 
+#################################################################
+# DémoJ Connect routes
+#################################################################
+
+@app.route('/restart', methods=['GET'])
+def restart_module():
+    return jsonify(execute_command(RESTART_CMD))
+
+@app.route('/stop', methods=['GET'])
+def stop_module():
+    return jsonify(execute_command(STOP_CMD))
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
