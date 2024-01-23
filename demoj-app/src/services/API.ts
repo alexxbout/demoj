@@ -78,10 +78,10 @@ class API {
 
     // Actions
 
-    async restartModule(): Promise<boolean> {
+    async restartModule(device: DeviceTypes): Promise<boolean> {
         // TODO Add restart specific module
         return await axios
-            .get(this.networkIP + `/restart`, { timeout: this.timeout })
+            .get(this.networkIP + `/restart/${device}`, { timeout: this.timeout })
             .then(() => {
                 return true;
             })
@@ -91,10 +91,10 @@ class API {
             });
     }
 
-    async stopModule(): Promise<boolean> {
+    async stopModule(device: DeviceTypes): Promise<boolean> {
         // TODO Add stop specific module
         return await axios
-            .get(this.networkIP + `/stop`, { timeout: this.timeout })
+            .get(this.networkIP + `/stop/${device}`, { timeout: this.timeout })
             .then(() => {
                 return true;
             })

@@ -114,7 +114,7 @@ const toastOpen = ref(false);
 
 const handleRestartSheet = async (event: CustomEvent) => {
     if (event.detail.role == "destructive") {
-        if (await API.restartModule()) {
+        if (await API.restartModule(props.device)) {
             isConnected.value = false;
             toastOpen.value = true;
 
@@ -128,7 +128,7 @@ const handleRestartSheet = async (event: CustomEvent) => {
 
 const handleStopSheet = async (event: CustomEvent) => {
     if (event.detail.role == "destructive") {
-        if (await API.stopModule()) {
+        if (await API.stopModule(props.device)) {
             isConnected.value = false;
             toastOpen.value = true;
         }
