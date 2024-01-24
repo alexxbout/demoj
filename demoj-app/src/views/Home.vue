@@ -1,25 +1,33 @@
 <template>
-    <ion-page>
-        <div class="content ion-padding">
-            <ion-img @click="handleClick" src="assets/images/demoj.png"></ion-img>
-            <ion-button @click="router.push({ name: 'scenarios' })" shape="round" size="default"> Accéder à l'application </ion-button>
-        </div>
-        <ion-toast @didDismiss="toastOpen = false" @click="toastOpen = false" :is-open="toastOpen" swipe-gesture="vertical" position="top" :message="toastMessage" :duration="toastDuration" :icon="checkmarkCircle"></ion-toast>
+    <ion-page class="custom">
+        <ion-grid>
+            <ion-row class="ion-align-items-center ion-justify-content-center" style="height: 100%">
+                <ion-col size="10">
+                    <ion-img @click="handleClick" src="assets/images/demoj.png"></ion-img>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+
+        <ion-footer class="ion-padding" style="">
+            <ion-button @click="router.push({ name: 'scenarios' })" shape="round" size="default" expand="full"> Accéder à l'application </ion-button>
+        </ion-footer>
+
+        <ion-toast @didDismiss="toastOpen = false" @click="toastOpen = false" :is-open="toastOpen" swipe-gesture="vertical" position="top" :message="toastMessage" :duration="toastDuration" :icon="checkmarkCircle" color="success"></ion-toast>
     </ion-page>
 </template>
 
 <script setup lang="ts">
-import { IonButton, IonImg, IonPage, IonToast, useIonRouter } from "@ionic/vue";
+import { IonButton, IonCol, IonFooter, IonGrid, IonImg, IonPage, IonRow, IonToast, useIonRouter } from "@ionic/vue";
 import { checkmarkCircle } from "ionicons/icons";
 import { computed, ref } from "vue";
 
 const router = useIonRouter();
 const clickCount = ref(0);
-const debugModeEnabled = ref(false);
+const debugMode = ref(false);
 const toastDuration = ref(2000);
 const toastOpen = ref(false);
 const toastMessage = computed<string>(() => {
-    if (debugModeEnabled.value) {
+    if (debugMode.value) {
         return "Mode développeur activé !";
     } else {
         return "Mode développeur désactivé !";
@@ -29,7 +37,7 @@ const toastMessage = computed<string>(() => {
 // Vérifier si le mode développeur est déjà activé au chargement de la page
 const storedDebugMode = localStorage.getItem("debugMode");
 if (storedDebugMode === "true") {
-    debugModeEnabled.value = true; // Activer le mode développeur
+    debugMode.value = true; // Activer le mode développeur
 }
 
 const handleClick = () => {
@@ -37,30 +45,20 @@ const handleClick = () => {
 
     if (clickCount.value === 10) {
         toastOpen.value = true; // Ouvrir le toast
-        debugModeEnabled.value = !debugModeEnabled.value; // Inverser l'état du mode développeur
-        localStorage.setItem("debugMode", debugModeEnabled.value.toString()); // Enregistrer le mode développeur dans le local storage
+        debugMode.value = !debugMode.value; // Inverser l'état du mode développeur
+        localStorage.setItem("debugMode", debugMode.value.toString()); // Enregistrer le mode développeur dans le local storage
         clickCount.value = 0; // Réinitialiser le compteur
     }
 };
 </script>
 
 <style scoped>
-.content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    justify-items: center;
-    align-content: center;
-    height: 100vh;
-    gap: 2rem;
-    padding-left: 30px;
-    padding-right: 30px;
+.custom {
     background: white;
 }
 
 @media (prefers-color-scheme: dark) {
-    .content {
+    .custom {
         background: black;
     }
 }
