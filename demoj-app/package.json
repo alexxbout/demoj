@@ -11,7 +11,7 @@
     "test:e2e": "cypress run",
     "test:unit": "vitest",
     "lint": "eslint .",
-    "deploy": "npm run build && gh-pages -d dist"
+    "deploy": "ionic build && gh-pages -d dist"
   },
   "dependencies": {
     "@capacitor/app": "5.0.6",
@@ -35,12 +35,12 @@
     "cypress": "^13.5.0",
     "eslint": "^8.35.0",
     "eslint-plugin-vue": "^9.9.0",
-    "gh-pages": "^6.1.0",
+    "gh-pages": "^6.1.1",
     "jsdom": "^22.1.0",
     "terser": "^5.4.0",
     "typescript": "^5.1.6",
     "vite": "^5.0.0",
-    "vite-plugin-pwa": "^0.17.2",
+    "vite-plugin-pwa": "^0.17.4",
     "vitest": "^0.34.6",
     "vue-tsc": "^1.0.24"
   },

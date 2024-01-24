@@ -1,7 +1,7 @@
 <template>
     <ion-page>
         <div class="content ion-padding">
-            <ion-img @click="handleClick" src="/demoj-app/demoj.png"></ion-img>
+            <ion-img @click="handleClick" src="assets/images/demoj.png"></ion-img>
             <ion-button @click="router.push({ name: 'scenarios' })" shape="round" size="default"> Accéder à l'application </ion-button>
         </div>
         <ion-toast @didDismiss="toastOpen = false" @click="toastOpen = false" :is-open="toastOpen" swipe-gesture="vertical" position="top" :message="toastMessage" :duration="toastDuration" :icon="checkmarkCircle"></ion-toast>

@@ -20,5 +20,5 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom'
   },
-  base: '/demoj-app/',
+  base: '/',
 })
