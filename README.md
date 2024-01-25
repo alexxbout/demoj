@@ -1,8 +1,8 @@
 # Demoj
 
-![logo](docs/logos/demoj.png)
+<img src="docs/logos/demoj.png" width="500">
 
->Repository for the DemoJ project
+#### Repository for the DemoJ project
 
 # Authors
 
