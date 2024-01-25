@@ -16,6 +16,27 @@
 - Anaelle Dumand
 - Charly Piaud
 
+# Table of content
+
+- [Authors](#authors) 
+- [Branches description](#branches)
+- [Libraries and frameworks used](#libraries--frameworks)
+- [Setup](#setup)
+- [Reports and documents](#reports-and-docs)
+
+# Branches
+
+Our project is divided into 3 modules and one web application.
+
+Each module has common code available in master branch. They also have their own code in their own branch (Network, Terminal or Server)
+> Common code is also shared in module's branches.
+
+The code for the web application is available into the common.
+
+
+The master branch is used for documentation and common parts.
+
+
 # Libraries & frameworks
 
 - DFRobot INA 219
@@ -23,6 +44,14 @@
 - Flask
 - VueJS
 - Ionic
+
+# Reports and docs
+
+We made two reports for our projects available [here](/docs/reports)
+
+You can see our circuit diagrams [here](/docs/circuit_diagrams) 
+
+For any other document look [here](/docs)
 
 ## Setup
 
