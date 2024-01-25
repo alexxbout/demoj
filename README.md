@@ -1,8 +1,10 @@
 # Demoj
 
-<img src="docs/logos/demoj.png" width="500">
+<div style="text-align:center"><img src="docs/logos/demoj.png" width="500">
+<img src="docs/logos/demotech.png" width="200">
+</div>
 
-#### Repository for the DemoJ project
+#### Repository for the DemoJ project by DemoTech
 
 # Authors
 
