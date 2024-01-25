@@ -1,5 +1,5 @@
 <template>
-    <ion-button @click="isOpen = true" expand="block" color="secondary">{{ header }}</ion-button>
+    <ion-button @click="isOpen = true" expand="block" color="danger">{{ header }}</ion-button>
     <ion-modal :is-open="isOpen" :presenting-element="props.presenting" @willDismiss="isOpen = false">
         <ion-header>
             <ion-toolbar>
@@ -23,5 +23,5 @@ const props = defineProps<{
 
 const isOpen = ref(false);
 
-const header = ref("Voir les scénarios en cours");
+const header = ref("Stresser un module");
 </script>

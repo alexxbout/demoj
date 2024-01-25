@@ -8,48 +8,87 @@
             </ion-row>
         </ion-grid>
 
-        <ion-footer class="ion-padding" style="">
-            <ion-button @click="router.push({ name: 'scenarios' })" shape="round" size="default" expand="full"> Accéder à l'application </ion-button>
+        <ion-footer class="ion-padding">
+            <ion-button id="present-alert" class="ion-margin-bottom" shape="round" size="default" expand="full" color="secondary">Accéder à l'application opérateur</ion-button>
+            <ion-button @click="handleClientAcces" shape="round" size="default" expand="full" color="primary">Accéder à l'application cliente</ion-button>
         </ion-footer>
 
-        <ion-toast @didDismiss="toastOpen = false" @click="toastOpen = false" :is-open="toastOpen" swipe-gesture="vertical" position="top" :message="toastMessage" :duration="toastDuration" :icon="checkmarkCircle" color="success"></ion-toast>
+        <ion-alert trigger="present-alert" :header="alterText" :buttons="alertButtons" :inputs="alertInputs"></ion-alert>
+
+        <ion-toast @didDismiss="toastOpen = false" @click="toastOpen = false" :is-open="toastOpen" swipe-gesture="vertical" position="top" :message="toastMessage" :duration="toastDuration" :color="toastColor"></ion-toast>
     </ion-page>
 </template>
 
 <script setup lang="ts">
-import { IonButton, IonCol, IonFooter, IonGrid, IonImg, IonPage, IonRow, IonToast, useIonRouter } from "@ionic/vue";
-import { checkmarkCircle } from "ionicons/icons";
-import { computed, ref } from "vue";
+import { IonAlert, IonButton, IonCol, IonFooter, IonGrid, IonImg, IonPage, IonRow, IonToast, useIonRouter } from "@ionic/vue";
+import { onMounted, ref } from "vue";
 
 const router = useIonRouter();
+
+const maxClickCount = 15;
 const clickCount = ref(0);
 const debugMode = ref(false);
+
 const toastDuration = ref(2000);
 const toastOpen = ref(false);
-const toastMessage = computed<string>(() => {
-    if (debugMode.value) {
-        return "Mode développeur activé !";
-    } else {
-        return "Mode développeur désactivé !";
-    }
-});
-
-// Vérifier si le mode développeur est déjà activé au chargement de la page
-const storedDebugMode = localStorage.getItem("debugMode");
-if (storedDebugMode === "true") {
-    debugMode.value = true; // Activer le mode développeur
-}
+const toastMessage = ref("");
+const toastColor = ref();
 
 const handleClick = () => {
     clickCount.value++;
 
-    if (clickCount.value === 10) {
-        toastOpen.value = true; // Ouvrir le toast
-        debugMode.value = !debugMode.value; // Inverser l'état du mode développeur
-        localStorage.setItem("debugMode", debugMode.value.toString()); // Enregistrer le mode développeur dans le local storage
-        clickCount.value = 0; // Réinitialiser le compteur
+    if (clickCount.value === maxClickCount) {
+        debugMode.value = !debugMode.value;
+        clickCount.value = 0;
+
+        localStorage.setItem("debugMode", debugMode.value.toString());
+
+        toastMessage.value = debugMode.value ? "Mode développeur activé !" : "Mode développeur désactivé !";
+        toastColor.value = debugMode.value ? "success" : "danger";
+        toastOpen.value = true;
     }
 };
+
+const alterText = ref("Saisir le code d'accès");
+const alertButtons = ref([
+    {
+        text: "Annuler",
+        role: "cancel",
+    },
+    {
+        text: "Valider",
+        handler: (value: any) => {
+            if (value[0] == import.meta.env.VITE_OPERATOR_CODE) {
+                localStorage.setItem("mode", "operator");
+                router.push({ name: "scenarios" });
+            } else {
+                toastMessage.value = "Code invalide !";
+                toastColor.value = "danger";
+                toastOpen.value = true;
+            }
+        },
+    },
+]);
+const alertInputs = ref([
+    {
+        placeholder: "Code",
+        type: "number",
+        min: 1,
+    },
+]);
+
+const handleClientAcces = () => {
+    localStorage.setItem("mode", "client");
+    router.push({ name: "scenarios" });
+};
+
+onMounted(() => {
+    // Set debug mode
+    const storedDebugMode = localStorage.getItem("debugMode");
+    if (storedDebugMode === "true") {
+        debugMode.value = true;
+    }
+});
 </script>
 
 <style scoped>

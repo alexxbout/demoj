@@ -9,13 +9,13 @@
         <ion-content :fullscreen="true">
             <ion-header collapse="condense">
                 <ion-toolbar>
-                    <ion-grid style="--ion-grid-padding: 0px;">
+                    <ion-grid style="--ion-grid-padding: 0px">
                         <ion-row class="ion-align-items-end ion-justify-content-between">
-                            <ion-col size="auto" style="--ion-grid-column-padding: 0px;">
+                            <ion-col size="auto" style="--ion-grid-column-padding: 0px">
                                 <ion-title size="large">Debug</ion-title>
                             </ion-col>
 
-                            <ion-col size="auto" style="--ion-grid-column-padding: 0px;">
+                            <ion-col size="auto" style="--ion-grid-column-padding: 0px">
                                 <ion-spinner v-show="isLoading"></ion-spinner>
                             </ion-col>
                         </ion-row>
@@ -25,19 +25,28 @@
 
             <ion-content class="ion-padding">
                 <Running :presenting="presenting" />
+                <Stress :presenting="presenting" />
+
                 <Ping @@start="isLoading = true" @@end="isLoading = false" />
                 <Flask @@start="isLoading = true" @@end="isLoading = false" />
             </ion-content>
         </ion-content>
+
+        <ion-footer class="ion-padding ion-text-center">
+            <ion-text>
+                DémoJ Connect version 1.0.0
+            </ion-text>
+        </ion-footer>
     </ion-page>
 </template>
 
 <script setup lang="ts">
-import { IonCol, IonContent, IonGrid, IonHeader, IonPage, IonRow, IonSpinner, IonTitle, IonToolbar } from "@ionic/vue";
+import { IonCol, IonContent, IonFooter, IonGrid, IonHeader, IonPage, IonRow, IonSpinner, IonText, IonTitle, IonToolbar } from "@ionic/vue";
 import { onMounted, ref } from "vue";
 import Flask from "./debug/Flask.vue";
 import Ping from "./debug/Ping.vue";
 import Running from "./debug/Running.vue";
+import Stress from "./debug/Stress.vue";
 
 const page = ref();
 const presenting = ref();

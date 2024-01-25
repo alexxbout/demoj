@@ -13,6 +13,7 @@ export interface IScenario {
     name: string;
     description: string;
     id: number;
+    clientAvailable: boolean;
     to: keyof DeviceTypes;
     multipleInstance: boolean;
     parameters: {

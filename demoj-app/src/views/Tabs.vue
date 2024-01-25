@@ -2,7 +2,7 @@
     <ion-page>
         <ion-tabs>
             <ion-router-outlet animated="true" />
-            <ion-tab-bar slot="bottom">
+            <ion-tab-bar v-show="mode == 'operator'" slot="bottom">
                 <ion-tab-button tab="scenarios" href="/tabs/scenarios">
                     <ion-icon aria-hidden="true" :icon="layers" />
                     <ion-label>Scénarios</ion-label>
@@ -37,12 +37,16 @@ import { IonIcon, IonLabel, IonPage, IonRouterOutlet, IonTabBar, IonTabButton, I
 import { desktop, hardwareChip, layers, terminal, wifi } from "ionicons/icons";
 import { onMounted, ref } from "vue";
 
+const mode = ref<"client" | "operator">("client");
 const debugModeEnabled = ref(false);
 
 onMounted(() => {
-    const storedDebugMode = localStorage.getItem("debugMode");
-    if (storedDebugMode === "true") {
+    if (localStorage.getItem("debugMode") === "true") {
         debugModeEnabled.value = true;
+    }
+
+    if (localStorage.getItem("mode") === "operator") {
+        mode.value = "operator";
     }
 });
 </script>

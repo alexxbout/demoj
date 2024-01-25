@@ -23,8 +23,9 @@ const routes: Array<RouteRecordRaw> = [
                 name: "debug",
                 component: () => import("@/views/Debug.vue"),
                 beforeEnter: (to, from, next) => {
-                    const storedDebugMode = localStorage.getItem("debugMode");
-                    if (storedDebugMode === "true") {
+                    const debugMode = localStorage.getItem("debugMode");
+                    const mode = localStorage.getItem("mode");
+                    if (mode === "operator" && debugMode === "true") {
                         next();
                     } else {
                         next({ name: "home" });
@@ -40,16 +41,40 @@ const routes: Array<RouteRecordRaw> = [
                 path: "terminal",
                 name: "terminal",
                 component: () => import("@/views/modules/Terminal.vue"),
+                beforeEnter: (to, from, next) => {
+                    const mode = localStorage.getItem("mode");
+                    if (mode === "client") {
+                        next({ name: "home" });
+                    } else {
+                        next();
+                    }
+                }
             },
             {
                 path: "network",
                 name: "network",
                 component: () => import("@/views/modules/Network.vue"),
+                beforeEnter: (to, from, next) => {
+                    const mode = localStorage.getItem("mode");
+                    if (mode === "client") {
+                        next({ name: "home" });
+                    } else {
+                        next();
+                    }
+                }
             },
             {
                 path: "server",
                 name: "server",
                 component: () => import("@/views/modules/Server.vue"),
+                beforeEnter: (to, from, next) => {
+                    const mode = localStorage.getItem("mode");
+                    if (mode === "client") {
+                        next({ name: "home" });
+                    } else {
+                        next();
+                    }
+                }
             },
         ],
     },

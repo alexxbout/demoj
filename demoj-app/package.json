@@ -2,7 +2,7 @@
   "homepage": "http://alexxbout.github.io/demoj-app",
   "name": "demoj-app",
   "private": true,
-  "version": "0.0.1",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
