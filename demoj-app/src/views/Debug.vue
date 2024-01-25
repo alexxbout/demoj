@@ -29,6 +29,7 @@
 
                 <Ping @@start="isLoading = true" @@end="isLoading = false" />
                 <Flask @@start="isLoading = true" @@end="isLoading = false" />
+                <Socket />
             </ion-content>
         </ion-content>
 
@@ -46,6 +47,7 @@ import { onMounted, ref } from "vue";
 import Flask from "./debug/Flask.vue";
 import Ping from "./debug/Ping.vue";
 import Running from "./debug/Running.vue";
+import Socket from "./debug/Socket.vue";
 import Stress from "./debug/Stress.vue";
 
 const page = ref();

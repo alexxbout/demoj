@@ -3,9 +3,9 @@
     <ion-modal :is-open="isOpen" :presenting-element="props.presenting" @willDismiss="isOpen = false">
         <ion-header>
             <ion-toolbar>
-                <ion-title>Modal</ion-title>
+                <ion-title>Scénarios en cours</ion-title>
                 <ion-buttons slot="end">
-                    <ion-button @click="isOpen = false">Close</ion-button>
+                    <ion-button @click="isOpen = false">Retour</ion-button>
                 </ion-buttons>
             </ion-toolbar>
         </ion-header>

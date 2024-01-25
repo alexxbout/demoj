@@ -6,7 +6,7 @@
 
         <ion-card-content>{{ props.data.description }}</ion-card-content>
 
-        <ion-button @click="go()" class="ion-padding" expand="block">Voir le scénario</ion-button>
+        <ion-button @click="router.push('/scenarios/' + props.data.id)" class="ion-padding" expand="block">Voir le scénario</ion-button>
     </ion-card>
 </template>
 
@@ -20,8 +20,4 @@ const props = defineProps<{
 }>();
 
 const router = useRouter();
-
-const go = () => {
-    router.push("/tabs/scenarios/" + props.data.id);
-};
 </script>

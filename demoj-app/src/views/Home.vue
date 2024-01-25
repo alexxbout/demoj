@@ -9,11 +9,11 @@
         </ion-grid>
 
         <ion-footer class="ion-padding">
-            <ion-button id="present-alert" class="ion-margin-bottom" shape="round" size="default" expand="full" color="secondary">Accéder à l'application opérateur</ion-button>
-            <ion-button @click="handleClientAcces" shape="round" size="default" expand="full" color="primary">Accéder à l'application cliente</ion-button>
+            <ion-button @click="handleOperator" class="ion-margin-bottom" shape="round" size="default" expand="full" color="secondary">Accéder à l'application opérateur</ion-button>
+            <ion-button @click="handleClient" shape="round" size="default" expand="full" color="primary">Accéder à l'application cliente</ion-button>
         </ion-footer>
 
-        <ion-alert trigger="present-alert" :header="alterText" :buttons="alertButtons" :inputs="alertInputs"></ion-alert>
+        <ion-alert @didDismiss="isAlertOpen = false" :is-open="isAlertOpen" :header="alterText" :buttons="alertButtons" :inputs="alertInputs"></ion-alert>
 
         <ion-toast @didDismiss="toastOpen = false" @click="toastOpen = false" :is-open="toastOpen" swipe-gesture="vertical" position="top" :message="toastMessage" :duration="toastDuration" :color="toastColor"></ion-toast>
     </ion-page>
@@ -27,24 +27,26 @@ const router = useIonRouter();
 
 const maxClickCount = 15;
 const clickCount = ref(0);
-const debugMode = ref(false);
+const debug = ref(false);
 
 const toastDuration = ref(2000);
 const toastOpen = ref(false);
 const toastMessage = ref("");
 const toastColor = ref();
 
+const isAlertOpen = ref(false);
+
 const handleClick = () => {
     clickCount.value++;
 
     if (clickCount.value === maxClickCount) {
-        debugMode.value = !debugMode.value;
+        debug.value = !debug.value;
         clickCount.value = 0;
 
-        localStorage.setItem("debugMode", debugMode.value.toString());
+        localStorage.setItem("debugMode", debug.value.toString());
 
-        toastMessage.value = debugMode.value ? "Mode développeur activé !" : "Mode développeur désactivé !";
-        toastColor.value = debugMode.value ? "success" : "danger";
+        toastMessage.value = debug.value ? "Mode développeur activé !" : "Mode développeur désactivé !";
+        toastColor.value = debug.value ? "success" : "danger";
         toastOpen.value = true;
     }
 };
@@ -77,16 +79,20 @@ const alertInputs = ref([
     },
 ]);
 
-const handleClientAcces = () => {
+const handleClient = () => {
     localStorage.setItem("mode", "client");
     router.push({ name: "scenarios" });
+};
+
+const handleOperator = () => {
+    isAlertOpen.value = true;
 };
 
 onMounted(() => {
     // Set debug mode
     const storedDebugMode = localStorage.getItem("debugMode");
     if (storedDebugMode === "true") {
-        debugMode.value = true;
+        debug.value = true;
     }
 });
 </script>

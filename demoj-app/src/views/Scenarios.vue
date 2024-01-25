@@ -13,7 +13,7 @@
                 </ion-toolbar>
             </ion-header>
 
-            <div v-if="mode == 'operator'" class="ion-padding">
+            <div v-show="mode == 'operator'" class="ion-padding">
                 <Running :presenting="presenting" />
             </div>
 
