@@ -16,13 +16,13 @@
 - Anaelle Dumand
 - Charly Piaud
 
-# Table of content
+# Summary
 
 - [Authors](#authors) 
 - [Branches description](#branches)
 - [Libraries and frameworks used](#libraries--frameworks)
-- [Setup](#setup)
 - [Reports and documents](#reports-and-docs)
+- [Setup](#setup)
 
 # Branches
 
