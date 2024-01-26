@@ -11,14 +11,23 @@ This branch contains the code and the configurations of the Network module of De
 
 > The local address of this module is fixed to 192.168.64.101 
 
-### The config file structure
+## Summary
+
+1. [Configuration file structure](#the-config-file-structure)
+2. [Requests description](#requests)
+
+    - [Control requests](#control)
+    - [Configuration requests](#configuration)
+3. [Dependencies](#dependencies)
+
+## The config file structure
 
 todo
 
 
-### Requests :
+## Requests :
 
-#### Control
+### Control
 
 - ```GET /restart/<module>``` Order to restart a module (server, network or terminal)
 
@@ -28,7 +37,7 @@ todo
 
 - ```GET /check_status/<module>``` Get the status of a module (active or inactive)
 
-#### Configuration
+### Configuration
 
 - ```GET /config``` Returns the config json file
 
