@@ -18,11 +18,11 @@
 
 # Summary
 
-- [Authors](#authors) 
-- [Branches description](#branches)
-- [Libraries and frameworks used](#libraries--frameworks)
-- [Reports and documents](#reports-and-docs)
-- [Setup](#setup)
+1. [Authors](#authors) 
+2. [Branches description](#branches)
+3. [Libraries and frameworks used](#libraries--frameworks)
+4. [Reports and documents](#reports-and-docs)
+5. [Setup](#setup)
 
 # Branches
 
