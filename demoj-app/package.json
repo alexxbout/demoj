@@ -23,6 +23,7 @@
     "@ionic/vue-router": "^7.0.0",
     "axios": "^1.6.2",
     "ionicons": "^7.0.0",
+    "socket.io-client": "^4.7.4",
     "vue": "^3.3.0",
     "vue-router": "^4.2.0"
   },
