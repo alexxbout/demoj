@@ -72,6 +72,7 @@ def get_config():
         print(f"Error reading config file: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
+# TODO Update this method to use update_and_write_json from utils.py
 @app.route("/modules/<module>/params/<id_param>", methods=["POST"])
 def update_parameter(module, id_param):
     try:
@@ -145,19 +146,37 @@ def handle_connect():
 def handle_disconnect():
     print("Client disconnected")
 
-@sio.on("module_ready")
-def handle_module_ready(data):
-    room = data["module"]
-    if room != "terminal" and room != "server":
-        print("Invalid module:", room)
+    device = get_device_from_addr(request.remote_addr)
+    
+    # Send notfication to client if both terminal and server are ready
+    sio.emit("module_off", {"device": device}, room="client")
+
+@sio.on("ready")
+def handle_ready(data):
+    data = data["device"]
+    if data != "terminal" and data != "server" and data != "client":
+        print("Invalid module:", data)
         return
     
-    print("Module ready:", room)
-    join_room(room)
-    print("Successfully joined room:", room)
+    print("Device ready:", data)
+    join_room(data)
+    print("Successfully joined room:", data)
 
-    update_and_write_json(CONFIG_PATH, f"modules.{room}.isConnected", True)
+    if data != "client":
+        # Update config if terminal or server is ready
+        update_and_write_json(CONFIG_PATH, f"modules.{data}.isConnected", True)
 
+        # Send notfication to client if both terminal and server are ready
+        sio.emit("module_on", {"device": data}, room="client")
+
+def get_device_from_addr(addr):
+    if addr == IP_TERMINAL:
+        return "terminal"
+    elif addr == IP_SERVER:
+        return "server"
+    else:
+        return "client"
+    
 #################################################################
 # Main
 #################################################################
