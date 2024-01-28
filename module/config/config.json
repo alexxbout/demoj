@@ -1,7 +1,7 @@
 {
   "modules": {
     "terminal": {
-      "isConnected": true
+      "isConnected": false
     },
     "network": {
       "isConnected": true,
@@ -18,7 +18,7 @@
           "name": "Latence",
           "type": "percentage",
           "isActive": false,
-          "value": 50
+          "value": 68
         },
         {
           "id": 2,

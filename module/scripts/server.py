@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 import json
 import requests
+import time
 from const import IP_TERMINAL, IP_NETWORK, IP_SERVER
 from utils import ping, execute_command, update_and_write_json
-import threading
 
 from flask import Flask, jsonify, request
 from flask_socketio import SocketIO, join_room, leave_room
@@ -135,6 +135,7 @@ def check_status(module):
     
 #################################################################
 # Socket
+# Be careful to the frequency of the emits
 #################################################################
 
 @sio.on("connect")
@@ -147,6 +148,9 @@ def handle_disconnect():
     print("Client disconnected")
 
     device = get_device_from_addr(request.remote_addr)
+    
+    # Update config if terminal or server is ready
+    update_and_write_json(CONFIG_PATH, f"modules.{device}.isConnected", False)
     
     # Send notfication to client if both terminal and server are ready
     sio.emit("module_off", {"device": device}, room="client")
