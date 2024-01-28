@@ -1,35 +1,51 @@
-#!/usr/bin/env python3
+from const import IP_NETWORK
+import socketio
+import time
+import threading
 
-from const import IP_TERMINAL, IP_NETWORK, IP_SERVER
-from utils import ping, execute_command
+CURRENT_MODULE = "terminal"
 
-from flask import Flask, jsonify, request
-from flask_cors import CORS
+sio = socketio.Client(reconnection=True, reconnection_attempts=10, reconnection_delay=5, reconnection_delay_max=5)
+received_event = threading.Event()
 
-import json
-import subprocess
+@sio.event
+def connect():
+    """
+    Send a message to the server to tell him that the module is ready
+    Add the current module to be added in a room by the server
+    """
+    sio.emit("module_ready", {"module": CURRENT_MODULE})
+    print("Connected to network")
 
-app = Flask(__name__)
-CORS(app)
+@sio.event
+def disconnect():
+    print("Disconnected from network")
 
-RESTART_CMD = ['sudo', 'reboot']
-STOP_CMD = ['sudo', 'shutdown', '-h', 'now']
+@sio.event
+def custom_message(data):
+    print(f"Received custom message: {data}")
+    received_event.set()
 
-@app.route('/')
-def index():
-    return jsonify({"message": "Server is running"})
+if __name__ == "__main__":
+    """
+    We have to keep this while loop because the socketio will not reconnect automatically at the first try.
+    Params for reconnection will be used if the socketio is disconnected while running.
+    """
+    while True:
+        try:
+            sio.connect("http://{}:5000".format(IP_NETWORK))
+            break
+        except socketio.exceptions.ConnectionError:
+            print("Connection to server failed, retrying in 5 seconds")
+            time.sleep(5)
+    
+    while True:
+        try:
+            message_received = received_event.wait(timeout=5)
 
-#################################################################
-# DémoJ Connect routes
-#################################################################
-
-@app.route('/restart', methods=['GET'])
-def restart_module():
-    return jsonify(execute_command(RESTART_CMD))
-
-@app.route('/stop', methods=['GET'])
-def stop_module():
-    return jsonify(execute_command(STOP_CMD))
-
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+            if message_received:
+                print("Message received, exiting.")
+                break
+        except socketio.exceptions.ConnectionError:
+            print("Connection lost, retrying in 5 seconds")
+            time.sleep(5)
