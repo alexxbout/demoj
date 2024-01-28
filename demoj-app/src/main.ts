@@ -21,12 +21,15 @@ import "@ionic/vue/css/text-alignment.css";
 import "@ionic/vue/css/text-transformation.css";
 
 /* Theme variables */
+import { CustomSocket } from "./services/CustomSocket";
 import "./theme/variables.css";
 
-const app = createApp(App).use(IonicVue, {
-    mode: "ios"
-}).use(router);
+const app = createApp(App)
+    .use(IonicVue, {
+        mode: "ios",
+    })
+    .use(router);
 
 router.isReady().then(() => {
-    app.mount("#app");
+    app.provide("socket", new CustomSocket()).mount("#app");
 });

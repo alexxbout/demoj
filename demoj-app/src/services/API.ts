@@ -7,7 +7,7 @@ class API {
 
     // Getters from config file
 
-    private async getConfig(): Promise<IConfig | null> {
+    async getConfig(): Promise<IConfig | null> {
         return await axios
             .get(this.networkIP + "/config", { timeout: this.timeout })
             .then((response) => {
@@ -19,6 +19,9 @@ class API {
             });
     }
 
+    /**
+     * @deprecated use socket instead
+     */
     async getModuleParameters(device: DeviceTypes): Promise<IParameter[]> {
         const config = await this.getConfig();
 
@@ -36,6 +39,9 @@ class API {
         }
     }
 
+    /**
+     * @deprecated use socket instead
+     */
     async getScenarios(): Promise<IScenario[]> {
         const config = await this.getConfig();
 

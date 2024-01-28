@@ -15,7 +15,6 @@ const handleConnect = () => {
 
     socket.on("connect", () => {
         console.log("socket connected");
-        // socket?.emit("message", "hellloooooooo");
     });
 
     socket.on("message", (data: any) => {

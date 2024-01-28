@@ -34,9 +34,7 @@
         </ion-content>
 
         <ion-footer class="ion-padding ion-text-center">
-            <ion-text>
-                DémoJ Connect version 1.0.0
-            </ion-text>
+            <ion-text> DémoJ Connect version 1.0.0 </ion-text>
         </ion-footer>
     </ion-page>
 </template>
