@@ -14,7 +14,7 @@ def connect():
     Send a message to the server to tell him that the module is ready
     Add the current module to be added in a room by the server
     """
-    sio.emit("module_ready", {"module": CURRENT_MODULE})
+    sio.emit("ready", {"device": CURRENT_MODULE})
     print("Connected to network")
 
 @sio.event
