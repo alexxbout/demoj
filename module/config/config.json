@@ -1,7 +1,10 @@
 {
   "modules": {
-    "terminal": {},
+    "terminal": {
+      "isConnected": false
+    },
     "network": {
+      "isConnected": false,
       "parameters": [
         {
           "id": 0,
@@ -32,7 +35,9 @@
         }
       ]
     },
-    "server": {}
+    "server": {
+      "isConnected": false
+    }
   },
   "scenarios": [
     {
