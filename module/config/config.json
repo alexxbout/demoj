@@ -1,10 +1,10 @@
 {
   "modules": {
     "terminal": {
-      "isConnected": false
+      "isConnected": true
     },
     "network": {
-      "isConnected": false,
+      "isConnected": true,
       "parameters": [
         {
           "id": 0,

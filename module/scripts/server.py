@@ -2,7 +2,7 @@
 import json
 import requests
 from const import IP_TERMINAL, IP_NETWORK, IP_SERVER
-from utils import ping, execute_command
+from utils import ping, execute_command, update_and_write_json
 import threading
 
 from flask import Flask, jsonify, request
@@ -148,13 +148,25 @@ def handle_disconnect():
 @sio.on("module_ready")
 def handle_module_ready(data):
     room = data["module"]
+    if room != "terminal" and room != "server":
+        print("Invalid module:", room)
+        return
+    
     print("Module ready:", room)
     join_room(room)
     print("Successfully joined room:", room)
+
+    update_and_write_json(CONFIG_PATH, f"modules.{room}.isConnected", True)
 
 #################################################################
 # Main
 #################################################################
 
 if __name__ == "__main__":
+    print("Restoring default config...")
+    update_and_write_json(CONFIG_PATH, "modules.terminal.isConnected", False)
+    update_and_write_json(CONFIG_PATH, "modules.server.isConnected", False)
+    update_and_write_json(CONFIG_PATH, "modules.network.isConnected", True)
+
+    print("Starting server...")
     sio.run(app, debug=True, host="0.0.0.0", port=5000, allow_unsafe_werkzeug=True)
