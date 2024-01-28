@@ -1,6 +1,6 @@
 import { IConfig } from "@/types/IConfig";
 import { io, Socket } from "socket.io-client";
-import { ref, Ref, watch } from "vue";
+import { ref, Ref } from "vue";
 import API from "./API";
 
 export class CustomSocket {
@@ -10,11 +10,6 @@ export class CustomSocket {
     constructor() {
         this.socket = null;
         this.config = ref(null);
-
-        watch(this.config, (newConfig) => {
-            console.log("new config from Socket.ts");
-            console.log(newConfig);
-        });
     }
 
     public connect() {
@@ -46,6 +41,18 @@ export class CustomSocket {
         this.socket.on("connect_timeout", (error: any) => {
             console.log(error);
             this.reconnect();
+        });
+
+        this.socket.on("module_on", (data: { device: "terminal" | "network" | "server" }) => {
+            console.log(`Client socket ${data.device} connected to server socket`);
+
+            if (this.config.value) this.config.value.modules[data.device].isConnected = true;
+        });
+
+        this.socket.on("module_off", (data: { device: "terminal" | "network" | "server" }) => {
+            console.log(`Client socket ${data.device} disconnected from server socket`);
+
+            if (this.config.value) this.config.value.modules[data.device].isConnected = false;
         });
     }
 
