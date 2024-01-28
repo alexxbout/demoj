@@ -1,12 +1,18 @@
 from const import IP_NETWORK
+from utils import execute_command
 import socketio
 import time
 import threading
 
 CURRENT_MODULE = "terminal"
+TIMEOUT = 1
 
 sio = socketio.Client(reconnection=True, reconnection_attempts=10, reconnection_delay=5, reconnection_delay_max=5)
 received_event = threading.Event()
+
+#################################################################
+# Socket
+#################################################################
 
 @sio.event
 def connect():
@@ -26,6 +32,10 @@ def custom_message(data):
     print(f"Received custom message: {data}")
     received_event.set()
 
+#################################################################
+# Main
+#################################################################
+
 if __name__ == "__main__":
     """
     We have to keep this while loop because the socketio will not reconnect automatically at the first try.
@@ -39,13 +49,20 @@ if __name__ == "__main__":
             print("Connection to server failed, retrying in 5 seconds")
             time.sleep(5)
     
+    """
+    This while loop is used to keep the socketio running.
+    The timeout parameter bellow is used to check if a message is received every x seconds.
+    Under this timeout, messages will be received and processed.
+    - Lower timeout: faster the message will be received.
+    - Higher timeout: chances are that the message will be processed after or not at all.
+    """
     while True:
         try:
-            message_received = received_event.wait(timeout=5)
+            message_received = received_event.wait(timeout=TIMEOUT)
 
             if message_received:
-                print("Message received, exiting.")
-                break
+                print("Message received, doing stuff...")
+                received_event.clear()
         except socketio.exceptions.ConnectionError:
             print("Connection lost, retrying in 5 seconds")
             time.sleep(5)
