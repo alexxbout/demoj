@@ -1,5 +1,5 @@
 <template>
-    <ion-chip style="border-radius: 9999px; height: 32px;">
+    <ion-chip style="border-radius: 9999px;">
         <ion-label>{{ props.level + "% &nbsp;" }}</ion-label>
         <ion-icon :icon="icon" :style="{ color: color, fontSize: '25px'}" class="ion-no-margin" />
     </ion-chip>
