@@ -7,18 +7,18 @@
         </ion-header>
 
         <ion-content :fullscreen="true">
-            <ion-refresher slot="fixed" :pull-factor="0.5" :pull-min="100" :pull-max="200" @ionRefresh="handleRefresh">
+            <!-- <ion-refresher slot="fixed" :pull-factor="0.5" :pull-min="100" :pull-max="200" @ionRefresh="handleRefresh">
                 <ion-refresher-content />
-            </ion-refresher>
+            </ion-refresher> -->
 
             <ion-header collapse="condense">
                 <ion-toolbar>
-                    <ion-grid style="--ion-grid-padding: 0px;">
+                    <ion-grid style="--ion-grid-padding: 0px">
                         <ion-row class="ion-align-items-center ion-justify-content-between">
-                            <ion-col size="auto" style="--ion-grid-column-padding: 0px;">
+                            <ion-col size="auto" style="--ion-grid-column-padding: 0px">
                                 <ion-title size="large">{{ name }}</ion-title>
                             </ion-col>
-                            <ion-col size="auto" style="--ion-grid-column-padding: 0px;">
+                            <ion-col size="auto" style="--ion-grid-column-padding: 0px">
                                 <connect-status :is-connected="isConnected" />
                             </ion-col>
                         </ion-row>
@@ -26,8 +26,8 @@
                 </ion-toolbar>
             </ion-header>
 
-            <ion-list class="ion-margin" :inset="true">
-                <ion-item v-for="param in parameters">
+            <ion-list v-if="config" class="ion-margin" :inset="true">
+                <ion-item v-for="param in config.modules[props.device].parameters">
                     <ion-grid>
                         <ion-row>
                             <ion-toggle v-model="param.isActive" @ion-change="onParameterToggle(param)" :disabled="!isConnected">{{ param.name }}</ion-toggle>
@@ -44,8 +44,8 @@
             <ion-button :id="actionSheetStopTrigger" expand="block" :color="isConnected ? 'danger' : 'medium'" :disabled="!isConnected">Arrêter</ion-button>
         </ion-footer>
 
-        <ion-action-sheet :trigger="actionSheetRestartTrigger" :header="actionSheetHeader" @didDismiss="handleRestartSheet" :buttons="actionSheetButtonsRestart"></ion-action-sheet>
-        <ion-action-sheet :trigger="actionSheetStopTrigger" :header="actionSheetHeader" @didDismiss="handleStopSheet" :buttons="actionSheetButtonsStop"></ion-action-sheet>
+        <ion-action-sheet :trigger="actionSheetRestartTrigger" :header="actionSheetHeader" @didDismiss="handleRestart" :buttons="actionSheetButtonsRestart"></ion-action-sheet>
+        <ion-action-sheet :trigger="actionSheetStopTrigger" :header="actionSheetHeader" @didDismiss="handleStop" :buttons="actionSheetButtonsStop"></ion-action-sheet>
 
         <ion-toast @didDismiss="toastOpen = false" @click="toastOpen = false" :is-open="toastOpen" swipe-gesture="vertical" position="top" :message="toastMessage" :duration="toastDuration" :icon="checkmarkCircle" color="success"></ion-toast>
     </ion-page>
@@ -53,18 +53,21 @@
 
 <script setup lang="ts">
 import ConnectStatus from "@/components/ConnectStatus.vue";
-import router from "@/router";
 import API from "@/services/API";
+import { CustomSocket } from "@/services/CustomSocket";
 import type { DeviceTypes, IParameter } from "@/types/IConfig";
-import { ActionSheetButton, IonActionSheet, IonButton, IonCol, IonContent, IonFooter, IonGrid, IonHeader, IonInput, IonItem, IonList, IonPage, IonRange, IonRefresher, IonRefresherContent, IonRow, IonTitle, IonToast, IonToggle, IonToolbar } from "@ionic/vue";
+import { ActionSheetButton, IonActionSheet, IonButton, IonCol, IonContent, IonFooter, IonGrid, IonHeader, IonInput, IonItem, IonList, IonPage, IonRange, IonRow, IonTitle, IonToast, IonToggle, IonToolbar } from "@ionic/vue";
 import { checkmarkCircle } from "ionicons/icons";
-import { computed, onMounted, ref } from "vue";
-
-// TODO : Faire un check toutes les x secondes pour voir si le module est connecté ou non
+import { computed, inject, ref } from "vue";
 
 const props = defineProps<{
     device: DeviceTypes;
 }>();
+
+const socket = inject("socket") as CustomSocket;
+const config = socket.getConfig();
+
+const isConnected = computed<boolean>(() => config.value?.modules[props.device].isConnected ?? false);
 
 const name = computed<string>(() => {
     switch (props.device) {
@@ -77,12 +80,9 @@ const name = computed<string>(() => {
     }
 });
 
+const actionSheetHeader = ref("Etes-vous sûr ?");
 const actionSheetRestartTrigger = ref("restart-" + name.value);
 const actionSheetStopTrigger = ref("stop-" + name.value);
-
-const isConnected = ref(false);
-const parameters = ref<IParameter[]>([]);
-
 const actionSheetButtonsRestart = ref<ActionSheetButton[]>([
     {
         text: "Redémarrer immédiatement",
@@ -93,7 +93,6 @@ const actionSheetButtonsRestart = ref<ActionSheetButton[]>([
         role: "cancel",
     },
 ]);
-
 const actionSheetButtonsStop = ref<ActionSheetButton[]>([
     {
         text: "Arrêter immédiatement",
@@ -105,32 +104,23 @@ const actionSheetButtonsStop = ref<ActionSheetButton[]>([
     },
 ]);
 
-const actionSheetHeader = ref("Etes-vous sûr ?");
-
 const toastMessage = ref("Action effectuée avec succès");
 const toastDuration = ref(5000);
 const toastOpen = ref(false);
 
-const handleRestartSheet = async (event: CustomEvent) => {
-    if (event.detail.role == "destructive") {
-        if (await API.restartModule(props.device)) {
-            isConnected.value = false;
-            toastOpen.value = true;
+const pinFormatter = (value: number) => `${value}%`;
 
-            // Automatically update the status of the module after 5 seconds
-            setTimeout(async () => {
-                await update();
-            }, 5000);
-        }
+const handleRestart = async (event: CustomEvent) => {
+    if (event.detail.role == "destructive") {
+        socket.updateModuleStatus(props.device, "restart");
+        toastOpen.value = true;
     }
 };
 
-const handleStopSheet = async (event: CustomEvent) => {
+const handleStop = async (event: CustomEvent) => {
     if (event.detail.role == "destructive") {
-        if (await API.stopModule(props.device)) {
-            isConnected.value = false;
-            toastOpen.value = true;
-        }
+        socket.updateModuleStatus(props.device, "stop");
+        toastOpen.value = true;
     }
 };
 
@@ -141,42 +131,4 @@ const onParameterToggle = async (parameter: IParameter) => {
 const onParameterUpdate = async (parameter: IParameter) => {
     await API.setParameterValue(props.device, parameter.id, parameter.value!);
 };
-
-const pinFormatter = (value: number) => `${value}%`;
-
-const handleRefresh = async (event: any) => {
-    await update();
-    setTimeout(() => {
-        event.target.complete();
-    }, 500);
-};
-
-const updateStatus = async () => {
-    isConnected.value = await API.checkStatus(props.device);
-};
-
-const getParameters = async () => {
-    await API.getModuleParameters(props.device).then((response) => {
-        parameters.value = response;
-    });
-};
-
-const update = async () => {
-    await updateStatus();
-    if (isConnected.value) await getParameters();
-};
-
-onMounted(async () => {
-    await update();
-});
-
-router.beforeEach(async (to, from, next) => {
-    if (!to.path.includes(props.device || !from.path.includes(props.device))) {
-        return next();
-    }
-
-    next();
-
-    await update();
-});
 </script>

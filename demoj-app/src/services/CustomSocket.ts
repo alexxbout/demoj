@@ -1,6 +1,6 @@
-import { IConfig } from "@/types/IConfig";
-import { io, Socket } from "socket.io-client";
-import { ref, Ref } from "vue";
+import { DeviceTypes, IConfig } from "@/types/IConfig";
+import { Socket, io } from "socket.io-client";
+import { Ref, ref } from "vue";
 import API from "./API";
 
 export class CustomSocket {
@@ -26,6 +26,11 @@ export class CustomSocket {
 
         this.socket.on("disconnect", () => {
             console.log("Socket closed");
+            if (this.config.value) {
+                this.config.value.modules.terminal.isConnected = false;
+                this.config.value.modules.server.isConnected = false;
+                this.config.value.modules.network.isConnected = false;
+            }
             this.reconnect();
         });
 
@@ -43,16 +48,10 @@ export class CustomSocket {
             this.reconnect();
         });
 
-        this.socket.on("module_on", (data: { device: "terminal" | "network" | "server" }) => {
-            console.log(`Client socket ${data.device} connected to server socket`);
+        this.socket.on("module_status", (data: { device: DeviceTypes; status: "on" | "off" }) => {
+            console.log(`Socket ${data.device} status: ${data.status}`);
 
-            if (this.config.value) this.config.value.modules[data.device].isConnected = true;
-        });
-
-        this.socket.on("module_off", (data: { device: "terminal" | "network" | "server" }) => {
-            console.log(`Client socket ${data.device} disconnected from server socket`);
-
-            if (this.config.value) this.config.value.modules[data.device].isConnected = false;
+            if (this.config.value) this.config.value.modules[data.device].isConnected = data.status == "on";
         });
     }
 
@@ -68,6 +67,10 @@ export class CustomSocket {
 
     public isConnected() {
         return this.socket?.connected;
+    }
+
+    public updateModuleStatus(module: DeviceTypes, action: "restart" | "stop") {
+        if (this.socket) this.socket.emit("update_module_status", { device: module, action: action });
     }
 
     public getConfig() {
