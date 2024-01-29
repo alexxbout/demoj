@@ -4,33 +4,33 @@
             <ion-router-outlet animated="true" />
             <ion-tab-bar v-show="mode == 'operator'" slot="bottom">
                 <ion-tab-button tab="scenarios" href="/tabs/scenarios">
-                    <ion-icon aria-hidden="true" :icon="layers" />
+                    <ion-icon :icon="layers" />
                     <ion-label>Scénarios</ion-label>
                 </ion-tab-button>
 
                 <ion-tab-button tab="terminal" href="/tabs/terminal">
-                    <ion-icon aria-hidden="true" :icon="phonePortrait" />
+                    <ion-icon :icon="phonePortrait" />
                     <ion-label>Terminal</ion-label>
 
                     <div v-show="!status.terminal" style="background-color: #eb445a; position: absolute; top: 2px; right: auto; left: auto; margin-left: 30px; width: 17px; height: 17px; border-radius: 9999px" />
                 </ion-tab-button>
 
                 <ion-tab-button tab="network" href="/tabs/network">
-                    <ion-icon aria-hidden="true" :icon="globe" />
+                    <ion-icon :icon="globe" />
                     <ion-label>Réseau</ion-label>
 
                     <div v-show="!status.network" style="background-color: #eb445a; position: absolute; top: 2px; right: auto; left: auto; margin-left: 30px; width: 17px; height: 17px; border-radius: 9999px" />
                 </ion-tab-button>
 
                 <ion-tab-button tab="server" href="/tabs/server">
-                    <ion-icon aria-hidden="true" :icon="server" />
+                    <ion-icon :icon="server" />
                     <ion-label>Serveur</ion-label>
 
                     <div v-show="!status.server" style="background-color: #eb445a; position: absolute; top: 2px; right: auto; left: auto; margin-left: 30px; width: 17px; height: 17px; border-radius: 9999px" />
                 </ion-tab-button>
 
                 <ion-tab-button v-show="debugModeEnabled" tab="debug" href="/tabs/debug">
-                    <ion-icon aria-hidden="true" :icon="hardwareChip" />
+                    <ion-icon :icon="hardwareChip" />
                     <ion-label>Debug</ion-label>
                 </ion-tab-button>
             </ion-tab-bar>

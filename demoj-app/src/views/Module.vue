@@ -15,6 +15,7 @@
                                 <ion-title size="large">{{ name }}</ion-title>
                             </ion-col>
                             <ion-col size="auto" style="--ion-grid-column-padding: 0px; padding-right: 5px;">
+                                <battery-status v-show="isConnected" :level="98" />
                                 <connect-status :is-connected="isConnected" />
                             </ion-col>
                         </ion-row>
@@ -48,6 +49,7 @@
 </template>
 
 <script setup lang="ts">
+import BatteryStatus from "@/components/BatteryStatus.vue";
 import ConnectStatus from "@/components/ConnectStatus.vue";
 import API from "@/services/API";
 import { CustomSocket } from "@/services/CustomSocket";
