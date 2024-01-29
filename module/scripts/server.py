@@ -19,6 +19,10 @@ SERVER_PORT = 5000
 RESTART_CMD = ["sudo", "reboot"]
 STOP_CMD = ["sudo", "shutdown", "-h", "now"]
 
+STRESS_LVL_1_CMD = ["stress", "-c", "1", "-i", "1", "-m", "1", "--timeout", "10s"]
+STRESS_LVL_2_CMD = ["stress", "-c", "2", "-i", "2", "-m", "2", "--timeout", "10s"]
+STRESS_LVL_3_CMD = ["stress", "-c", "4", "-i", "4", "-m", "4", "--timeout", "10s"]
+
 #################################################################
 # DémoJ Connect
 # Flask server is only used to receive config and update it
@@ -89,20 +93,6 @@ def ping_module(module):
     else:
         return jsonify({"error": "Invalid module"}), 400
     
-# @app.route("/check_status/<module>", methods=["GET"])
-# def check_status(module):
-#     try:
-#         if module == "terminal":
-#             return jsonify(requests.get(geHttpAddress(IP_TERMINAL)).status_code == 200)
-#         elif module == "server":
-#             return jsonify(requests.get(geHttpAddress(IP_SERVER)).status_code == 200)
-#         elif module == "network":
-#             return jsonify(True)
-#         else:
-#             return jsonify({"error": "Invalid module"}), 400
-#     except Exception as e:
-#         return jsonify(False), 200
-    
 #################################################################
 # Scenarios
 #################################################################
@@ -124,9 +114,10 @@ def disconnect():
     print("Client disconnected")
 
     device = get_device_from_addr(request.remote_addr)
-    
-    update_and_write_json(CONFIG_PATH, f"modules.{device}.isConnected", False)
-    sio.emit("module_status", {"device": device, "status": "off"}, room="client")
+
+    if device != "client":
+        update_and_write_json(CONFIG_PATH, f"modules.{device}.isConnected", False)
+        sio.emit("module_status", {"device": device, "status": "off"}, room="client")
 
 @sio.event
 def ready(data):
@@ -156,9 +147,6 @@ def update_module_status(data):
         print("Invalid action:", action)
         return
 
-    update_and_write_json(CONFIG_PATH, f"modules.{device}.isConnected", False)
-    sio.emit("module_status", {"device": device, "status": "off"}, room="client")
-
     if device != "network":
         update_and_write_json(CONFIG_PATH, f"modules.{device}.isConnected", False)
         sio.emit(action, room=device)
@@ -169,6 +157,37 @@ def update_module_status(data):
         else:
             execute_command(STOP_CMD)
     
+@sio.event
+def stress_module(data):
+    device = data["device"]
+    level = data["level"]
+    time = data["time"]
+
+    if device != "terminal" and device != "server" and device != "network":
+        msg = "Invalid module: {}".format(device)
+        return jsonify({"error": msg})
+    
+    if level != 1 and level != 2 and level != 3:
+        print("Invalid level:", level)
+        return
+    
+    # Update time (last parameter) of stress command
+    cmd = None
+    if level == 1:
+        cmd = STRESS_LVL_1_CMD
+    elif level == 2:
+        cmd = STRESS_LVL_2_CMD
+    else:
+        cmd = STRESS_LVL_3_CMD
+
+    cmd[-1] = time
+
+    if device != "network":
+        # sio.emit("stress", {"level": level}, room=device)
+        print("")
+    else:
+        execute_command(cmd)
+
 #################################################################
 # Main
 #################################################################
