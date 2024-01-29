@@ -15,7 +15,7 @@
                                 <ion-title size="large">Debug</ion-title>
                             </ion-col>
 
-                            <ion-col size="auto" style="--ion-grid-column-padding: 0px">
+                            <ion-col size="auto" style="--ion-grid-column-padding: 0px; padding-right: 5px;">
                                 <ion-spinner v-show="isLoading"></ion-spinner>
                             </ion-col>
                         </ion-row>
