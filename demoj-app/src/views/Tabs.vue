@@ -12,14 +12,14 @@
                     <ion-icon aria-hidden="true" :icon="desktop" />
                     <ion-label>Terminal</ion-label>
 
-                    <div v-show="!status.server" style="background-color: #eb445a; position: absolute; top: 2px; right: auto; left: auto; margin-left: 30px; width: 17px; height: 17px; border-radius: 9999px" />
+                    <div v-show="!status.terminal" style="background-color: #eb445a; position: absolute; top: 2px; right: auto; left: auto; margin-left: 30px; width: 17px; height: 17px; border-radius: 9999px" />
                 </ion-tab-button>
 
                 <ion-tab-button tab="network" href="/tabs/network">
                     <ion-icon aria-hidden="true" :icon="wifi" />
                     <ion-label>Réseau</ion-label>
 
-                    <div v-show="!status.server" style="background-color: #eb445a; position: absolute; top: 2px; right: auto; left: auto; margin-left: 30px; width: 17px; height: 17px; border-radius: 9999px" />
+                    <div v-show="!status.network" style="background-color: #eb445a; position: absolute; top: 2px; right: auto; left: auto; margin-left: 30px; width: 17px; height: 17px; border-radius: 9999px" />
                 </ion-tab-button>
 
                 <ion-tab-button tab="server" href="/tabs/server">
