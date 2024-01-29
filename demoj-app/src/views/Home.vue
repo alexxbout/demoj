@@ -45,7 +45,7 @@ const handleClick = () => {
 
         localStorage.setItem("debugMode", debug.value.toString());
 
-        toastMessage.value = debug.value ? "Mode développeur activé !" : "Mode développeur désactivé !";
+        toastMessage.value = debug.value ? "Mode développeur activé" : "Mode développeur désactivé";
         toastColor.value = debug.value ? "success" : "danger";
         toastOpen.value = true;
     }
