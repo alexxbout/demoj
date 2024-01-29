@@ -1,5 +1,5 @@
 <template>
-    <ion-button @click="isOpen = true" expand="block" color="secondary">{{ header }}</ion-button>
+    <ion-button @click="isOpen = true" expand="block" color="success">{{ header }}</ion-button>
     <ion-modal :is-open="isOpen" :presenting-element="props.presenting" @willDismiss="isOpen = false">
         <ion-header>
             <ion-toolbar>

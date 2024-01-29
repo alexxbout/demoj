@@ -73,6 +73,10 @@ export class CustomSocket {
         if (this.socket) this.socket.emit("update_module_status", { device: module, action: action });
     }
 
+    public stressModule(module: DeviceTypes, level: 1 | 2 | 3, time: number) {
+        if (this.socket) this.socket.emit("stress_module", { device: module, level: level, time: time });
+    }
+
     public getConfig() {
         return this.config;
     }

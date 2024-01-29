@@ -28,8 +28,6 @@
                 <Stress :presenting="presenting" />
 
                 <Ping @@start="isLoading = true" @@end="isLoading = false" />
-                <Flask @@start="isLoading = true" @@end="isLoading = false" />
-                <Socket />
             </ion-content>
         </ion-content>
 
@@ -42,10 +40,8 @@
 <script setup lang="ts">
 import { IonCol, IonContent, IonFooter, IonGrid, IonHeader, IonPage, IonRow, IonSpinner, IonText, IonTitle, IonToolbar } from "@ionic/vue";
 import { onMounted, ref } from "vue";
-import Flask from "./debug/Flask.vue";
 import Ping from "./debug/Ping.vue";
 import Running from "./debug/Running.vue";
-import Socket from "./debug/Socket.vue";
 import Stress from "./debug/Stress.vue";
 
 const page = ref();

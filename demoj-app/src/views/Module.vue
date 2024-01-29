@@ -7,10 +7,6 @@
         </ion-header>
 
         <ion-content :fullscreen="true">
-            <!-- <ion-refresher slot="fixed" :pull-factor="0.5" :pull-min="100" :pull-max="200" @ionRefresh="handleRefresh">
-                <ion-refresher-content />
-            </ion-refresher> -->
-
             <ion-header collapse="condense">
                 <ion-toolbar>
                     <ion-grid style="--ion-grid-padding: 0px">
