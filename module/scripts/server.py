@@ -3,7 +3,7 @@ import json
 import requests
 import time
 from const import IP_TERMINAL, IP_NETWORK, IP_SERVER
-from utils import ping, execute_command, update_and_write_json
+from utils import ping, execute_command, update_and_write_json, get_device_from_addr
 
 from flask import Flask, jsonify, request
 from flask_socketio import SocketIO, join_room, leave_room
@@ -19,12 +19,10 @@ SERVER_PORT = 5000
 RESTART_CMD = ["sudo", "reboot"]
 STOP_CMD = ["sudo", "shutdown", "-h", "now"]
 
-# ! DEPRECATED
-def geHttpAddress(ip):
-    return ("http://{}:{}".format(ip, SERVER_PORT))
-
 #################################################################
 # DémoJ Connect
+# Flask server is only used to receive config and update it
+# Sockets are used to send actions to the modules
 #################################################################
 
 @app.route("/")
@@ -37,28 +35,6 @@ def receive_data():
     print("Received data:", data)
 
     return jsonify({"message": "Data received successfully"})
-
-@app.route("/restart/<module>", methods=["GET"])
-def restart_module(module):
-    if module == "terminal":
-        return jsonify(requests.get(geHttpAddress(IP_TERMINAL) + "/restart").status_code == 200)
-    elif module == "server":
-        return jsonify(requests.get(geHttpAddress(IP_SERVER) + "/restart").status_code == 200)
-    elif module == "network":
-        return jsonify(execute_command(RESTART_CMD));
-    else:
-        return jsonify({"error": "Invalid module"}), 400
-
-@app.route("/stop/<module>", methods=["GET"])
-def stop_module(module):
-    if module == "terminal":
-        return jsonify(requests.get(geHttpAddress(IP_TERMINAL) + "/stop").status_code == 200)
-    elif module == "server":
-        return jsonify(requests.get(geHttpAddress(IP_SERVER) + "/stop").status_code == 200)
-    elif module == "network":
-        return jsonify(execute_command(STOP_CMD));
-    else:
-        return jsonify({"error": "Invalid module"}), 400
 
 @app.route("/config", methods=["GET"])
 def get_config():
@@ -113,19 +89,19 @@ def ping_module(module):
     else:
         return jsonify({"error": "Invalid module"}), 400
     
-@app.route("/check_status/<module>", methods=["GET"])
-def check_status(module):
-    try:
-        if module == "terminal":
-            return jsonify(requests.get(geHttpAddress(IP_TERMINAL)).status_code == 200)
-        elif module == "server":
-            return jsonify(requests.get(geHttpAddress(IP_SERVER)).status_code == 200)
-        elif module == "network":
-            return jsonify(True)
-        else:
-            return jsonify({"error": "Invalid module"}), 400
-    except Exception as e:
-        return jsonify(False), 200
+# @app.route("/check_status/<module>", methods=["GET"])
+# def check_status(module):
+#     try:
+#         if module == "terminal":
+#             return jsonify(requests.get(geHttpAddress(IP_TERMINAL)).status_code == 200)
+#         elif module == "server":
+#             return jsonify(requests.get(geHttpAddress(IP_SERVER)).status_code == 200)
+#         elif module == "network":
+#             return jsonify(True)
+#         else:
+#             return jsonify({"error": "Invalid module"}), 400
+#     except Exception as e:
+#         return jsonify(False), 200
     
 #################################################################
 # Scenarios
@@ -138,25 +114,22 @@ def check_status(module):
 # Be careful to the frequency of the emits
 #################################################################
 
-@sio.on("connect")
-def handle_connect():
+@sio.event
+def connect():
     print("Client connected")
     print("ip: ", request.remote_addr)
 
-@sio.on("disconnect")
-def handle_disconnect():
+@sio.event
+def disconnect():
     print("Client disconnected")
 
     device = get_device_from_addr(request.remote_addr)
     
-    # Update config if terminal or server is ready
     update_and_write_json(CONFIG_PATH, f"modules.{device}.isConnected", False)
-    
-    # Send notfication to client if both terminal and server are ready
-    sio.emit("module_off", {"device": device}, room="client")
+    sio.emit("module_status", {"device": device, "status": "off"}, room="client")
 
-@sio.on("ready")
-def handle_ready(data):
+@sio.event
+def ready(data):
     data = data["device"]
     if data != "terminal" and data != "server" and data != "client":
         print("Invalid module:", data)
@@ -167,19 +140,34 @@ def handle_ready(data):
     print("Successfully joined room:", data)
 
     if data != "client":
-        # Update config if terminal or server is ready
         update_and_write_json(CONFIG_PATH, f"modules.{data}.isConnected", True)
+        sio.emit("module_status", {"device": data, "status": "on"}, room="client")
 
-        # Send notfication to client if both terminal and server are ready
-        sio.emit("module_on", {"device": data}, room="client")
+@sio.event
+def update_module_status(data):
+    device = data["device"]
+    action = data["action"]
 
-def get_device_from_addr(addr):
-    if addr == IP_TERMINAL:
-        return "terminal"
-    elif addr == IP_SERVER:
-        return "server"
+    if device != "terminal" and device != "server" and device != "network":
+        msg = "Invalid module: {}".format(device)
+        return jsonify({"error": msg})
+    
+    if action != "restart" and action != "stop":
+        print("Invalid action:", action)
+        return
+
+    update_and_write_json(CONFIG_PATH, f"modules.{device}.isConnected", False)
+    sio.emit("module_status", {"device": device, "status": "off"}, room="client")
+
+    if device != "network":
+        update_and_write_json(CONFIG_PATH, f"modules.{device}.isConnected", False)
+        sio.emit(action, room=device)
     else:
-        return "client"
+        update_and_write_json(CONFIG_PATH, f"modules.{device}.isConnected", False)
+        if action == "restart":
+            execute_command(RESTART_CMD)
+        else:
+            execute_command(STOP_CMD)
     
 #################################################################
 # Main

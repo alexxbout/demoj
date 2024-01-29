@@ -3,6 +3,7 @@ import os
 import subprocess
 import time
 import json
+from const import IP_TERMINAL, IP_NETWORK, IP_SERVER
 from functools import reduce
 
 def execute_command(command):
@@ -87,3 +88,20 @@ def update_and_write_json(file_path, path, new_value):
 
     # Write the updated data back to the file
     write_json_to_file(updated_json_data, file_path)
+
+def get_device_from_addr(addr):
+    """
+    Get the device name from its IP address.
+
+    Parameters:
+    - addr (str): The IP address of the device.
+
+    Returns:
+    - The device name.
+    """
+    if addr == IP_TERMINAL:
+        return "terminal"
+    elif addr == IP_SERVER:
+        return "server"
+    else:
+        return "client"
