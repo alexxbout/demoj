@@ -35,16 +35,18 @@ export class CustomSocket {
         });
 
         this.socket.on("error", (error: any) => {
+            console.log("Socket error");
             console.log(error);
         });
 
         this.socket.on("connect_error", (error: any) => {
+            console.log("Socket connection error, reconnecting...");
             console.log(error);
             this.reconnect();
         });
 
         this.socket.on("connect_timeout", (error: any) => {
-            console.log(error);
+            console.log("Socket timeout, reconnecting...");
             this.reconnect();
         });
 
