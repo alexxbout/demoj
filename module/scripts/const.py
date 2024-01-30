@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 IP_TERMINAL = "192.168.64.100"
 IP_NETWORK = "192.168.64.101"
 IP_SERVER = "192.168.64.102"
