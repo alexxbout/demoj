@@ -1,14 +1,12 @@
 import json
-import requests
-import time
 from const import IP_TERMINAL, IP_NETWORK, IP_SERVER
 from utils import ping, execute_command, update_and_write_json, get_device_from_addr
 
-from flask import Flask, jsonify, request
-from flask_socketio import SocketIO, join_room, leave_room
+from flask import Flask, jsonify, request, render_template, redirect, url_for
+from flask_socketio import SocketIO, join_room
 from flask_cors import CORS
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="../demojconnect", static_folder="../demojconnect", static_url_path="/app/")
 sio = SocketIO(app, cors_allowed_origins="*")
 CORS(app)
 
@@ -23,23 +21,42 @@ STRESS_LVL_2_CMD = ["stress", "-c", "2", "-i", "2", "-m", "2", "--timeout", "10s
 STRESS_LVL_3_CMD = ["stress", "-c", "4", "-i", "4", "-m", "4", "--timeout", "10s"]
 
 #################################################################
-# DémoJ Connect
+# Routes
 # Flask server is only used to receive config and update it
 # Sockets are used to send actions to the modules
 #################################################################
 
-@app.route("/")
-def index():
-    return jsonify({"message": "Server is running"})
+#################################################################
+# DémoJ Connect
+#################################################################
 
-@app.route("/receive_data", methods=["POST"])
+@app.errorhandler(404)
+def not_found(e):
+    if request.path.startswith("/app"):
+        return redirect(url_for("index"))
+    return jsonify({"error": "Not found"}), 404
+
+@app.route("/")
+@app.route("/app")
+def index():
+    return render_template("index.html")
+
+#################################################################
+# API
+#################################################################
+
+@app.route("/api")
+def api():
+    return jsonify({"message": "DémoJ Connect API is running"})
+
+@app.route("/api/receive_data", methods=["POST"])
 def receive_data():
     data = request.get_json()
     print("Received data:", data)
 
     return jsonify({"message": "Data received successfully"})
 
-@app.route("/config", methods=["GET"])
+@app.route("/api/config")
 def get_config():
     try:
         with open(CONFIG_PATH, "r") as config_file:
@@ -52,7 +69,7 @@ def get_config():
         return jsonify({"error": str(e)}), 500
 
 # TODO Update this method to use update_and_write_json from utils.py
-@app.route("/modules/<module>/params/<id_param>", methods=["POST"])
+@app.route("/api/modules/<module>/params/<id_param>", methods=["POST"])
 def update_parameter(module, id_param):
     try:
         data = request.get_json()
@@ -81,7 +98,7 @@ def update_parameter(module, id_param):
         print(f"Error toggling parameter: {str(e)}")
         return jsonify({"error": str(e)}), 500
     
-@app.route("/ping/<module>", methods=["GET"])
+@app.route("/api/ping/<module>")
 def ping_module(module):
     if module == "terminal":
         return jsonify(ping(IP_TERMINAL))
