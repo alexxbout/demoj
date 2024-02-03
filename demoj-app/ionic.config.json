@@ -3,6 +3,5 @@
   "integrations": {
     "capacitor": {}
   },
-  "type": "vue-vite",
-  "id": "00942f42"
+  "type": "vue-vite"
 }

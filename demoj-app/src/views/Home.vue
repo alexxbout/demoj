@@ -3,7 +3,7 @@
         <ion-grid>
             <ion-row class="ion-align-items-center ion-justify-content-center" style="height: 100%">
                 <ion-col size="10">
-                    <ion-img @click="handleClick" src="assets/images/demoj.png"></ion-img>
+                    <ion-img @click="handleClick" src="/assets/images/demoj.png"></ion-img>
                 </ion-col>
             </ion-row>
         </ion-grid>
