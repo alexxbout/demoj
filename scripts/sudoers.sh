@@ -3,15 +3,20 @@
 
 # args: user
 
+user=$1
+command_line="$user ALL=(ALL) NOPASSWD:"
+
 echo "Initialising sudoers file"
 
-if [ -z "$1" ]; then
+if [ -z "$user" ]; then
     echo "User not set"
     exit 1
 fi
 
-user=$1
-command_line="$user ALL=(ALL) NOPASSWD:"
+if [ "$user" != "terminal" ] && [ "$user" != "network" ] && [ "$user" != "server" ]; then
+    echo "Invalid user"
+    exit 1
+fi
 
 if ! grep -q "$command_line /sbin/reboot" /etc/sudoers; then
     echo "Adding reboot command to sudoers file"

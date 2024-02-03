@@ -3,14 +3,19 @@
 
 # args: user
 
+user=$1
+
 echo "Initialising app service"
 
-if [ -z "$1" ]; then
+if [ -z "$user" ]; then
     echo "User not set"
     exit 1
 fi
 
-user=$1
+if [ "$user" != "terminal" ] && [ "$user" != "network" ] && [ "$user" != "server" ]; then
+    echo "Invalid user"
+    exit 1
+fi
 
 echo "Creating app.service file"
 
