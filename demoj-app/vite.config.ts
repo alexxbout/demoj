@@ -11,7 +11,7 @@ export default defineConfig({
             "@": path.resolve(__dirname, "./src"),
         },
     },
-    base: "/",
+    base: "/app/",
     build: { // For Flask
         assetsDir: ".",
         outDir: "./demojconnect",

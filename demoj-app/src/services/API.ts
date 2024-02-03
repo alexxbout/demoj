@@ -3,7 +3,7 @@ import axios from "axios";
 
 class API {
     private timeout = 2000;
-    private networkIP = "http://" + import.meta.env.VITE_IP_NETWORK + ":" + import.meta.env.VITE_PORT;
+    private networkIP = "http://" + import.meta.env.VITE_IP_NETWORK + ":" + import.meta.env.VITE_PORT + "/api";
 
     // Getters from config file
 
