@@ -6,17 +6,14 @@ if [ "$EUID" -ne 0 ]; then
   exit
 fi
 
+apt install inetutils-ping -y
+
 if ! ping -q -c 1 -W 1 google.com >/dev/null; then
   echo "Internet is not available. Please connect to the internet and try again."
   exit 1
 fi
 
 clear
-
-echo -e "\033[1;32m                                                                       
-█▀▄ █▀▀ █▀▄▀█ █▀█ ░░█
-█▄▀ ██▄ █░▀░█ █▄█ █▄█
-\033[0m"
 
 echo "Welcome to the DemoJ setup script!"
 echo "Installing dependencies for the DemoJ project."
@@ -65,6 +62,7 @@ echo "  4. Run repository"
 echo "  5. Run staticip"
 echo "  6. Run sudoers"
 echo "  7. Run virtualenv"
+echo ""
 echo "  0. Exit"
 echo ""
 
@@ -73,31 +71,31 @@ read -rp "Enter your choice: " choice
 case $choice in
 1)
   echo "Running all..."
-  "./others/runall.sh $user"
+  "others/runall.sh" "$user"
   ;;
 2)
     echo "Running appservice..."
-    "./others/appservice.sh $user"
+    "others/appservice.sh" "$user"
     ;;
 3)
     echo "Running raspap..."
-    "./others/raspap.sh $user"
+    "others/raspap.sh" "$user"
     ;;
 4)
     echo "Running repository..."
-    "./others/repository.sh $user"
+    "others/repository.sh" "$user"
     ;;
 5)
     echo "Running staticip..."
-    "./others/staticip.sh $user"
+    "others/staticip.sh" "$user"
     ;;
 6)
     echo "Running sudoers..."
-    "./others/sudoers.sh $user"
+    "others/sudoers.sh" "$user"
     ;;
 7)
     echo "Running virtualenv..."
-    "./others/virtualenv.sh $user"
+    "others/virtualenv.sh" "$user"
     ;;
 0)
     echo "Exiting..."
