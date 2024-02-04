@@ -6,16 +6,9 @@
 echo "Initialising repo"
 
 user=$1
-gitlab="gitlab.istic.univ-rennes1.fr"
-repo="$gitlab:arthadam/demoj.git"
-
-if ! command -v git &> /dev/null
-then
-    echo "Git is not installed"
-    
-    echo "Installing git"
-    apt install git -y
-fi
+access_token="glpat-yskhYMsdxsxV4VbFrz2M"
+repo="https://demoj:$access_token@gitlab.istic.univ-rennes1.fr/arthadam/demoj.git"
+clone_dir="/home/$user/demoj"
 
 if [ -z "$user" ]; then
     echo "User not set"
@@ -27,55 +20,34 @@ if [ "$user" != "terminal" ] && [ "$user" != "network" ] && [ "$user" != "server
     exit 1
 fi
 
-echo "User: $user"
-
-while true; do
-    read -pr "Do you want to generate a new SSH key? (y/n) " yn
-    case $yn in
-        [yY] ) echo "Generating new SSH key"
-            ssh-keygen -t rsa -b 4096
-
-            echo "SSH key generated"
-
-            echo "Public key:"
-            cat /home/"$user"/.ssh/id_rsa.pub
-            break;;
-        [nN] ) echo "Using existing SSH key"
-            break;;
-        * ) echo "Invalid response";;
-    esac
-done
-
-read -pr "Please add the public key to your gitlab account, press enter when done"
-
-echo "Connecting to gitlab"
-
-attempt=1
-while true; do
-    if sudo -u "$user" ssh -T git@"$gitlab"; then
-        echo "Connected to GitLab"
-        break
-    else
-        echo "Failed to connect to GitLab"
-        read -pr "Do you want to retry? (y/n) " retry
-        case $retry in
-            [yY] ) echo "Retrying..."
-                attempt=$((attempt+1))
-                ;;
-            [nN] ) echo "Exiting..."
-                exit 1
-                ;;
-            * ) echo "Invalid response";;
-        esac
-    fi
-done
+if ! command -v git &> /dev/null
+then
+    echo "Git is not installed"
+    
+    echo "Installing git"
+    apt install git -y
+fi
 
 echo "Cloning repo"
 
-if sudo -u "$user" git clone "$repo" /home/"$user"/; then
+if [ ! -d "$clone_dir" ]; then
+    mkdir "$clone_dir"
+    chown "$user":"$user" "$clone_dir"
+fi
+
+if sudo -u "$user" git clone "$repo" "$clone_dir"; then
     echo "Repo cloned"
 else
     echo "Failed to clone repo"
+    exit 1
+fi
+
+echo "Switching to $user branch"
+
+cd "$clone_dir" || exit 1
+
+if ! sudo -u "$user" git checkout "$user"; then
+    echo "Failed to switch to $user branch"
     exit 1
 fi
 

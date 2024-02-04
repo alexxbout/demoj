@@ -6,12 +6,24 @@ if [ "$EUID" -ne 0 ]; then
   exit
 fi
 
-apt install inetutils-ping -y
+if ! [ -x "$(command -v ping)" ]; then
+  echo "Installing ping"
+  apt install inetutils-ping -y
+fi
 
 if ! ping -q -c 1 -W 1 google.com >/dev/null; then
   echo "Internet is not available. Please connect to the internet and try again."
   exit 1
 fi
+
+chmod +x others/appservice.sh
+chmod +x others/raspap.sh
+chmod +x others/raspios.sh
+chmod +x others/repository.sh
+chmod +x others/runall.sh
+chmod +x others/staticip.sh
+chmod +x others/sudoers.sh
+chmod +x others/virtualenv.sh
 
 clear
 
@@ -48,6 +60,8 @@ while true; do
   fi
 done
 
+clear
+
 echo "User set to $user"
 echo ""
 
@@ -72,6 +86,8 @@ case $choice in
 1)
   echo "Running all..."
   "others/runall.sh" "$user"
+
+  echo "Setup complete. Have fun with DemoJ!"
   ;;
 2)
     echo "Running appservice..."
@@ -107,7 +123,7 @@ case $choice in
     ;;
 esac
 
-echo "Setup complete. Have fun with DemoJ!"
+echo ""
 
 while true; do
   read -rp "Do you want to reboot now? (y/n) " yn
