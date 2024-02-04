@@ -1,6 +1,8 @@
 #!/usr/bin/sudo bash
 # shellcheck shell=bash
 
+# TODO: Add DNS to demoj.fr
+
 echo "Initializing Demoj Connect"
 
 if [ ! -d "$dir" ]; then
