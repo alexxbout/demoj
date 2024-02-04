@@ -6,6 +6,11 @@ if [ "$EUID" -ne 0 ]; then
   exit
 fi
 
+if ! ping -q -c 1 -W 1 google.com >/dev/null; then
+  echo "Internet is not available. Please connect to the internet and try again."
+  exit 1
+fi
+
 clear
 
 echo -e "\033[1;32m                                                                       
