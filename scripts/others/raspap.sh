@@ -1,16 +1,7 @@
 #!/usr/bin/sudo bash
 # shellcheck shell=bash
 
-# args: user
-
 echo "Initialising RaspAP"
-
-user=$1
-
-if [ "$user" != "network" ]; then
-    echo "Invalid user"
-    exit 1
-fi
 
 echo "After reboot, remember to disable your personal hotspot to let RaspAP take over"
 

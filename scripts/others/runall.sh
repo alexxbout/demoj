@@ -12,9 +12,14 @@ if [ -z "$user" ]; then
     exit 1
 fi
 
-"./others/appservice.sh $user"
-"./others/raspap.sh $user"
-"./others/repository.sh $user"
-"./others/staticip.sh $user"
-"./others/sudoers.sh $user"
-"./others/virtualenv.sh $user"
+"./others/sudoers.sh" "$user"
+"./others/repository.sh" "$user"
+"./others/virtualenv.sh" "$user"
+"./others/appservice.sh" "$user"
+
+if [ "$user" = "network" ]; then
+    "./others/demojconnect.sh"
+    "./others/raspap.sh"
+else
+    "./others/staticip.sh" "$user"
+fi
