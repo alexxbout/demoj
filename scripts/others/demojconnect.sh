@@ -3,12 +3,12 @@
 
 echo "Initialising Demoj Connect"
 
-dir="/home/network/demoj"
-
 if [ ! -d "$dir" ]; then
     echo "Directory /home/network/demoj does not exist. Please run repository.sh first"
     exit 1
 fi
+
+dir="/home/network/demoj"
 
 cd "$dir" || exit 1
 
@@ -41,6 +41,8 @@ if ! command -v npm &> /dev/null; then
 
     echo "Npm installed"
 fi
+
+echo "Installing dependencies"
 
 npm install
 
