@@ -15,7 +15,6 @@ fi
 "./others/sudoers.sh" "$user"
 "./others/repository.sh" "$user"
 "./others/virtualenv.sh" "$user"
-"./others/appservice.sh" "$user"
 
 if [ "$user" = "network" ]; then
     "./others/demojconnect.sh"
@@ -23,3 +22,9 @@ if [ "$user" = "network" ]; then
 else
     "./others/staticip.sh" "$user"
 fi
+
+"./others/appservice.sh" "$user"
+
+echo "All scripts run"
+
+exit 0
