@@ -3,10 +3,10 @@
 
 # args: user
 
+echo "Initialising sudoers file"
+
 user=$1
 command_line="$user ALL=(ALL) NOPASSWD:"
-
-echo "Initialising sudoers file"
 
 if [ -z "$user" ]; then
     echo "User not set"
@@ -33,3 +33,5 @@ else
 fi
 
 echo "Sudoers file initialised"
+
+exit 0

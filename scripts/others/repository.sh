@@ -3,18 +3,18 @@
 
 # args: user=terminal | network | server
 
+echo "Initialising repo"
+
 user=$1
 gitlab="gitlab.istic.univ-rennes1.fr"
 repo="$gitlab:arthadam/demoj.git"
-
-echo "Initialising repo"
 
 if ! command -v git &> /dev/null
 then
     echo "Git is not installed"
     
     echo "Installing git"
-    apt-get install git -y
+    apt install git -y
 fi
 
 if [ -z "$user" ]; then
@@ -80,3 +80,5 @@ else
 fi
 
 echo "Repo initialised"
+
+exit 0
