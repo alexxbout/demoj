@@ -3,17 +3,12 @@
 
 # args: user=terminal | network | server
 
-echo "Initialising repo"
+echo "Initializing repo"
 
 user=$1
 access_token="glpat-yskhYMsdxsxV4VbFrz2M"
 repo="https://demoj:$access_token@gitlab.istic.univ-rennes1.fr/arthadam/demoj.git"
 clone_dir="/home/$user/demoj"
-
-if [ -z "$user" ]; then
-    echo "User not set"
-    exit 1
-fi
 
 if [ "$user" != "terminal" ] && [ "$user" != "network" ] && [ "$user" != "server" ]; then
     echo "Invalid user"
@@ -51,6 +46,6 @@ if ! sudo -u "$user" git checkout "$user"; then
     exit 1
 fi
 
-echo "Repo initialised"
+echo "Repo initialized"
 
 exit 0

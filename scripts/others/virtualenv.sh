@@ -4,14 +4,9 @@
 
 # TODO: Add other dependencies here if needed
 
-echo "Initialising virtualenv"
+echo "Initializing virtualenv"
 
 user=$1
-
-if [ -z "$user" ]; then
-    echo "User not set"
-    exit 1
-fi
 
 if [ "$user" != "terminal" ] && [ "$user" != "network" ] && [ "$user" != "server" ]; then
     echo "Invalid user"
@@ -39,6 +34,6 @@ fi
 
 deactivate
 
-echo "Virtualenv initialised"
+echo "Virtualenv initialized"
 
 exit 0

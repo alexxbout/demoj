@@ -3,6 +3,8 @@
 
 # TODO Check if pip paackges have to be installed using venv as well
 
+echo "Initializing raspios"
+
 echo "Updating system"
 apt update -y
 apt -y full-upgrade
@@ -30,3 +32,7 @@ else
     sudo raspi-config nonint do_i2c 0
     echo "I2C enabled"
 fi
+
+echo "Raspios initialized"
+
+exit 0

@@ -1,7 +1,7 @@
 #!/usr/bin/sudo bash
 # shellcheck shell=bash
 
-echo "Initialising Demoj Connect"
+echo "Initializing Demoj Connect"
 
 if [ ! -d "$dir" ]; then
     echo "Directory /home/network/demoj does not exist. Please run repository.sh first"
@@ -75,6 +75,6 @@ mv /home/network/temp/demojconnect /home/network/demoj/module
 
 echo "App moved to /home/network/demoj/module"
 
-echo "DemoJ Connect initialised"
+echo "DemoJ Connect initialized"
 
 exit 0

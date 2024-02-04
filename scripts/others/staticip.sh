@@ -3,6 +3,6 @@
 
 # TODO
 
-echo "Initialising static IP"
+echo "Initializing static IP"
 
 exit 0

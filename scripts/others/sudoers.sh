@@ -3,15 +3,10 @@
 
 # args: user
 
-echo "Initialising sudoers file"
+echo "Initializing sudoers file"
 
 user=$1
 command_line="$user ALL=(ALL) NOPASSWD:"
-
-if [ -z "$user" ]; then
-    echo "User not set"
-    exit 1
-fi
 
 if [ "$user" != "terminal" ] && [ "$user" != "network" ] && [ "$user" != "server" ]; then
     echo "Invalid user"
@@ -32,6 +27,6 @@ else
     echo "Shutdown command already in sudoers file"
 fi
 
-echo "Sudoers file initialised"
+echo "Sudoers file initialized"
 
 exit 0

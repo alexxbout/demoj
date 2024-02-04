@@ -1,7 +1,7 @@
 #!/usr/bin/sudo bash
 # shellcheck shell=bash
 
-echo "Initialising RaspAP"
+echo "Initializing RaspAP"
 
 echo "After reboot, remember to disable your personal hotspot to let RaspAP take over"
 

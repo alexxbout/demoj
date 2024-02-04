@@ -3,14 +3,9 @@
 
 # args: user
 
-echo "Initialising app service"
+echo "Initializing app service"
 
 user=$1
-
-if [ -z "$user" ]; then
-    echo "User not set"
-    exit 1
-fi
 
 if [ "$user" != "terminal" ] && [ "$user" != "network" ] && [ "$user" != "server" ]; then
     echo "Invalid user"
@@ -36,6 +31,6 @@ file="/etc/systemd/system/app.service"
 echo "Enabling app.service"
 sudo systemctl enable app.service
 
-echo "App service initialised"
+echo "App service initialized"
 
 exit 0

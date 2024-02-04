@@ -7,8 +7,8 @@ echo "Running all scripts"
 
 user=$1
 
-if [ -z "$user" ]; then
-    echo "User not set"
+if [ "$user" != "terminal" ] && [ "$user" != "network" ] && [ "$user" != "server" ]; then
+    echo "Invalid user"
     exit 1
 fi
 
