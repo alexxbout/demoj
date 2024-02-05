@@ -50,6 +50,8 @@ npm install
 
 echo "Building app"
 
+# TODO: Update .env file
+
 ionic build
 
 echo "App built"
@@ -62,8 +64,6 @@ fi
 mv /home/network/demoj/demoj-app/demojconnect /home/network/temp
 
 echo "App moved to /home/network/temp"
-
-rm -rf /home/network/demoj/demoj-app/demojconnect
 
 echo "Switching to network branch"
 
