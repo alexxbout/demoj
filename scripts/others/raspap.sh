@@ -19,7 +19,8 @@ echo "RaspAP installed"
 
 echo "Configuring RaspAP"
 
-# TODO: Change default SSID and password
+# TODO: Change default SSID: Maybe here /etc/raspap/raspap.auth or /etc/hostapd/hostapd.conf
+# TODO: Maybe remove the password: https://docs.raspap.com/faq/#can-i-remove-the-ap-password-to-create-an-open-wifi-network
 # TOdo: Update default login and password to portal
 
 echo "RaspAP configured"
