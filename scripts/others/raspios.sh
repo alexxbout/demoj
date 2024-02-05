@@ -25,11 +25,11 @@ echo "Installing strip led API"
 pip3 install rpi_ws281x --break-system-packages
 
 echo "Setup I2C"
-if [ "$(sudo raspi-config nonint get_i2c)" -eq 0 ]
+if [ "$(raspi-config nonint get_i2c)" -eq 0 ]
 then
     echo "I2C already enabled"
 else
-    sudo raspi-config nonint do_i2c 0
+    raspi-config nonint do_i2c 0
     echo "I2C enabled"
 fi
 

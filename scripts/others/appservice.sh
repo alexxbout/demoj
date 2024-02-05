@@ -29,7 +29,7 @@ file="/etc/systemd/system/app.service"
 } > $file
 
 echo "Enabling app.service"
-sudo systemctl enable app.service
+systemctl enable app.service
 
 echo "App service initialized"
 
