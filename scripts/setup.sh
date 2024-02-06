@@ -1,21 +1,25 @@
-#!/usr/bin/sudo bash
-# shellcheck shell=bash
+#!/bin/bash
+# shellcheck shell=bash source=/dev/null
 
-if [ "$EUID" -ne 0 ]; then
-  echo "Please run this script as root."
-  exit
-fi
+# Including utility functions
+source "$(dirname "$0")"/others/utils.sh
 
+# Check if the script is run as root
+check_root
+
+# Check if ping is installed, if not, install it
 if ! [ -x "$(command -v ping)" ]; then
   echo "Installing ping"
   apt install inetutils-ping -y
 fi
 
+# Check if internet connection is available
 if ! ping -q -c 1 -W 1 google.com >/dev/null; then
   echo "Internet is not available. Please connect to the internet and try again."
   exit 1
 fi
 
+# Set executable permissions for other scripts
 chmod +x others/appservice.sh
 chmod +x others/raspap.sh
 chmod +x others/raspios.sh
@@ -56,7 +60,6 @@ while true; do
     break
   else
     echo "Invalid option. Please try again."
-    break
   fi
 done
 
@@ -80,48 +83,55 @@ echo ""
 echo "  0. Exit"
 echo ""
 
-read -rp "Enter your choice: " choice
+while true; do
+  read -rp "Enter your choice: " choice
 
-case $choice in
-1)
-  echo "Running all..."
-  "others/runall.sh" "$user"
+  case $choice in
+  1)
+    echo "Running all..."
+    "others/runall.sh" "$user"
 
-  echo "Setup complete. Have fun with DemoJ!"
-  ;;
-2)
+    echo "Setup complete. Have fun with DemoJ!"
+    break
+    ;;
+  2)
     echo "Running appservice..."
     "others/appservice.sh" "$user"
+    break
     ;;
-3)
+  3)
     echo "Running raspap..."
     "others/raspap.sh" "$user"
+    break
     ;;
-4)
+  4)
     echo "Running repository..."
     "others/repository.sh" "$user"
+    break
     ;;
-5)
+  5)
     echo "Running staticip..."
     "others/staticip.sh" "$user"
+    break
     ;;
-6)
+  6)
     echo "Running sudoers..."
     "others/sudoers.sh" "$user"
+    break
     ;;
-7)
+  7)
     echo "Running virtualenv..."
     "others/virtualenv.sh" "$user"
+    break
     ;;
-0)
+  0)
     echo "Exiting..."
     exit 0
     ;;
-*)
-    echo "Invalid option. Exiting..."
-    exit 1
-    ;;
-esac
+  *)
+    echo "Invalid option. Please try again."
+  esac
+done
 
 echo ""
 
@@ -137,7 +147,6 @@ while true; do
     exit 0
     ;;
   *)
-    echo "Invalid response"
-    ;;
+    echo "Invalid response. Please try again."
   esac
 done

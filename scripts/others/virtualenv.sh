@@ -1,37 +1,40 @@
-#!/usr/bin/sudo bash
-# shellcheck shell=bash
-# shellcheck disable=SC1091
+#!/bin/bash
+# shellcheck shell=bash source=/dev/null
 
-# TODO: Add other dependencies here if needed
+# Including utility functions
+source "$(dirname "$0")"/utils.sh
 
+# Checking if the script is executed as root
+check_root
+
+# Displaying initialization message
 echo "Initializing virtualenv"
 
-user=$1
+# Getting the user
+user="$1"
 
-if [ "$user" != "terminal" ] && [ "$user" != "network" ] && [ "$user" != "server" ]; then
-    echo "Invalid user"
-    exit 1
-fi
+# Checking the validity of the user
+valid_users=("terminal" "network" "server")
+check_param_in_array "$user" "${valid_users[@]}" || die "Invalid user"
 
-if [ ! -d "/home/$user/demoj" ]; then
-    echo "Directory /home/$user/demoj does not exist. Please run repository.sh first"
-    exit 1
-fi
+# Checking the existence of the demoj directory
+check_directory "/home/$user/demoj" || die "Directory /home/$user/demoj does not exist. Please run repository.sh first"
 
-apt install python3.11-venv -y
+# Installing python3-venv
+apt install python3.11-venv -y || die "Failed to install python3.11-venv"
 
+# Activating the virtual environment
 cd "/home/$user/demoj" || exit 1
-
 source venv/bin/activate
 
+# Installing dependencies based on the user
 if [ "$user" = "terminal" ] || [ "$user" = "server" ]; then
     pip install "python-socketio[client]"
 elif [ "$user" = "network" ]; then
-    pip install flask
-    pip install flask_cors
-    pip install flask-socketio
+    pip install flask flask_cors flask-socketio
 fi
 
+# Deactivating the virtual environment
 deactivate
 
 echo "Virtualenv initialized"

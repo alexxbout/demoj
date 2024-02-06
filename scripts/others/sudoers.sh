@@ -1,18 +1,25 @@
-#!/usr/bin/sudo bash
-# shellcheck shell=bash
+#!/bin/bash
+# shellcheck shell=bash source=/dev/null
 
-# args: user
+# Including utility functions
+source "$(dirname "$0")"/utils.sh
 
+# Checking if the script is executed as root
+check_root
+
+# Displaying initialization message
 echo "Initializing sudoers file"
 
-user=$1
+# Retrieving the user
+user="$1"
+
+# Checking the validity of the user
+valid_users=("terminal" "network" "server")
+check_param_in_array "$user" "${valid_users[@]}" || die "Invalid user"
+
 command_line="$user ALL=(ALL) NOPASSWD:"
 
-if [ "$user" != "terminal" ] && [ "$user" != "network" ] && [ "$user" != "server" ]; then
-    echo "Invalid user"
-    exit 1
-fi
-
+# Adding reboot and shutdown commands to the sudoers file
 if ! grep -q "$command_line /sbin/reboot" /etc/sudoers; then
     echo "Adding reboot command to sudoers file"
     echo "$command_line /sbin/reboot" >> /etc/sudoers

@@ -1,5 +1,8 @@
-#!/usr/bin/sudo bash
-# shellcheck shell=bash
+#!/bin/bash
+# shellcheck shell=bash source=/dev/null
+
+# Including utility functions
+source "$(dirname "$0")"/utils.sh
 
 echo "Initializing RaspAP"
 
@@ -21,7 +24,7 @@ echo "Configuring RaspAP"
 
 # TODO: Change default SSID: Maybe here /etc/raspap/raspap.auth or /etc/hostapd/hostapd.conf
 # TODO: Maybe remove the password: https://docs.raspap.com/faq/#can-i-remove-the-ap-password-to-create-an-open-wifi-network
-# TOdo: Update default login and password to portal
+# TODO: Update default login and password to portal
 
 echo "RaspAP configured"
 

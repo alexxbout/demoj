@@ -1,35 +1,23 @@
 #!/bin/bash
-# shellcheck shell=bash
+# shellcheck shell=bash source=/dev/null
 
-# Vérification des arguments
-if [ "$#" -ne 1 ]; then
-    echo "Usage: $0 <user>"
-    exit 1
-fi
+# Including utility functions
+source "$(dirname "$0")"/utils.sh
 
-# Vérification que le script est exécuté en tant que root
-if [ "$EUID" -ne 0 ]; then
-    echo "Please run this script as root."
-    exit 1
-fi
+# Checking if the script is executed as root
+check_root
 
-# Récupération de l'utilisateur
-user=$1
+# Checking arguments
+valid_params=("terminal" "network" "server")
+user="$1"
+check_param_in_array "$user" "${valid_params[@]}" || die "Invalid user"
 
-# Vérification de la validité de l'utilisateur
-if [ "$user" != "terminal" ] && [ "$user" != "network" ] && [ "$user" != "server" ]; then
-    echo "Invalid user"
-    exit 1
-fi
-
-# Définition des chemins
+# Defining paths
 venv_path="/home/$user/demoj/venv/bin/python3"
 app_script="/home/$user/demoj/module/scripts/app.py"
 service_file="/etc/systemd/system/app.service"
 
-echo "Initializing app service"
-
-# Création du fichier de service
+# Creating and writing to the service file
 {
     echo "[Unit]"
     echo "Description=Start $user app"
@@ -40,11 +28,11 @@ echo "Initializing app service"
     echo ""
     echo "[Install]"
     echo "WantedBy=multi-user.target"
-} > "$service_file"
+} > "$service_file" || die "Failed to create service file: $service_file"
 
-# Activation du service
+# Enabling the service
 echo "Enabling app.service"
-systemctl enable app.service
+systemctl enable app.service || die "Failed to enable app.service"
 
 echo "App service initialized"
 

@@ -1,29 +1,35 @@
-#!/usr/bin/sudo bash
-# shellcheck shell=bash
+#!/bin/bash
+# shellcheck shell=bash source=/dev/null
 
-# args: user
+# Including utility functions
+source "$(dirname "$0")"/utils.sh
 
+# Checking if the script is executed as root
+check_root
+
+# Displaying initialization message
 echo "Running all scripts"
 
-user=$1
+# Retrieving the user from the arguments
+user="$1"
 
-if [ "$user" != "terminal" ] && [ "$user" != "network" ] && [ "$user" != "server" ]; then
-    echo "Invalid user"
-    exit 1
-fi
+# Checking the validity of the user
+valid_users=("terminal" "network" "server")
+check_param_in_array "$user" "${valid_users[@]}" || die "Invalid user"
 
-"./others/sudoers.sh" "$user"
-"./others/repository.sh" "$user"
-"./others/virtualenv.sh" "$user"
+# Executing scripts based on the user
+"./others/sudoers.sh" "$user" || die "Failed to execute sudoers.sh"
+"./others/repository.sh" "$user" || die "Failed to execute repository.sh"
+"./others/virtualenv.sh" "$user" || die "Failed to execute virtualenv.sh"
 
 if [ "$user" = "network" ]; then
-    "./others/demojconnect.sh"
-    "./others/raspap.sh"
+    "./others/demojconnect.sh" || die "Failed to execute demojconnect.sh"
+    "./others/raspap.sh" || die "Failed to execute raspap.sh"
 else
-    "./others/staticip.sh" "$user"
+    "./others/staticip.sh" "$user" || die "Failed to execute staticip.sh"
 fi
 
-"./others/appservice.sh" "$user"
+"./others/appservice.sh" "$user" || die "Failed to execute appservice.sh"
 
 echo "All scripts run"
 

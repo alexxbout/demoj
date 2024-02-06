@@ -1,88 +1,67 @@
 #!/bin/bash
-# shellcheck shell=bash
+# shellcheck shell=bash source=/dev/null
 
-# Affichage du message d'initialisation
+# Including utility functions
+source "$(dirname "$0")"/utils.sh
+
+# Displaying initialization message
 echo "Initializing Demoj Connect"
 
-# Définition du répertoire de travail
+# Defining working directory
 dir="/home/network/demoj"
 
-# Vérification de l'existence du répertoire
-if [ ! -d "$dir" ]; then
-    echo "Directory $dir does not exist. Please run repository.sh first"
-    exit 1
+# Checking if directory exists
+check_directory "$dir"
+
+# Changing directory to working directory
+cd "$dir" || die "Failed to change directory to $dir"
+
+# Updating code from Git repository
+sudo -u network git checkout demojconnect || die "Failed to checkout demojconnect"
+
+# Changing directory to application directory
+cd "demoj-app" || die "Failed to change directory to demoj-app"
+
+# Checking if Node.js and npm are installed
+if ! command -v node &> /dev/null || ! command -v npm &> /dev/null; then
+    echo "Node.js or npm is not installed, installing..."
+    apt install nodejs npm -y || die "Failed to install Node.js and npm"
+    echo "Node.js and npm installed"
 fi
 
-# Changement de répertoire vers le répertoire de travail
-cd "$dir" || exit 1
-
-# Mise à jour du code depuis le dépôt Git
-sudo -u network git checkout demojconnect || exit 1
-
-# Changement de répertoire vers le répertoire de l'application
-cd "demoj-app" || exit 1
-
-# Vérification de l'installation de Node.js
-if ! command -v node &> /dev/null; then
-    echo "Node is not installed"
-    apt install nodejs -y || exit 1
-
-    if ! command -v node &> /dev/null; then
-        echo "Node installation failed"
-        exit 1
-    fi
-
-    echo "Node installed"
-fi
-
-# Vérification de l'installation de npm
-if ! command -v npm &> /dev/null; then
-    echo "Npm is not installed"
-    apt install npm -y || exit 1
-
-    if ! command -v npm &> /dev/null; then
-        echo "Npm installation failed"
-        exit 1
-    fi
-
-    echo "Npm installed"
-fi
-
-# Installation des dépendances de l'application
+# Installing application dependencies
 echo "Installing dependencies"
-npm install || exit 1
+npm install || die "Failed to install dependencies"
 
-# Construction de l'application
+# Building the application
 echo "Building app"
-ionic build || exit 1
+ionic build || die "Failed to build app"
 
 echo "App built"
 echo "Moving app to /home/network/temp"
 
-# Définition du répertoire temporaire
+# Defining temporary directory
 temp_dir="/home/network/temp"
 
-# Création du répertoire temporaire s'il n'existe pas
-if [ ! -d "$temp_dir" ]; then
-    mkdir "$temp_dir" || exit 1
-fi
+# Creating temporary directory if it doesn't exist
+mkdir -p "$temp_dir" || die "Failed to create temp directory: $temp_dir"
 
-# Déplacement de l'application vers le répertoire temporaire
-mv "$dir/demoj-app/demojconnect" "$temp_dir" || exit 1
+# Moving the application to the temporary directory
+mv "$dir/demoj-app/demojconnect" "$temp_dir" || die "Failed to move app to $temp_dir"
 
 echo "App moved to $temp_dir"
 
-# Changement de branche Git
+# Changing Git branch
 echo "Switching to network branch"
-cd "$dir" || exit 1
-sudo -u network git checkout network || exit 1
+cd "$dir" || die "Failed to change directory to $dir"
+sudo -u network git checkout network || die "Failed to checkout network branch"
 
-# Déplacement de l'application vers le répertoire final
+# Moving the application to the final directory
 echo "Moving app to /home/network/demoj/module"
-mv "$temp_dir/demojconnect" "$dir/module" || exit 1
+mv "$temp_dir/demojconnect" "$dir/module" || die "Failed to move app to $dir/module"
 
 echo "App moved to $dir/module"
 
-# Message de finalisation
+# Finalization message
 echo "DemoJ Connect initialized"
 exit 0
