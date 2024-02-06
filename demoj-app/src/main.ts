@@ -31,5 +31,6 @@ const app = createApp(App)
     .use(router);
 
 router.isReady().then(() => {
-    app.provide("socket", new CustomSocket()).mount("#app");
+    app.provide("socket", new CustomSocket());
+    app.mount("#app");
 });

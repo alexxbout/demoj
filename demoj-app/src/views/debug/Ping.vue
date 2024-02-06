@@ -6,14 +6,17 @@
 
 <script setup lang="ts">
 import API from "@/services/API";
+import { SoundEnum, SoundManager } from "@/services/SoundManager";
 import { IonActionSheet, IonButton, IonToast } from "@ionic/vue";
 import { alertCircle, checkmarkCircle, radioButtonOff } from "ionicons/icons";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 
 const emits = defineEmits<{
     (e: "@start"): void;
     (e: "@end"): void;
 }>();
+
+const soundManager = new SoundManager();
 
 const toastOpen = ref(false);
 const toastMessage = ref("");
@@ -92,10 +95,16 @@ const showToast = (message: string, isSuccess: boolean) => {
     if (isSuccess) {
         toastIcon.value = toastTheme.value.success.icon;
         toastColor.value = toastTheme.value.success.color;
+        soundManager.playSound(SoundEnum.NOTIFICATION_SIMPLE_01);
     } else {
+        soundManager.playSound(SoundEnum.ALERT_ERROR_02);
         toastIcon.value = toastTheme.value.error.icon;
         toastColor.value = toastTheme.value.error.color;
     }
     toastOpen.value = true;
 };
+
+onMounted(() => {
+    soundManager.loadSounds([SoundEnum.ALERT_ERROR_02, SoundEnum.NOTIFICATION_SIMPLE_01])
+});
 </script>

@@ -53,14 +53,17 @@ import BatteryStatus from "@/components/BatteryStatus.vue";
 import ConnectStatus from "@/components/ConnectStatus.vue";
 import API from "@/services/API";
 import { CustomSocket } from "@/services/CustomSocket";
+import { SoundEnum, SoundManager } from "@/services/SoundManager";
 import type { DeviceTypes, IParameter } from "@/types/IConfig";
 import { ActionSheetButton, IonActionSheet, IonButton, IonCol, IonContent, IonFooter, IonGrid, IonHeader, IonInput, IonItem, IonList, IonPage, IonRange, IonRow, IonTitle, IonToast, IonToggle, IonToolbar } from "@ionic/vue";
 import { checkmarkCircle } from "ionicons/icons";
-import { computed, inject, ref } from "vue";
+import { computed, inject, onMounted, ref } from "vue";
 
 const props = defineProps<{
     device: DeviceTypes;
 }>();
+
+const soundManager = new SoundManager();
 
 const socket = inject("socket") as CustomSocket;
 const config = socket.getConfig();
@@ -111,6 +114,7 @@ const pinFormatter = (value: number) => `${value}%`;
 const handleRestart = async (event: CustomEvent) => {
     if (event.detail.role == "destructive") {
         socket.updateModuleStatus(props.device, "restart");
+        soundManager.playSound(SoundEnum.HERO_SIMPLE_CELEBRATION_03);
         toastOpen.value = true;
     }
 };
@@ -118,6 +122,7 @@ const handleRestart = async (event: CustomEvent) => {
 const handleStop = async (event: CustomEvent) => {
     if (event.detail.role == "destructive") {
         socket.updateModuleStatus(props.device, "stop");
+        soundManager.playSound(SoundEnum.HERO_SIMPLE_CELEBRATION_03);
         toastOpen.value = true;
     }
 };
@@ -129,4 +134,8 @@ const onParameterToggle = async (parameter: IParameter) => {
 const onParameterUpdate = async (parameter: IParameter) => {
     await API.setParameterValue(props.device, parameter.id, parameter.value!);
 };
+
+onMounted(() => {
+    soundManager.loadSounds([SoundEnum.HERO_SIMPLE_CELEBRATION_03]);
+});
 </script>

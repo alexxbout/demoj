@@ -13,7 +13,6 @@ const socket = inject("socket") as CustomSocket;
 
 onMounted(() => {
     console.log("Hello DémoJ Connect");
-    console.log("Starting socket connection");
     socket.connect();
 
     if (!localStorage.getItem("mode")) localStorage.setItem("mode", "client");

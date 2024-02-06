@@ -2,21 +2,28 @@ import { DeviceTypes, IConfig } from "@/types/IConfig";
 import { Socket, io } from "socket.io-client";
 import { Ref, ref } from "vue";
 import API from "./API";
+import { SoundEnum, SoundManager } from "./SoundManager";
 
 export class CustomSocket {
     private socket: Socket | null;
     private config: Ref<IConfig | null>;
+    private soundManager: SoundManager;
 
     constructor() {
         this.socket = null;
         this.config = ref(null);
+
+        this.soundManager = new SoundManager();
+        this.soundManager.loadSounds([SoundEnum.NAVIGATION_FORWARD_SELECTION, SoundEnum.NAVIGATION_BACKWARD_SELECTION, SoundEnum.UI_LOADING])
     }
 
     public connect() {
+        console.log("Connecting to socket...");
         this.socket = io(`http://${import.meta.env.VITE_IP_NETWORK}:${import.meta.env.VITE_PORT}`);
 
         this.socket.on("connect", () => {
             console.log("Socket connected");
+            this.soundManager.playSound(SoundEnum.NAVIGATION_FORWARD_SELECTION);
             this.socket?.emit("ready", { device: "client" });
 
             API.getConfig().then((config) => {
@@ -41,12 +48,13 @@ export class CustomSocket {
 
         this.socket.on("connect_error", (error: any) => {
             console.log("Socket connection error, reconnecting...");
-            console.log(error);
+            // console.log(error);
             this.reconnect();
         });
 
         this.socket.on("connect_timeout", (error: any) => {
             console.log("Socket timeout, reconnecting...");
+            // console.log(error);
             this.reconnect();
         });
 
@@ -54,11 +62,19 @@ export class CustomSocket {
             console.log(`Socket ${data.device} status: ${data.status}`);
 
             if (this.config.value) this.config.value.modules[data.device].isConnected = data.status == "on";
+
+            if (data.status == "on") {
+                this.soundManager.playSound(SoundEnum.NAVIGATION_FORWARD_SELECTION);
+            } else {
+                this.soundManager.playSound(SoundEnum.NAVIGATION_BACKWARD_SELECTION);
+            }
         });
     }
 
     private reconnect() {
         setTimeout(() => {
+            this.soundManager.playSound(SoundEnum.UI_LOADING);
+
             if (this.socket && !this.socket.connected) this.socket.connect();
         }, 1000);
     }
