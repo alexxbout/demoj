@@ -114,7 +114,7 @@ const pinFormatter = (value: number) => `${value}%`;
 const handleRestart = async (event: CustomEvent) => {
     if (event.detail.role == "destructive") {
         socket.updateModuleStatus(props.device, "restart");
-        soundManager.playSound(SoundEnum.HERO_SIMPLE_CELEBRATION_03);
+        soundManager.playSound(SoundEnum.NAVIGATION_SELECTION_COMPLETE_CELEBRATION);
         toastOpen.value = true;
     }
 };
@@ -122,7 +122,7 @@ const handleRestart = async (event: CustomEvent) => {
 const handleStop = async (event: CustomEvent) => {
     if (event.detail.role == "destructive") {
         socket.updateModuleStatus(props.device, "stop");
-        soundManager.playSound(SoundEnum.HERO_SIMPLE_CELEBRATION_03);
+        soundManager.playSound(SoundEnum.NAVIGATION_SELECTION_COMPLETE_CELEBRATION);
         toastOpen.value = true;
     }
 };
@@ -136,6 +136,6 @@ const onParameterUpdate = async (parameter: IParameter) => {
 };
 
 onMounted(() => {
-    soundManager.loadSounds([SoundEnum.HERO_SIMPLE_CELEBRATION_03]);
+    soundManager.loadSounds([SoundEnum.NAVIGATION_SELECTION_COMPLETE_CELEBRATION]);
 });
 </script>
