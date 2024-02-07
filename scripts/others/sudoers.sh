@@ -19,6 +19,12 @@ check_param_in_array "$user" "${valid_users[@]}" || die "Invalid user"
 
 command_line="$user ALL=(ALL) NOPASSWD:"
 
+# Creating a backup of /etc/sudoers if the backup file doesn't exist
+if [[ ! -f "/etc/sudoers.bak" ]]; then
+    echo "Creating backup of /etc/sudoers"
+    cp /etc/sudoers /etc/sudoers.bak
+fi
+
 # Adding reboot and shutdown commands to the sudoers file
 if ! grep -q "$command_line /sbin/reboot" /etc/sudoers; then
     echo "Adding reboot command to sudoers file"
