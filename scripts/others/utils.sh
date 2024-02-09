@@ -36,3 +36,11 @@ check_directory() {
         die "Directory $dir does not exist"
     fi
 }
+
+# Function pour créer une sauvegarde d'un fichier
+create_bak() {
+    local file="$1"
+    if [ ! -f "$file.bak" ]; then
+        cp "$file" "$file.bak" || die "Failed to create backup of $file"
+    fi
+}

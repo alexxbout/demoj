@@ -21,10 +21,9 @@ file="/etc/dhcpcd.conf"
 
 # Check if the file already exists
 if [ -f "$file" ]; then
-    if [ ! -f "$file.bak" ]; then
-        cp "$file" "$file.bak"
-        echo "Created backup file $file.bak"
-    fi
+    echo "Creating backup of $file"
+    create_bak "$file"
+
     read -rp "The file $file already exists. Do you want to overwrite it? (y/n) " overwrite
     case $overwrite in
         [yY])
