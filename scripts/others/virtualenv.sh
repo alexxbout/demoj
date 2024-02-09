@@ -23,8 +23,13 @@ check_directory "/home/$user/demoj" || die "Directory /home/$user/demoj does not
 # Installing python3-venv
 apt install python3.11-venv -y || die "Failed to install python3.11-venv"
 
-# Activating the virtual environment
+# Moving to the demoj directory
 cd "/home/$user/demoj" || exit 1
+
+# Creating the virtual environment
+python3 -m venv venv
+
+# Activating the virtual environment
 source venv/bin/activate
 
 # Installing dependencies based on the user
