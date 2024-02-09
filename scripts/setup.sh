@@ -1,5 +1,6 @@
 #!/bin/bash
 # shellcheck shell=bash source=/dev/null
+# shellcheck disable=SC2034
 
 # Including utility functions
 source "$(dirname "$0")"/others/utils.sh
@@ -35,32 +36,16 @@ echo "Welcome to the DemoJ setup script!"
 echo "Installing dependencies for the DemoJ project."
 echo "Ensure SSH connection to the target device with internet access."
 echo ""
-echo "Please select the user you want to install the project for."
-echo "  1. Terminal"
-echo "  2. Network"
-echo "  3. Server"
-echo "  4. Continue anyway"
-echo ""
-
-while true; do
-  read -rp "Enter your choice: " user
-
-  if [ "$user" == "1" ]; then
-    user="terminal"
-    break
-  elif [ "$user" == "2" ]; then
-    user="network"
-    break
-  elif [ "$user" == "3" ]; then
-    user="server"
-    break
-  elif [ "$user" == "4" ]; then
-    user="unknown"
-    echo "Warning: User set to unknown. Some features may not be available."
-    break
-  else
-    echo "Invalid option. Please try again."
-  fi
+echo "Please select the user you want to install the project for:"
+options=("Terminal" "Network" "Server" "Continue anyway")
+select user_option in "${options[@]}"; do
+    case $REPLY in
+        1) user="terminal"; break;;
+        2) user="network"; break;;
+        3) user="server"; break;;
+        4) user="unknown"; echo "Warning: User set to unknown. Some features may not be available."; break;;
+        *) echo "Invalid option. Please try again.";;
+    esac
 done
 
 clear
@@ -68,69 +53,21 @@ clear
 echo "User set to $user"
 echo ""
 
-echo "Please select the options you want to install."
+echo "Please select the options you want to install:"
 
-echo "  1. Install DemoJ on this device"
-echo ""
-echo "Other options:"
-echo "  2. Run appservice"
-echo "  3. Run raspap"
-echo "  4. Run repository"
-echo "  5. Run staticip"
-echo "  6. Run sudoers"
-echo "  7. Run virtualenv"
-echo ""
-echo "  0. Exit"
-echo ""
-
-while true; do
-  read -rp "Enter your choice: " choice
-
-  case $choice in
-  1)
-    echo "Running all..."
-    "others/runall.sh" "$user"
-
-    echo "Setup complete. Have fun with DemoJ!"
-    break
-    ;;
-  2)
-    echo "Running appservice..."
-    "others/appservice.sh" "$user"
-    break
-    ;;
-  3)
-    echo "Running raspap..."
-    "others/raspap.sh" "$user"
-    break
-    ;;
-  4)
-    echo "Running repository..."
-    "others/repository.sh" "$user"
-    break
-    ;;
-  5)
-    echo "Running staticip..."
-    "others/staticip.sh" "$user"
-    break
-    ;;
-  6)
-    echo "Running sudoers..."
-    "others/sudoers.sh" "$user"
-    break
-    ;;
-  7)
-    echo "Running virtualenv..."
-    "others/virtualenv.sh" "$user"
-    break
-    ;;
-  0)
-    echo "Exiting..."
-    exit 0
-    ;;
-  *)
-    echo "Invalid option. Please try again."
-  esac
+options=("Install DemoJ on this device" "Run appservice" "Run raspap" "Run repository" "Run staticip" "Run sudoers" "Run virtualenv" "Exit")
+select install_option in "${options[@]}"; do
+    case $REPLY in
+        1) echo "Running all..."; "others/runall.sh" "$user"; echo "Setup complete. Have fun with DemoJ!"; break;;
+        2) echo "Running appservice..."; "others/appservice.sh" "$user"; break;;
+        3) echo "Running raspap..."; "others/raspap.sh" "$user"; break;;
+        4) echo "Running repository..."; "others/repository.sh" "$user"; break;;
+        5) echo "Running staticip..."; "others/staticip.sh" "$user"; break;;
+        6) echo "Running sudoers..."; "others/sudoers.sh" "$user"; break;;
+        7) echo "Running virtualenv..."; "others/virtualenv.sh" "$user"; break;;
+        8) echo "Exiting..."; exit 0;;
+        *) echo "Invalid option. Please try again.";;
+    esac
 done
 
 echo ""
