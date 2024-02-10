@@ -29,6 +29,7 @@ chmod +x others/runall.sh
 chmod +x others/staticip.sh
 chmod +x others/sudoers.sh
 chmod +x others/virtualenv.sh
+chmod +x others/demojconnect.sh
 
 clear
 
@@ -55,7 +56,7 @@ echo ""
 
 echo "Please select the options you want to install:"
 
-options=("Install DemoJ on this device" "Run appservice" "Run raspap" "Run repository" "Run staticip" "Run sudoers" "Run virtualenv" "Exit")
+options=("Install DemoJ on this device" "Run appservice" "Run raspap" "Run repository" "Run staticip" "Run sudoers" "Run virtualenv" "Run demojconnect" "Exit")
 select install_option in "${options[@]}"; do
     case $REPLY in
         1) echo "Running all..."; "others/runall.sh" "$user"; echo "Setup complete. Have fun with DemoJ!"; break;;
@@ -65,7 +66,8 @@ select install_option in "${options[@]}"; do
         5) echo "Running staticip..."; "others/staticip.sh" "$user"; break;;
         6) echo "Running sudoers..."; "others/sudoers.sh" "$user"; break;;
         7) echo "Running virtualenv..."; "others/virtualenv.sh" "$user"; break;;
-        8) echo "Exiting..."; exit 0;;
+        8) echo "Running demojconnect..."; "others/demojconnect.sh"; break;;
+        9) echo "Exiting..."; exit 0;;
         *) echo "Invalid option. Please try again.";;
     esac
 done

@@ -31,6 +31,7 @@ fi
 
 # Installing application dependencies
 echo "Installing dependencies"
+npm i -g @ionic/cli || die "Failed to install Ionic CLI"
 npm install || die "Failed to install dependencies"
 
 # Building the application
