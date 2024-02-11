@@ -4,6 +4,9 @@
 # Including utility functions
 source "$(dirname "$0")"/utils.sh
 
+# Redirecting output to log file
+redirect_output
+
 # Displaying initialization message
 echo "Initializing Demoj Connect"
 

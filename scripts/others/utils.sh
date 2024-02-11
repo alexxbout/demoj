@@ -1,8 +1,16 @@
 #!/bin/bash
 # shellcheck shell=bash
 
+log_file=".logs.txt"
+
 # Fonction pour afficher un message d'erreur et quitter le script avec un code de sortie non nul
 die() {
+    echo "Something went wrong. Do you want to see the logs? (y/n)"
+    read -r answer
+    if [ "$answer" = "y" ]; then
+        less "$log_file"
+    fi
+
     echo "$1" >&2
     exit 1
 }
@@ -43,4 +51,15 @@ create_bak() {
     if [ ! -f "$file.bak" ]; then
         cp "$file" "$file.bak" || die "Failed to create backup of $file"
     fi
+}
+
+# Fonction pour rediriger la sortie standard et la sortie d'erreur vers un fichier de log
+redirect_output() {
+    # Redirection de stdout des échos vers le terminal
+    exec > >(while IFS= read -r line; do printf '%s\n' "$line"; done)
+    # Utilisation d'une sous-coquille pour rediriger seulement la sortie des commandes
+    {
+        # Redirection de stderr et stdout des commandes vers le fichier de log
+        exec 2>> >(while IFS= read -r line; do printf '%s %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$line"; done >> "$log_file")
+    }
 }

@@ -4,6 +4,9 @@
 # Including utility functions
 source "$(dirname "$0")"/utils.sh
 
+# Redirecting output to log file
+redirect_output
+
 echo "Initializing RaspAP"
 
 echo "After reboot, remember to disable your personal hotspot to let RaspAP take over"
