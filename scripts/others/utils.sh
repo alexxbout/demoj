@@ -8,7 +8,7 @@ die() {
     echo "Something went wrong. Do you want to see the logs? (y/n)"
     read -r answer
     if [ "$answer" = "y" ]; then
-        less "$log_file"
+        cat "$log_file"
     fi
 
     echo "$1" >&2
