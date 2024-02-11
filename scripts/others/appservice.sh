@@ -9,13 +9,12 @@ source "$(dirname "$0")"/others/utils.sh
 select_user() {
     clear
     echo "Please select the user you want to install the project for:"
-    options=("Terminal" "Network" "Server" "Continue anyway")
+    options=("Terminal" "Network" "Server")
     select user_option in "${options[@]}"; do
         case $REPLY in
             1) echo "terminal"; break;;
             2) echo "network"; break;;
             3) echo "server"; break;;
-            4) echo "unknown"; echo "Warning: User set to unknown. Some features may not be available."; break;;
             *) echo "Invalid option. Please try again.";;
         esac
     done
