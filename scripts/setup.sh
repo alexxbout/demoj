@@ -36,7 +36,7 @@ clear
 echo "Welcome to the DemoJ setup script!"
 echo "Installing dependencies for the DemoJ project."
 echo "Ensure SSH connection to the target device with internet access."
-echo ""
+echo
 echo "Please select the user you want to install the project for:"
 options=("Terminal" "Network" "Server" "Continue anyway")
 select user_option in "${options[@]}"; do
@@ -52,7 +52,7 @@ done
 clear
 
 echo "User set to $user"
-echo ""
+echo
 
 echo "Please select the options you want to install:"
 
@@ -72,7 +72,7 @@ select install_option in "${options[@]}"; do
     esac
 done
 
-echo ""
+echo
 
 while true; do
   read -rp "Do you want to reboot now? (y/n) " yn

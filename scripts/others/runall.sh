@@ -21,6 +21,7 @@ valid_users=("terminal" "network" "server")
 check_param_in_array "$user" "${valid_users[@]}" || die "Invalid user"
 
 # Executing scripts based on the user
+"./others/raspios.sh" || die "Failed to execute raspios.sh"
 "./others/sudoers.sh" "$user" || die "Failed to execute sudoers.sh"
 "./others/repository.sh" "$user" || die "Failed to execute repository.sh"
 "./others/virtualenv.sh" "$user" || die "Failed to execute virtualenv.sh"
