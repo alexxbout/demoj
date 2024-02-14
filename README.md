@@ -14,6 +14,7 @@
 - Cameron Salomé
 - Yann Lainé Odic
 - Anaelle Dumand
+- Charly Piaud
 
 # Summary
 
