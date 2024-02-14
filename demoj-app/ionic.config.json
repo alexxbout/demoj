@@ -1,7 +1,0 @@
-{
-  "name": "demoj-app",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "vue-vite"
-}
