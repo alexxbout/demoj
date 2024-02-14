@@ -18,7 +18,7 @@ user="$1"
 
 # Checking the validity of the user
 valid_users=("terminal" "network" "server")
-check_param_in_array "$user" "${valid_users[@]}" || die "Invalid user"
+check_param_in_array "$user" "${valid_users[@]}" || die "Invalid user: " "$user"
 
 # Checking the existence of the demoj directory
 check_directory "/home/$user/demoj" || die "Directory /home/$user/demoj does not exist. Please run repository.sh first"

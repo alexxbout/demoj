@@ -18,7 +18,7 @@ user="$1"
 
 # Checking the validity of the user
 valid_users=("terminal" "network" "server")
-check_param_in_array "$user" "${valid_users[@]}" || die "Invalid user"
+check_param_in_array "$user" "${valid_users[@]}" || die "Invalid user: " "$user"
 
 # Executing scripts based on the user
 "./others/raspios.sh" || die "Failed to execute raspios.sh"

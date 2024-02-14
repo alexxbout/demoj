@@ -18,7 +18,7 @@ user="$1"
 
 # Check the validity of the user
 valid_users=("terminal" "network" "server")
-check_param_in_array "$user" "${valid_users[@]}" || die "Invalid user"
+check_param_in_array "$user" "${valid_users[@]}" || die "Invalid user: " "$user"
 
 # Define constants
 readonly access_token="glpat-yskhYMsdxsxV4VbFrz2M"

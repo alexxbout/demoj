@@ -12,9 +12,9 @@ select_user() {
     options=("Terminal" "Network" "Server")
     select user_option in "${options[@]}"; do
         case $REPLY in
-            1) echo "terminal"; break;;
-            2) echo "network"; break;;
-            3) echo "server"; break;;
+            1) echo "terminal"; return;;
+            2) echo "network"; return;;
+            3) echo "server"; return;;
             *) echo "Invalid option. Please try again.";;
         esac
     done

@@ -18,7 +18,7 @@ user="$1"
 
 # Checking the validity of the user
 valid_users=("terminal" "network" "server")
-check_param_in_array "$user" "${valid_users[@]}" || die "Invalid user"
+check_param_in_array "$user" "${valid_users[@]}" || die "Invalid user: " "$user"
 
 command_line="$user ALL=(ALL) NOPASSWD:"
 

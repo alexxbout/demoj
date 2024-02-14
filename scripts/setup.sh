@@ -6,18 +6,24 @@
 source "$(dirname "$0")"/others/utils.sh
 
 # Fonction pour demander à l'utilisateur de sélectionner un utilisateur
+#! PROBLEME SUR LA SELECTION DE L'UTILISATEUR
 select_user() {
     clear
     echo "Please select the user you want to install the project for:"
+
+    local ret=""
+
     options=("Terminal" "Network" "Server")
     select user_option in "${options[@]}"; do
         case $REPLY in
-            1) echo "terminal"; break;;
-            2) echo "network"; break;;
-            3) echo "server"; break;;
+            1) ret="terminal"; break;;
+            2) ret="network"; break;;
+            3) ret="server"; break;;
             *) echo "Invalid option. Please try again.";;
         esac
     done
+
+    echo "$ret"
 }
 
 # Check if the script is run as root
