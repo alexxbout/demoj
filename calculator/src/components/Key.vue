@@ -1,5 +1,5 @@
 <template>
-    <button @click="emits('@click')" class="flex items-center justify-center w-full h-20 p-5 text-3xl text-center rounded-3xl aspect-square disabled:grayscale" :style="styles" :disabled="props.disabled">
+    <button @click.prevent="emits('@click')" class="flex items-center justify-center w-full h-20 p-5 text-3xl text-center duration-200 active:scale-90 rounded-3xl aspect-square disabled:grayscale" :style="styles" :disabled="props.disabled">
         <span v-if="props.type != 'delete'">{{ props.text }}</span>
 
         <svg v-else class="w-12 h-12 fill-black" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background: new 0 0 512 512" xml:space="preserve">

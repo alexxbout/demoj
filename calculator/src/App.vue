@@ -1,14 +1,18 @@
 <template>
-    <div class="flex flex-col w-screen h-screen overflow-x-hidden">
-        <div class="mt-auto"></div>
-
+    <div class="flex flex-col justify-around w-screen h-screen overflow-x-hidden">
+        <div class="p-5">
+            <button class="text-[#007AFF] text-xl rounded-3xl bg-white p-5 w-full h-max flex items-center justify-center font-medium">
+                <span>Retour</span>
+            </button>
+        </div>
+        
         <div ref="field" class="w-screen p-5 overflow-x-auto scroll-smooth scrollbar-hide">
             <div class="flex items-center justify-end h-24 min-w-full p-5 ml-auto w-max bg-stone-200 rounded-3xl">
                 <span class="text-5xl font-semibold">{{ formula }}</span>
             </div>
         </div>
 
-        <div class="grid grid-cols-4 gap-5 p-5">
+        <div class="grid grid-cols-4 gap-3 p-5">
             <Key @@click="clear" text="AC" type="ac" :span="2" />
             <Key @@click="deleteChar" type="delete" :span="2" />
 
@@ -20,7 +24,7 @@
             <Key @@click="append('7')" text="7" type="number" />
             <Key @@click="append('8')" text="8" type="number" />
             <Key @@click="append('9')" text="9" type="number" />
-            <Key @@click="operator('*')" text="x" type="operator" />
+            <Key @@click="operator('*')" text="*" type="operator" />
 
             <Key @@click="append('4')" text="4" type="number" />
             <Key @@click="append('5')" text="5" type="number" />
@@ -40,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import Key from "./components/Key.vue";
 
 const field = ref<HTMLElement | null>(null);
@@ -55,10 +59,6 @@ const deleteChar = () => {
 };
 
 const append = (value: string) => {
-    if (formula.value.endsWith(".") && value === "0") {
-        return;
-    }
-
     if (formula.value === "0" && value === "0") {
         return;
     }
@@ -78,6 +78,12 @@ const scrollToRight = () => {
     }
 };
 
+const scrollToLeft = () => {
+    if (field.value) {
+        field.value.scrollLeft = 0;
+    }
+};
+
 const operator = (op: string) => {
     formula.value += op;
 };
@@ -93,9 +99,15 @@ const equal = () => {
     }
 
     if (field.value) {
-        field.value.scrollLeft = 0;
+        setTimeout(scrollToLeft, 1);
     }
 };
+
+onMounted(() => {
+    document.addEventListener("gesturestart", function (e) {
+        e.preventDefault();
+    });
+});
 </script>
 
 <style scoped>
