@@ -1,11 +1,13 @@
 <template>
     <div class="flex flex-col justify-around w-screen h-screen overflow-x-hidden">
-        <div class="p-5">
+        <div class="flex flex-col p-5 gap-y-5">
             <button class="text-[#007AFF] text-xl rounded-3xl bg-white p-5 w-full h-max flex items-center justify-center font-medium">
                 <span>Retour</span>
             </button>
+
+            <button @click="handleTest" class="flex items-center justify-center w-full p-5 text-xl font-medium text-white bg-green-500 rounded-3xl h-max">Test</button>
         </div>
-        
+
         <div ref="field" class="w-screen p-5 overflow-x-auto scroll-smooth scrollbar-hide">
             <div class="flex items-center justify-end h-24 min-w-full p-5 ml-auto w-max bg-stone-200 rounded-3xl">
                 <span class="text-5xl font-semibold">{{ formula }}</span>
@@ -46,6 +48,8 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import Key from "./components/Key.vue";
+import ArithmeticExpressionEvaluator from "./utils/ArithmeticExpressionEvaluator.ts";
+import { testCalculateFunction } from "./utils/calculator.ts";
 
 const field = ref<HTMLElement | null>(null);
 const formula = ref("");
@@ -91,9 +95,10 @@ const operator = (op: string) => {
 const equal = () => {
     try {
         // Replace ^ with **
-        const evaluatedFormula = formula.value.replace(/\^/g, "**");
-        // Evaluate the modified formula
-        formula.value = eval(evaluatedFormula).toString();
+        // const evaluatedFormula = formula.value.replace(/\^/g, "**");
+
+        // formula.value = calculate(formula.value).toString();
+        formula.value = ArithmeticExpressionEvaluator.evaluate(formula.value).toString();
     } catch (error) {
         formula.value = ":(";
     }
@@ -108,6 +113,10 @@ onMounted(() => {
         e.preventDefault();
     });
 });
+
+const handleTest = () => {
+    testCalculateFunction(100);
+};
 </script>
 
 <style scoped>
