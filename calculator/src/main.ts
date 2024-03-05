@@ -1,5 +1,32 @@
-import { createApp } from 'vue'
-import './style.css'
-import App from './App.vue'
+import { createApp } from "vue";
+import { RouteRecordRaw, createRouter, createWebHistory } from "vue-router";
+import App from "./App.vue";
+import "./style.css";
 
-createApp(App).mount('#app')
+const routes: Array<RouteRecordRaw> = [
+    {
+        path: "/",
+        name: "home",
+        component: () => import("./App.vue"),
+        redirect: "/terminal",
+        children: [
+            {
+                path: "terminal",
+                name: "terminal",
+                component: () => import("./App.vue"),
+            },
+            {
+                path: "server",
+                name: "server",
+                component: () => import("./App.vue"),
+            },
+        ],
+    },
+];
+
+const router = createRouter({
+    history: createWebHistory(),
+    routes,
+});
+
+createApp(App).use(router).mount("#app");
