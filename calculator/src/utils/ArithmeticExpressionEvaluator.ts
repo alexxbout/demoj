@@ -1,4 +1,3 @@
-
 class ArithmeticExpressionEvaluator {
     static INVALID_NUMBER = -1234567.654;
     private str: string;
@@ -55,11 +54,9 @@ class ArithmeticExpressionEvaluator {
             if (this.eat("+")) {
                 // addition
                 x += this.parseTerm();
-                // x = addition(x, this.parseTerm());
             } else if (this.eat("-")) {
                 // subtraction
                 x -= this.parseTerm();
-                // x = subtraction(x, this.parseTerm());
             } else {
                 return x;
             }
@@ -72,11 +69,9 @@ class ArithmeticExpressionEvaluator {
             if (this.eat("*")) {
                 // multiplication
                 x *= this.parseFactor();
-                // x = multiplication(x, this.parseFactor());
             } else if (this.eat("/")) {
                 // division
                 x /= this.parseFactor();
-                // x = division(x, this.parseFactor());
             } else {
                 return x;
             }
@@ -104,24 +99,6 @@ class ArithmeticExpressionEvaluator {
                 this.nextChar();
             }
             x = parseFloat(this.str.substring(startPos, this.pos));
-        } else if (this.ch >= "a" && this.ch <= "z") {
-            // functions
-            while (this.ch >= "a" && this.ch <= "z") {
-                this.nextChar();
-            }
-            const func = this.str.substring(startPos, this.pos);
-            x = this.parseFactor();
-            if (func === "sqrt") {
-                x = Math.sqrt(x);
-            } else if (func === "sin") {
-                x = Math.sin(this.degreesToRadians(x));
-            } else if (func === "cos") {
-                x = Math.cos(this.degreesToRadians(x));
-            } else if (func === "tan") {
-                x = Math.tan(this.degreesToRadians(x));
-            } else {
-                return ArithmeticExpressionEvaluator.INVALID_NUMBER;
-            }
         } else {
             return ArithmeticExpressionEvaluator.INVALID_NUMBER;
         }
@@ -130,11 +107,6 @@ class ArithmeticExpressionEvaluator {
             x = Math.pow(x, this.parseFactor());
         }
         return x;
-    }
-
-    degreesToRadians(degrees: number): number {
-        const pi = Math.PI;
-        return degrees * (pi / 180);
     }
 }
 
