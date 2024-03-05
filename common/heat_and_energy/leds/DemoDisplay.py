@@ -32,6 +32,8 @@ class Gauges:
         self.__ledsPerGauge = int(led_count/NB_OF_GAUGES)
         self.__tempStep = self.__ledsPerGauge/(MAX_TEMP - MIN_TEMP)
         self.__wattStep = self.__ledsPerGauge/(MAX_WATTS - MIN_WATTS)
+        self.__lastWatts = 0.0
+        self.__lastTemp = 0.0
         LED_PIN = led_pin          # GPIO pin connected to the pixels (18 uses PWM!).
         LED_FREQ_HZ = 800000  # LED signal frequency in hertz (usually 800khz)
         LED_DMA = 10          # DMA channel to use for generating signal (try 10)
@@ -43,7 +45,7 @@ class Gauges:
         self.__strip = PixelStrip(led_count, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
         self.__begin()
 
-    def __gradiant(self, step: int, maxStep: int, begin: Color, end: Color): 
+    def __gradiant(step: int, maxStep: int, begin: Color, end: Color) -> Color: 
         """
         Calculate the gradiant color for the current step
 
@@ -98,7 +100,8 @@ class Gauges:
         """
         if degrees > MAX_TEMP:
             degrees = MAX_TEMP
-        colored_leds: int = int((degrees - MIN_TEMP) * self.__tempStep)
+        averagedTemp = self.__instantAverageTemp(degrees)
+        colored_leds: int = int((averagedTemp - MIN_TEMP) * self.__tempStep)
         gaugeEnd: int = self.__ledsPerGauge
         self.__gradiantLeds(0, colored_leds, gaugeEnd)
         self.__clearLeds(colored_leds, gaugeEnd)
@@ -113,7 +116,8 @@ class Gauges:
         """
         if miliWatts > MAX_WATTS:
             miliWatts = MAX_WATTS
-        colored_leds: int = int((miliWatts - MIN_WATTS) * self.__wattStep)
+        averagedMW = self.__instantAverageWatts(miliWatts)
+        colored_leds: int = int((averagedMW - MIN_WATTS) * self.__wattStep)
         colorEnd: int = self.__ledsPerGauge+colored_leds
         self.__gradiantLeds(self.__ledsPerGauge, colorEnd, self.__ledsPerGauge)
         self.__clearLeds(colorEnd, self.__led_count)
@@ -123,3 +127,25 @@ class Gauges:
         """Clear all the leds"""
         self.__clearLeds(0, self.__led_count)
         self.__strip.show()
+
+    def __instantAverageWatts(self, newValue: float) -> float:
+        self.__lastWatts = self.__instantAverage(self.__lastWatts, newValue, 0.5)
+        return self.__lastWatts
+    
+    def __instantAverageTemp(self, newValue: float) -> float:
+        self.__lastTemp = self.__instantAverage(self.__lastTemp, newValue, 0.5)
+        return self.__lastTemp
+
+    def __instantAverage(lastValue: float, newValue: float, percent: float) -> float:
+        """
+        Instant average on floats
+        
+        PARAMS:
+            - lastValue The last value evaluated.
+            - newValue The new value to add
+            - percent A real between 0 and 1. 
+                The factor for the balance between lastValue and newValue.
+
+        RETURNS: The instant average.
+        """
+        return percent * newValue + (1 - percent) * lastValue
