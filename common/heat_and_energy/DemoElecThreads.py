@@ -10,10 +10,10 @@ LED_COUNT = 30
 CHANNEL = 0
 LED_PIN = 18    
     
-"""
-A class to control the leds on an other thread 
-"""
 class DemoElecThread(threading.Thread):
+    """
+    A class to control the leds on an other thread 
+    """
     def __init__(self): 
         self.daemon = True
         self.__lock: Lock = Lock()
