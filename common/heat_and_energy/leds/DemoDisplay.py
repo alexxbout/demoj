@@ -1,6 +1,7 @@
 # DEMOTECH
 
 from rpi_ws281x import PixelStrip, Color
+import time
 #import time if you want to add cool transitions
 
 MAX_TEMP = 45
@@ -9,6 +10,9 @@ MIN_WATTS = 2000
 MAX_WATTS = 3500 # value reached at approximatly 50 degrees
 NB_OF_GAUGES = 2
 NO_COLOR = Color(0, 0, 0, 0)
+
+#TODO make colorization with areas instead of gradiant
+#TODO adjust begin and end of temperature
 
 class Gauges:
     """
@@ -72,7 +76,7 @@ class Gauges:
         if begin >= end-1 :
             tmp = begin
             begin = end
-            end = begin
+            end = tmp
         for i in range(begin, end):
             self.__strip.setPixelColor(i, NO_COLOR)
 
@@ -87,7 +91,7 @@ class Gauges:
         if begin >= end-1 :
             tmp = begin
             begin = end
-            end = begin
+            end = tmp
         for i in range(begin, end):
             self.__strip.setPixelColor(i, self.__gradiant(i-begin, maxStep, self.__begin_color, self.__ending_color))
 
@@ -149,3 +153,16 @@ class Gauges:
         RETURNS: The instant average.
         """
         return percent * newValue + (1 - percent) * lastValue
+    
+
+    """
+    Clear all leds with a smooth animation
+    """
+    def clearAllSmooth(self):
+        mid = self.__ledsPerGauge
+        for i in range(0, mid):
+            self.__strip.setPixelColor(i, NO_COLOR)
+            time.sleep(0.020)
+        for i in range(mid, self.__led_count):
+            self.__strip.setPixelColor(i, NO_COLOR)
+            time.sleep(0.020)
