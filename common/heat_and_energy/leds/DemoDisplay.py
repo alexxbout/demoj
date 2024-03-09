@@ -155,7 +155,7 @@ class Gauges:
         return percent * newValue + (1 - percent) * lastValue
     
 
-    def clearAllSmooth(self):
+    def clearAllSmoothed(self):
         """
         Clear all leds with a smooth animation
         """
@@ -166,3 +166,15 @@ class Gauges:
         for i in range(mid, self.__led_count):
             self.__strip.setPixelColor(i, NO_COLOR)
             time.sleep(0.020)
+
+    def fillColorSmoothed(self, color: Color):
+        """
+        filling a color with a smooth animation
+        """
+        pass #TODO
+
+    def blinkColorSmoothed(self, color: Color):
+        """
+        make a color blinking one with a smooth animation
+        """
+        pass #TODO

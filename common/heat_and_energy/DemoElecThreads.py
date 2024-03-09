@@ -4,6 +4,7 @@ import time
 from leds.DemoDisplay import Gauges
 from temperature.temp import getCPUtemperature
 from wattmeter.DemoWattmeter import *
+from rpi_ws281x import Color
 
 SPEED = 0.5 
 LED_COUNT = 30
@@ -56,5 +57,5 @@ class DemoElecThread(threading.Thread):
         except InterruptedError:
             pass
         finally:
-            self.__gauges.clearAll()
+            self.__gauges.clearAllSmoothed()
             
