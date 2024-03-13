@@ -16,7 +16,7 @@ GREEN = Color(0, 255, 0, 0)
 
 #On aurait aussi pu tout faire avec un seul thread mais j'avais un doute sur la synchro
 #car la routine du thread dépendrait de l'extérieur 
-#TODO dire ou faire si vous trouvez que c'est mieux avec un seul
+#TODO dire ou faire si vous trouvez que c'est mieux avec un seul je pense que ce serais peut-être plus pertinant
 
 class DemoLedsController:
     """
