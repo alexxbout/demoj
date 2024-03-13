@@ -1,6 +1,6 @@
 # DEMOTECH
 
-from rpi_ws281x import PixelStrip, Color
+from rpi_ws281x import PixelStrip, Color, RGBW
 import time
 #import time if you want to add cool transitions
 
@@ -10,6 +10,7 @@ MIN_WATTS = 2000
 MAX_WATTS = 3500 # value reached at approximatly 50 degrees
 NB_OF_GAUGES = 2
 NO_COLOR = Color(0, 0, 0, 0)
+ANIM_SPEED = 0.020
 
 #TODO make colorization with areas instead of gradiant
 #TODO adjust begin and end of temperature
@@ -129,8 +130,7 @@ class Gauges:
         
     def clearAll(self):
         """Clear all the leds"""
-        self.__clearLeds(0, self.__led_count)
-        self.__strip.show()
+        self.__fillColor(NO_COLOR)
 
     def __instantAverageWatts(self, newValue: float) -> float:
         self.__lastWatts = self.__instantAverage(self.__lastWatts, newValue, 0.5)
@@ -159,22 +159,49 @@ class Gauges:
         """
         Clear all leds with a smooth animation
         """
-        mid = self.__ledsPerGauge
-        for i in range(0, mid):
-            self.__strip.setPixelColor(i, NO_COLOR)
-            time.sleep(0.020)
-        for i in range(mid, self.__led_count):
-            self.__strip.setPixelColor(i, NO_COLOR)
-            time.sleep(0.020)
+        self.fillColorSmoothed(NO_COLOR)
 
-    def fillColorSmoothed(self, color: Color):
+    def fillColorSmoothed(self, color: RGBW):
         """
         filling a color with a smooth animation
         """
-        pass #TODO
+        mid = self.__ledsPerGauge
+        for i in range(0, mid):
+            self.__strip.setPixelColor(i, NO_COLOR)
+            time.sleep(ANIM_SPEED)
+        for i in range(mid, self.__led_count):
+            self.__strip.setPixelColor(i, NO_COLOR)
+            time.sleep(ANIM_SPEED)
 
-    def blinkColorSmoothed(self, color: Color):
+    def __fillColor(self, color: RGBW):
+        for i in range(0, self.__led_count):
+            self.__strip.setPixelColor(i, NO_COLOR)
+        self.__strip.show()
+
+    def blinkColorSmoothed(self, color: RGBW, duration: float):
         """
         make a color blinking one with a smooth animation
         """
-        pass #TODO
+        phase = duration / 3
+        #rgb vector
+        r: int = 0
+        b: int = 0
+        g: int = 0
+        steps = phase / ANIM_SPEED
+        # vector to add each step
+        stepr = color.r / steps
+        stepb =  color.b / steps
+        stepg = color.g / steps
+        for i in range(0, int(steps)):
+            self.__fillColor(Color(r, g, b))
+            r = int(stepr * i)
+            b = int(stepb * i)
+            g = int(stepg * i)
+            time.sleep(ANIM_SPEED)
+        time.sleep(phase)
+        for i in range(0, int(steps)):
+            self.__fillColor(Color(r, g, b))
+            r = color.r - int(stepr * i)
+            b = color.b - int(stepb * i)
+            g = color.g - int(stepg * i)
+            time.sleep(ANIM_SPEED)
