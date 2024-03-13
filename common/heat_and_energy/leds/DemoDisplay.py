@@ -50,7 +50,7 @@ class Gauges:
         self.__strip = PixelStrip(led_count, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
         self.__begin()
 
-    def __gradiant(step: int, maxStep: int, begin: Color, end: Color) -> Color: 
+    def __gradiant(step: int, maxStep: int, begin: RGBW, end: RGBW) -> RGBW: 
         """
         Calculate the gradiant color for the current step
 
@@ -167,15 +167,15 @@ class Gauges:
         """
         mid = self.__ledsPerGauge
         for i in range(0, mid):
-            self.__strip.setPixelColor(i, NO_COLOR)
+            self.__strip.setPixelColor(i, color)
             time.sleep(ANIM_SPEED)
         for i in range(mid, self.__led_count):
-            self.__strip.setPixelColor(i, NO_COLOR)
+            self.__strip.setPixelColor(i, color)
             time.sleep(ANIM_SPEED)
 
     def __fillColor(self, color: RGBW):
         for i in range(0, self.__led_count):
-            self.__strip.setPixelColor(i, NO_COLOR)
+            self.__strip.setPixelColor(i, color)
         self.__strip.show()
 
     def blinkColorSmoothed(self, color: RGBW, duration: float):
