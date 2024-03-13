@@ -33,7 +33,7 @@ class DemoLedsController:
     
     def loading(self):
         self.__cond.acquire()
-        self.__gauges.blinkColorSmoothed()
+        self.__gauges.blinkColorSmoothed(RED)
         self.__cond.release()
 
     def loading_done(self):
@@ -44,7 +44,7 @@ class DemoLedsController:
     def demoj(self):
         self.__cond.acquire()
         while not self.__animate:
-            self.__cond.wait()
+            self.__cond.wait() #TODO soit comme ça soit faire un thread qui controle tout?
         temp: float = getCPUtemperature()
         watts: float = self.__wattmeter.getWattsMW()
         self.__gauges.displayTemp(temp)
