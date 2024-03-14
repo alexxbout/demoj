@@ -27,7 +27,6 @@ class DemoLedsController:
     """
     def __init__(self):
         self.__gauges = Gauges(LED_COUNT, CHANNEL, LED_PIN)
-        self.__isAnimated = False
         self.__running: Process = None
         try:
             self.__wattmeter = Wattmeter
