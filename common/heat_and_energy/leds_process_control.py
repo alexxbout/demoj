@@ -27,18 +27,24 @@ class DemoLedsController:
     """
     def __init__(self):
         self.__gauges = Gauges(LED_COUNT, CHANNEL, LED_PIN)
-        self.__running: Process = None
+        self.__demoj_process = Process(target=self.__demoj_routine, args=(self.__gauges, self.__wattmeter,), daemon=True)
+        self.__loading_process =  Process(target=self.__loading_routine, args=(self.__gauges,), daemon=True)
+        self.__current: Process = self.__demoj_process
         try:
             self.__wattmeter = Wattmeter
         except WattmeterTimeout:
             print("Wattmeter timed out on init")
         self.__gauges.clearAll()
 
+    def __start(self, p: Process):
+        self.__current = p
+        p.start()
+
     def is_running(self) -> bool:
         """
         If an animation process still running. You should run end_animation to end the current process.
         """
-        return self.__running != None and self.__running.is_alive()
+        return self.__current.is_alive()
     
     def __loading_routine(gauges: Gauges):
         while True:
@@ -53,16 +59,16 @@ class DemoLedsController:
         """
         if self.is_running(): 
             raise ConccurentAnimation()
-        self.__running = Process(target=self.__loading_routine, args=(self.__gauges), daemon=True)
+        self.__start(self.__loading_process)
     
     def end_animation(self): 
         """
         End the current running animation. isRunning will return False and all leds will be cleared smoothly
         """
-        if self.__running == None: 
-            return
-        self.__running.close() # let's try this
-        self.__gauges.clearAllSmoothed()
+        if self.__current.is_alive: 
+            self.__current.terminate()
+            self.__current.join()
+            self.__gauges.clearAllSmoothed()
 
     def loading_done(self):
         """
@@ -88,4 +94,11 @@ class DemoLedsController:
         """
         if self.is_running(): 
             raise ConccurentAnimation()
-        self.__running = Process(target=self.__demoj_routine, args=(self.__gauges, self.__wattmeter), daemon=True)
+        self.__start(self.__demoj_process)
+
+    def close(self):
+        """
+        Release resources held by the processes. Error if the animation still running.
+        """
+        self.__loading_process.close()
+        self.__demoj_process.close()
