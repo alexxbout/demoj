@@ -43,6 +43,8 @@ class DemoLedsController:
     def is_running(self) -> bool:
         """
         If an animation process still running. You should run end_animation to end the current process.
+
+        RETURNS: If an animation process still running.
         """
         return self.__current.is_alive()
     

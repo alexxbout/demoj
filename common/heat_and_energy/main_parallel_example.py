@@ -10,3 +10,4 @@ if __name__ == "__main__":
     leds.demoj()
     time.sleep(5)
     leds.end_animation()
+    leds.close()
