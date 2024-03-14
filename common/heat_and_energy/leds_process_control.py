@@ -42,7 +42,6 @@ class DemoLedsController:
         return self.__running != None and self.__running.is_alive()
     
     def __loading_rootine(gauges: Gauges):
-        gauges.clearAllSmoothed()
         while True:
             gauges.blinkColorSmoothed(RED, 3)            
 
@@ -75,13 +74,14 @@ class DemoLedsController:
         time.sleep(1)
 
     def __demoj_rootine(self):
-        temp: float = getCPUtemperature()
-        watts: float = self.__wattmeter.getWattsMW()
-        self.__gauges.displayTemp(temp)
-        self.__gauges.displayWatts(watts)
-        time.sleep(SPEED)
-        print(f"temperature : {temp}")
-        print(f"watts: {watts/1000}")
+        while True:
+            temp: float = getCPUtemperature()
+            watts: float = self.__wattmeter.getWattsMW()
+            self.__gauges.displayTemp(temp)
+            self.__gauges.displayWatts(watts)
+            time.sleep(SPEED)
+            print(f"temperature : {temp}")
+            print(f"watts: {watts/1000}")
     
     def demoj(self):
         """
