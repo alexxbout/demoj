@@ -41,7 +41,7 @@ class DemoLedsController:
         """
         return self.__running != None and self.__running.is_alive()
     
-    def __loading_rootine(gauges: Gauges):
+    def __loading_routine(gauges: Gauges):
         while True:
             gauges.blinkColorSmoothed(RED, 3)            
 
@@ -54,7 +54,7 @@ class DemoLedsController:
         """
         if self.is_running(): 
             raise ConccurentAnimation()
-        self.__running = Process(target=self.__loading_rootine, args=(self.__gauges), daemon=True)
+        self.__running = Process(target=self.__loading_routine, args=(self.__gauges), daemon=True)
     
     def end_animation(self): 
         """
@@ -73,7 +73,7 @@ class DemoLedsController:
         self.__gauges.fillColorSmoothed(GREEN)
         time.sleep(1)
 
-    def __demoj_rootine(self):
+    def __demoj_routine(self):
         while True:
             temp: float = getCPUtemperature()
             watts: float = self.__wattmeter.getWattsMW()
@@ -89,4 +89,4 @@ class DemoLedsController:
         """
         if self.is_running(): 
             raise ConccurentAnimation()
-        self.__running = Process(target=self.__demoj_rootine, args=(self.__gauges, self.__wattmeter), daemon=True)
+        self.__running = Process(target=self.__demoj_routine, args=(self.__gauges, self.__wattmeter), daemon=True)
