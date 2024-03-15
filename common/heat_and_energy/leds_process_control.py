@@ -26,12 +26,12 @@ class DemoLedsController:
     A small class to coordinates processes in order to mannipulate the DemoJ Leds with some animations senarios.
     """
     def __init__(self):
-        self.__gauges = Gauges(LED_COUNT, CHANNEL, LED_PIN)
         self.__demoj_process = Process(target=self.__demoj_routine, args=(self.__gauges, self.__wattmeter,), daemon=True)
         self.__loading_process =  Process(target=self.__loading_routine, args=(self.__gauges,), daemon=True)
         self.__current: Process = self.__demoj_process
         try:
             self.__wattmeter = Wattmeter
+            self.__gauges = Gauges(LED_COUNT, CHANNEL, LED_PIN, getCPUtemperature(), self.__wattmeter.getWattsMW())
         except WattmeterTimeout:
             print("Wattmeter timed out on init")
         self.__gauges.clearAll()

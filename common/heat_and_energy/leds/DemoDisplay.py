@@ -24,7 +24,7 @@ class Gauges:
     def __begin(self):
         self.__strip.begin()
 
-    def __init__(self, led_count: int, channel: int, led_pin: int):
+    def __init__(self, led_count: int, channel: int, led_pin: int, min_temp: int, min_watt: int):
         """ Constructor for the demoj led gauges Temperature and Wattmeter
 
         Params:
@@ -33,6 +33,9 @@ class Gauges:
             - led_pin The GIPIO PIN number according to the channel chosen
         """
         # LED strip configuration:
+        MIN_TEMP = min_temp
+        MIN_WATTS = min_watt
+        MAX_TEMP = MIN_TEMP + 40
         self.__led_count = led_count # Number of LED pixels.
         self.__ledsPerGauge = int(led_count/NB_OF_GAUGES)
         self.__tempStep = self.__ledsPerGauge/(MAX_TEMP - MIN_TEMP)
