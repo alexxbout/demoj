@@ -36,8 +36,13 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import Key from "./components/Key.vue";
 
+const router = useRouter();
+const route = useRoute();
+
+const mode = ref<"server" | "client">("client");
 const field = ref<HTMLElement | null>(null);
 const formula = ref("");
 
@@ -84,10 +89,14 @@ const operator = (op: string) => {
 };
 
 const equal = () => {
-    try {
-        formula.value = eval(formula.value);
-    } catch (e) {
-        formula.value = ":(";
+    if (mode.value === "client") {
+        try {
+            formula.value = eval(formula.value);
+        } catch (e) {
+            formula.value = ":(";
+        }
+    } else {
+        // TODO: Send the formula to the server and receive the result
     }
 
     if (field.value) {
@@ -95,10 +104,16 @@ const equal = () => {
     }
 };
 
-onMounted(() => {
+const send = () => {};
+
+onMounted(async () => {
     document.addEventListener("gesturestart", function (e) {
         e.preventDefault();
     });
+
+    await router.isReady();
+
+    mode.value = route.path.slice(1) as "server" | "client";
 });
 </script>
 

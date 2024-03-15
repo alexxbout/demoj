@@ -8,11 +8,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/",
         name: "home",
         component: () => import("./App.vue"),
-        redirect: "/terminal",
+        redirect: "/client",
         children: [
             {
-                path: "terminal",
-                name: "terminal",
+                path: "client",
+                name: "client",
                 component: () => import("./App.vue"),
             },
             {
