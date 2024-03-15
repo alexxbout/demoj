@@ -106,7 +106,6 @@ class Gauges:
         if degrees > MAX_TEMP:
             degrees = MAX_TEMP
         averagedTemp = self.__instantAverageTemp(degrees)
-        print("temp", averagedTemp)
         colored_leds: int = int((averagedTemp - MIN_TEMP) * self.__tempStep)
         if colored_leds < 0:
             colored_leds = 0
