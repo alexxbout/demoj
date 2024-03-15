@@ -1,30 +1,21 @@
 <template>
-    <div class="flex flex-col justify-around w-screen h-screen overflow-x-hidden">
-        <div class="flex flex-col p-5 gap-y-5">
-            <button class="text-[#007AFF] text-xl rounded-3xl bg-white p-5 w-full h-max flex items-center justify-center font-medium">
-                <span>Retour</span>
-            </button>
-        </div>
-
+    <div class="flex flex-col justify-end w-screen h-screen overflow-x-hidden">
         <div ref="field" class="w-screen p-5 overflow-x-auto scroll-smooth scrollbar-hide">
-            <div class="flex items-center justify-end h-24 min-w-full p-5 ml-auto w-max bg-stone-200 rounded-3xl">
-                <span class="text-5xl font-semibold">{{ formula }}</span>
+            <div class="flex items-center justify-end h-24 min-w-full p-5 ml-auto w-max">
+                <span class="text-6xl font-medium text-slate-700">{{ formula }}</span>
             </div>
         </div>
 
-        <div class="grid grid-cols-4 gap-3 p-5">
-            <Key @@click="clear" text="AC" type="ac" :span="2" />
-            <Key @@click="deleteChar" type="delete" :span="2" />
-
-            <Key @@click="append('(')" text="(" type="operator" />
-            <Key @@click="append(')')" text=")" type="operator" />
-            <Key @@click="append('^')" text="^" type="operator" />
-            <Key @@click="operator('/')" text="/" type="operator" />
+        <div class="grid grid-cols-4 gap-4 p-5 pt-10">
+            <Key @@click="clear" text="AC" type="action" />
+            <Key @@click="invertSign" text="+/-" type="action" />
+            <Key @@click="append('%')" text="%" type="action" />
+            <Key @@click="append('/')" text="÷" type="operator" />
 
             <Key @@click="append('7')" text="7" type="number" />
             <Key @@click="append('8')" text="8" type="number" />
             <Key @@click="append('9')" text="9" type="number" />
-            <Key @@click="operator('*')" text="*" type="operator" />
+            <Key @@click="operator('*')" text="x" type="operator" />
 
             <Key @@click="append('4')" text="4" type="number" />
             <Key @@click="append('5')" text="5" type="number" />
@@ -36,9 +27,9 @@
             <Key @@click="append('3')" text="3" type="number" />
             <Key @@click="operator('+')" text="+" type="operator" />
 
+            <Key @@click="append('0')" text="0" type="number" :span="2" />
             <Key @@click="append('.')" text="." type="number" />
-            <Key @@click="append('0')" text="0" type="number" />
-            <Key @@click="equal" text="=" type="equal" :span="2" />
+            <Key @@click="equal" text="=" type="operator" />
         </div>
     </div>
 </template>
@@ -46,7 +37,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import Key from "./components/Key.vue";
-import ArithmeticExpressionEvaluator from "./utils/ArithmeticExpressionEvaluator.ts";
 
 const field = ref<HTMLElement | null>(null);
 const formula = ref("");
@@ -55,8 +45,12 @@ const clear = () => {
     formula.value = "";
 };
 
-const deleteChar = () => {
-    formula.value = formula.value.slice(0, -1);
+// const deleteChar = () => {
+//     formula.value = formula.value.slice(0, -1);
+// };
+
+const invertSign = () => {
+    formula.value = formula.value.startsWith("-") ? formula.value.slice(1) : `-${formula.value}`;
 };
 
 const append = (value: string) => {
@@ -91,8 +85,8 @@ const operator = (op: string) => {
 
 const equal = () => {
     try {
-        formula.value = ArithmeticExpressionEvaluator.evaluate(formula.value).toString();
-    } catch (error) {
+        formula.value = eval(formula.value);
+    } catch (e) {
         formula.value = ":(";
     }
 
