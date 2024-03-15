@@ -37,8 +37,8 @@ class Gauges:
         self.__ledsPerGauge = int(led_count/NB_OF_GAUGES)
         self.__tempStep = self.__ledsPerGauge/(MAX_TEMP - MIN_TEMP)
         self.__wattStep = self.__ledsPerGauge/(MAX_WATTS - MIN_WATTS)
-        self.__lastWatts = 0.0
-        self.__lastTemp = 0.0
+        self.__lastWatts:float = 0.0
+        self.__lastTemp: float = 0.0
         LED_PIN = led_pin          # GPIO pin connected to the pixels (18 uses PWM!).
         LED_FREQ_HZ = 800000  # LED signal frequency in hertz (usually 800khz)
         LED_DMA = 10          # DMA channel to use for generating signal (try 10)
@@ -50,7 +50,7 @@ class Gauges:
         self.__strip = PixelStrip(led_count, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
         self.__begin()
 
-    def __gradiant(step: int, maxStep: int, begin: RGBW, end: RGBW) -> RGBW: 
+    def __gradiant(self, step: int, maxStep: int, begin: RGBW, end: RGBW) -> RGBW: 
         """
         Calculate the gradiant color for the current step
 
@@ -106,7 +106,10 @@ class Gauges:
         if degrees > MAX_TEMP:
             degrees = MAX_TEMP
         averagedTemp = self.__instantAverageTemp(degrees)
+        print("temp", averagedTemp)
         colored_leds: int = int((averagedTemp - MIN_TEMP) * self.__tempStep)
+        if colored_leds < 0:
+            colored_leds = 0
         gaugeEnd: int = self.__ledsPerGauge
         self.__gradiantLeds(0, colored_leds, gaugeEnd)
         self.__clearLeds(colored_leds, gaugeEnd)
@@ -123,6 +126,8 @@ class Gauges:
             miliWatts = MAX_WATTS
         averagedMW = self.__instantAverageWatts(miliWatts)
         colored_leds: int = int((averagedMW - MIN_WATTS) * self.__wattStep)
+        if colored_leds < 0:
+            colored_leds = 0
         colorEnd: int = self.__ledsPerGauge+colored_leds
         self.__gradiantLeds(self.__ledsPerGauge, colorEnd, self.__ledsPerGauge)
         self.__clearLeds(colorEnd, self.__led_count)
@@ -140,7 +145,7 @@ class Gauges:
         self.__lastTemp = self.__instantAverage(self.__lastTemp, newValue, 0.5)
         return self.__lastTemp
 
-    def __instantAverage(lastValue: float, newValue: float, percent: float) -> float:
+    def __instantAverage(self, lastValue: float, newValue: float, percent: float) -> float:
         """
         Instant average on floats
         
