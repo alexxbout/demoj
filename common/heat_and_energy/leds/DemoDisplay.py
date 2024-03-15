@@ -33,13 +33,20 @@ class Gauges:
             - led_pin The GIPIO PIN number according to the channel chosen
         """
         # LED strip configuration:
-        MIN_TEMP = min_temp
-        MIN_WATTS = min_watt
-        MAX_TEMP = MIN_TEMP + 40
+
+        self.__min_temp = min_temp 
+        self.__min_watt = min_watt
+        self.__max_temp = min_temp + 20
+        print(f"temperature_max : {self.__max_temp}")
+        print(f"temperature_min : {self.__min_temp}")
+        self.__max_watt = MAX_WATTS
+
         self.__led_count = led_count # Number of LED pixels.
         self.__ledsPerGauge = int(led_count/NB_OF_GAUGES)
-        self.__tempStep = self.__ledsPerGauge/(MAX_TEMP - MIN_TEMP)
-        self.__wattStep = self.__ledsPerGauge/(MAX_WATTS - MIN_WATTS)
+        self.__tempStep = self.__ledsPerGauge/(self.__max_temp - self.__min_temp)
+        print(f"temp par led : {self.__tempStep}")
+        self.__wattStep = self.__ledsPerGauge/(self.__max_watt - self.__min_watt)
+        print(f"wat par led : {self.__wattStep}")
         self.__lastWatts:float = 0.0
         self.__lastTemp: float = 0.0
         LED_PIN = led_pin          # GPIO pin connected to the pixels (18 uses PWM!).
@@ -106,12 +113,15 @@ class Gauges:
         PARAMS:
             - degrees The temperature in celsius degrees
         """
-        if degrees > MAX_TEMP:
-            degrees = MAX_TEMP
+        if degrees > self.__max_temp :
+            degrees = self.__max_temp 
         averagedTemp = self.__instantAverageTemp(degrees)
-        colored_leds: int = int((averagedTemp - MIN_TEMP) * self.__tempStep)
+        colored_leds: int = int((averagedTemp - self.__min_temp ) * self.__tempStep)
+        print(f"ratio : {averagedTemp - self.__min_temp }")
+        print(f"ratio : {self.__tempStep }")
         if colored_leds < 0:
             colored_leds = 0
+        print(f"led_colored : {colored_leds}")
         gaugeEnd: int = self.__ledsPerGauge
         self.__gradiantLeds(0, colored_leds, gaugeEnd)
         self.__clearLeds(colored_leds, gaugeEnd)
@@ -124,10 +134,10 @@ class Gauges:
         PARAMS:
             - miliWatts The power in miliwatts
         """
-        if miliWatts > MAX_WATTS:
-            miliWatts = MAX_WATTS
+        if miliWatts > self.__max_watt:
+            miliWatts = self.__max_watt
         averagedMW = self.__instantAverageWatts(miliWatts)
-        colored_leds: int = int((averagedMW - MIN_WATTS) * self.__wattStep)
+        colored_leds: int = int((averagedMW - self.__min_watt) * self.__wattStep)
         if colored_leds < 0:
             colored_leds = 0
         colorEnd: int = self.__ledsPerGauge+colored_leds
