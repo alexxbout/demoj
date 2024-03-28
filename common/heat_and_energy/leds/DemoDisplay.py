@@ -6,8 +6,8 @@ import time
 
 MAX_TEMP = 45
 MIN_TEMP = 36
-MIN_WATTS = 2000
-MAX_WATTS = 3500 # value reached at approximatly 50 degrees
+MIN_WATTS = 1600
+MAX_WATTS = 2700 # value reached at approximatly 50 degrees
 NB_OF_GAUGES = 2
 NO_COLOR = Color(0, 0, 0, 0)
 ANIM_SPEED = 0.020
@@ -34,19 +34,24 @@ class Gauges:
         """
         # LED strip configuration:
 
-        self.__min_temp = min_temp 
-        self.__min_watt = min_watt
-        self.__max_temp = min_temp + 20
-        print(f"temperature_max : {self.__max_temp}")
-        print(f"temperature_min : {self.__min_temp}")
+        #self.__min_temp = min_temp - 5
+        self.__min_temp = 25
+
+        self.__min_watt = MIN_WATTS
+    
+        #self.__max_temp = min_temp + 20
+
+        self.__max_temp = 60
+        #print(f"temperature_max : {self.__max_temp}")
+        #print(f"temperature_min : {self.__min_temp}")
         self.__max_watt = MAX_WATTS
 
         self.__led_count = led_count # Number of LED pixels.
         self.__ledsPerGauge = int(led_count/NB_OF_GAUGES)
         self.__tempStep = self.__ledsPerGauge/(self.__max_temp - self.__min_temp)
-        print(f"temp par led : {self.__tempStep}")
+        #print(f"temp par led : {self.__tempStep}")
         self.__wattStep = self.__ledsPerGauge/(self.__max_watt - self.__min_watt)
-        print(f"wat par led : {self.__wattStep}")
+        #print(f"wat par led : {self.__wattStep}")
         self.__lastWatts:float = 0.0
         self.__lastTemp: float = 0.0
         LED_PIN = led_pin          # GPIO pin connected to the pixels (18 uses PWM!).
@@ -60,7 +65,7 @@ class Gauges:
         self.__strip = PixelStrip(led_count, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
         self.__begin()
 
-    def __gradiant(self, step: int, maxStep: int, begin: RGBW, end: RGBW) -> RGBW: 
+    def __colorize(self, step: int, maxStep: int) -> RGBW: 
         """
         Calculate the gradiant color for the current step
 
@@ -71,9 +76,26 @@ class Gauges:
             - end The ending color
         """
         percent = step / maxStep
-        red = int(begin.r + percent * (end.r - begin.r))
-        green = int(begin.g + percent * (end.g - begin.g))
-        blue = int(begin.b + percent * (end.b - begin.b))
+
+        #print(f"ratio couleur : {percent}")
+
+        if percent<0.25 :
+            red = 0
+            green = 255
+            blue = 0
+        elif percent >= 0.25 and percent < 0.50 :
+            red = 255
+            green = 255
+            blue = 0
+        elif percent >= 0.50 and percent < 0.75 :
+            red = 255
+            green = 120
+            blue = 0
+        else:
+            red = 255
+            green = 0
+            blue = 0
+
         return Color(red, green, blue)
 
     def __clearLeds(self, begin: int, end: int):
@@ -91,7 +113,7 @@ class Gauges:
         for i in range(begin, end):
             self.__strip.setPixelColor(i, NO_COLOR)
 
-    def __gradiantLeds(self, begin: int, end: int, maxStep: int):
+    def __colorizeLedsTemp(self, leds: int):
         """
         Colorize all leds in the given interval using gradiant method
         PARAMS:
@@ -99,12 +121,26 @@ class Gauges:
             - end Should be greater than begin (exclusive)
             - maxStep The max value for a step
         """
-        if begin >= end-1 :
-            tmp = begin
-            begin = end
-            end = tmp
-        for i in range(begin, end):
-            self.__strip.setPixelColor(i, self.__gradiant(i-begin, maxStep, self.__begin_color, self.__ending_color))
+        for i in range(0, leds):
+            self.__strip.setPixelColor(i, self.__colorize(i, self.__ledsPerGauge))
+        
+    def __colorizeLedsWatts(self, leds: int):
+        """
+        Colorize all leds in the given interval using gradiant method
+        PARAMS:
+            - begin Should be less than end (inclusive)
+            - end Should be greater than begin (exclusive)
+            - maxStep The max value for a step
+        """
+
+        #print(f"led-count : {self.__led_count}")
+
+        for i in range(0, leds):
+            color: RGBW = self.__colorize(i, self.__ledsPerGauge)
+            #print(f"coloring :  {self.__led_count-1-i} r {color.r} g {color.g} b {color.b}")
+            self.__strip.setPixelColor(self.__led_count-1-i, color)
+
+    
 
     def displayTemp(self, degrees: float): 
         """
@@ -117,13 +153,13 @@ class Gauges:
             degrees = self.__max_temp 
         averagedTemp = self.__instantAverageTemp(degrees)
         colored_leds: int = int((averagedTemp - self.__min_temp ) * self.__tempStep)
-        print(f"ratio : {averagedTemp - self.__min_temp }")
-        print(f"ratio : {self.__tempStep }")
+        #print(f"ratio : {averagedTemp - self.__min_temp }")
+        #print(f"ratio : {self.__tempStep }")
         if colored_leds < 0:
             colored_leds = 0
-        print(f"led_colored : {colored_leds}")
+        #print(f"led_colored : {colored_leds}")
         gaugeEnd: int = self.__ledsPerGauge
-        self.__gradiantLeds(0, colored_leds, gaugeEnd)
+        self.__colorizeLedsTemp(colored_leds)
         self.__clearLeds(colored_leds, gaugeEnd)
         self.__strip.show() #show at the end of calculation
 
@@ -141,8 +177,8 @@ class Gauges:
         if colored_leds < 0:
             colored_leds = 0
         colorEnd: int = self.__ledsPerGauge+colored_leds
-        self.__gradiantLeds(self.__ledsPerGauge, colorEnd, self.__ledsPerGauge)
-        self.__clearLeds(colorEnd, self.__led_count)
+        self.__clearLeds(self.__ledsPerGauge, colorEnd)
+        self.__colorizeLedsWatts(colored_leds)
         self.__strip.show() #show at the end of calculation
         
     def clearAll(self):
