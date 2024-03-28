@@ -11,7 +11,7 @@ LED_PIN = 18
 if __name__ == "__main__":
     try:
         wattmeter = Wattmeter()
-        gauges = Gauges(LED_COUNT, CHANNEL, LED_PIN, getCPUtemperature(), wattmeter.getWattsMW())
+        gauges = Gauges(LED_COUNT, CHANNEL, LED_PIN)
         while True:
             temp: float = getCPUtemperature()
             watts: float = wattmeter.getWattsMW()

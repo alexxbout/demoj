@@ -24,7 +24,7 @@ class Gauges:
     def __begin(self):
         self.__strip.begin()
 
-    def __init__(self, led_count: int, channel: int, led_pin: int, min_temp: int, min_watt: int):
+    def __init__(self, led_count: int, channel: int, led_pin: int):
         """ Constructor for the demoj led gauges Temperature and Wattmeter
 
         Params:
@@ -41,7 +41,7 @@ class Gauges:
     
         #self.__max_temp = min_temp + 20
 
-        self.__max_temp = 60
+        self.__max_temp = 55
         #print(f"temperature_max : {self.__max_temp}")
         #print(f"temperature_min : {self.__min_temp}")
         self.__max_watt = MAX_WATTS
