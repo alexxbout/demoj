@@ -51,7 +51,7 @@ class DemoLedsController:
     
     def __loading_routine(self, gauges: Gauges):
         while True:
-            gauges.blinkColorSmoothed(RED, 3)            
+            gauges.k2000(RED)           
 
     def loading(self):
         """

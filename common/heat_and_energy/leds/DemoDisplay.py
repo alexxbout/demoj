@@ -11,9 +11,7 @@ MAX_WATTS = 2700 # value reached at approximatly 50 degrees
 NB_OF_GAUGES = 2
 NO_COLOR = Color(0, 0, 0, 0)
 ANIM_SPEED = 0.020
-
-#TODO make colorization with areas instead of gradiant
-#TODO adjust begin and end of temperature
+ORANGE = Color(250, 77, 0)
 
 class Gauges:
     """
@@ -260,4 +258,31 @@ class Gauges:
             r = color.r - int(stepr * i)
             b = color.b - int(stepb * i)
             g = color.g - int(stepg * i)
+            time.sleep(ANIM_SPEED)
+
+    def k2000(self, color: RGBW):
+        """
+        The k2000 animation
+        """
+        rStep = color.r / 8
+        gStep = color.g / 8
+        for i in range(0, self.__led_count):
+            r = float(color.r)
+            g = float(color.g)
+            for j in range(0, 9):
+                if j >= 0:
+                    self.__strip.setPixelColor(i-j, Color(int(r), int(g), 0))
+                r -= rStep
+                g -= gStep
+            self.__strip.show()
+            time.sleep(ANIM_SPEED)
+        for i in range(0, self.__led_count-1):
+            r = float(color.r)
+            g = float(color.g)
+            for j in range(0, 9):
+                if j >= 0:
+                    self.__strip.setPixelColor(self.__led_count-1-i+j, Color(int(r), int(g), 0))
+                r -= rStep
+                g -= gStep
+            self.__strip.show()
             time.sleep(ANIM_SPEED)
