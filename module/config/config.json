@@ -23,25 +23,7 @@
     {
       "name": "Calculs complexes",
       "description": "Effectuez des calculs avanc\u00e9s. Choisissez le niveau de complexit\u00e9 et l'endroit o\u00f9 le calcul sera effectu\u00e9.",
-      "id": 0,
-      "to": "T",
-      "multipleInstance": true,
-      "parameters": [
-        {
-          "name": "Niveau de complexit\u00e9",
-          "value": 10
-        }
-      ],
-      "instances": []
-    },
-    {
-      "name": "Streaming vid\u00e9o",
-      "description": "Regardez des vid\u00e9os en streaming. Celles-ci seront t\u00e9l\u00e9charg\u00e9es sur le serveur et envoy\u00e9es au terminal.",
-      "id": 0,
-      "to": "T",
-      "multipleInstance": true,
-      "parameters": [],
-      "instances": []
+      "id": 0
     }
   ]
 }

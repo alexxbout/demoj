@@ -1,10 +1,16 @@
 import json
 from const import IP_TERMINAL, IP_NETWORK, IP_SERVER
-from utils import ping, execute_command, update_and_write_json, get_device_from_addr
+from utils import execute_command, update_and_write_json, get_device_from_addr
 
 from flask import Flask, jsonify, request, render_template, redirect, url_for
-from flask_socketio import SocketIO, join_room
+from flask_socketio import SocketIO, join_room, leave_room
 from flask_cors import CORS
+
+devices = {
+    "terminal": IP_TERMINAL,
+    "server": IP_SERVER,
+    "network": IP_NETWORK
+}
 
 app = Flask(__name__, template_folder="../demojconnect", static_folder="../demojconnect", static_url_path="/app/")
 sio = SocketIO(app, cors_allowed_origins="*")
@@ -21,17 +27,11 @@ STRESS_LVL_2_CMD = ["stress", "-c", "2", "-i", "2", "-m", "2", "--timeout", "10s
 STRESS_LVL_3_CMD = ["stress", "-c", "4", "-i", "4", "-m", "4", "--timeout", "10s"]
 
 #################################################################
-# Routes
-# Flask server is only used to receive config and update it
-# Sockets are used to send actions to the modules
-#################################################################
-
-#################################################################
-# DémoJ Connect
+# * DémoJ Connect API Routes
 #################################################################
 
 @app.errorhandler(404)
-def not_found(e):
+def not_found():
     if request.path.startswith("/app"):
         return redirect(url_for("index"))
     return jsonify({"error": "Not found"}), 404
@@ -49,26 +49,6 @@ def index():
 def api():
     return jsonify({"message": "DémoJ Connect API is running"})
 
-@app.route("/api/receive_data", methods=["POST"])
-def receive_data():
-    data = request.get_json()
-    print("Received data:", data)
-
-    return jsonify({"message": "Data received successfully"})
-
-@app.route("/api/config")
-def get_config():
-    try:
-        with open(CONFIG_PATH, "r") as config_file:
-            config_data = json.load(config_file)
-            return jsonify(config_data)
-    except FileNotFoundError:
-        return jsonify({"error": "Config file not found"}), 404
-    except Exception as e:
-        print(f"Error reading config file: {str(e)}")
-        return jsonify({"error": str(e)}), 500
-
-# TODO Update this method to use update_and_write_json from utils.py
 @app.route("/api/modules/<module>/params/<id_param>", methods=["POST"])
 def update_parameter(module, id_param):
     try:
@@ -76,110 +56,109 @@ def update_parameter(module, id_param):
         is_active = data.get("isActive")
         value = data.get("value")
 
-        with open(CONFIG_PATH, "r+") as config_file:
-            config_data = json.load(config_file)
+        if is_active is not None:
+            update_and_write_json(CONFIG_PATH, f"modules.{module}.parameters.{id_param}.isActive", is_active)
+        if value is not None:
+            update_and_write_json(CONFIG_PATH, f"modules.{module}.parameters.{id_param}.value", value)
 
-        if "modules" in config_data and module in config_data["modules"]:
-            device = config_data["modules"][module]
-            if "parameters" in device:
-                for param in device["parameters"]:
-                    if int(param["id"]) == int(id_param):
-                        if is_active is not None:
-                            param["isActive"] = is_active
-                        if value is not None:
-                            param["value"] = value
-                        # TODO : toggle parameter on module
-
-        with open(CONFIG_PATH, "w") as config_file:
-            json.dump(config_data, config_file, indent=2)
-
-        return jsonify({"message": "Parameter toggled successfully"})
+        return jsonify({"message": "Parameter updated successfully"})
     except Exception as e:
-        print(f"Error toggling parameter: {str(e)}")
+        print(f"Error updating parameter: {str(e)}")
         return jsonify({"error": str(e)}), 500
     
-@app.route("/api/ping/<module>")
-def ping_module(module):
-    if module == "terminal":
-        return jsonify(ping(IP_TERMINAL))
-    elif module == "server":
-        return jsonify(ping(IP_SERVER))
-    elif module == "all":
-        return jsonify(ping(IP_TERMINAL) and ping(IP_SERVER))
-    else:
-        return jsonify({"error": "Invalid module"}), 400
+@app.route("/api/config", methods=["GET"])
+def get_config():
+    try:
+        with open(CONFIG_PATH, "r") as f:
+            config = json.load(f)
+            return jsonify(config)
+    except Exception as e:
+        print(f"Error getting config: {str(e)}")
+        return jsonify({"error": str(e)}), 500
     
 #################################################################
 # Scenarios
 #################################################################
     
-# TODO
+# TODO: Calculator (fibonacci, factorial, prime number)
+    
+# TODO: Streaming video
+    
+# TODO: Image processing
     
 #################################################################
 # Socket
-# Be careful to the frequency of the emits
+# ! Be careful to the frequency of the emits
 #################################################################
 
 @sio.event
 def connect():
-    print("Client connected")
-    print("ip: ", request.remote_addr)
+    """
+    Event handler triggered when a client connects to the server.
+
+    This event adds the new host to its corresponding room in order to broadcast messages to specific hosts.
+    """
+    device = get_device_from_addr(request.remote_addr)
+    print(f"Client connected: {device}")
+    
+    join_room(device)
+
+    if device != "client":
+        # Update connection status of the module in the config file
+        update_and_write_json(CONFIG_PATH, f"modules.{device}.isConnected", True)
+        # Tell clients that the module is connected
+        sio.emit("module_status", {"device": device, "status": "on"}, room="client")
 
 @sio.event
 def disconnect():
-    print("Client disconnected")
-
+    """
+    Event handler triggered when a client disconnects from the server.
+    """
     device = get_device_from_addr(request.remote_addr)
+    print("Client disconnected: {device}")
+
+    leave_room(device)
 
     if device != "client":
+        # Update connection status of the module in the config file
         update_and_write_json(CONFIG_PATH, f"modules.{device}.isConnected", False)
+        # Tell clients that the module is disconnected
         sio.emit("module_status", {"device": device, "status": "off"}, room="client")
 
 @sio.event
-def ready(data):
-    data = data["device"]
-    if data != "terminal" and data != "server" and data != "client":
-        print("Invalid module:", data)
-        return
-    
-    print("Device ready:", data)
-    join_room(data)
-    print("Successfully joined room:", data)
-
-    if data != "client":
-        update_and_write_json(CONFIG_PATH, f"modules.{data}.isConnected", True)
-        sio.emit("module_status", {"device": data, "status": "on"}, room="client")
-
-@sio.event
 def update_module_status(data):
-    device = data["device"]
+    """
+    Event handler triggered when updating the connection status of a module.
+    data: { "device": "module", "status": "restart/stop" }
+    """
+    device = get_device_from_addr(request.remote_addr)
     action = data["action"]
 
-    if device != "terminal" and device != "server" and device != "network":
-        msg = "Invalid module: {}".format(device)
-        return jsonify({"error": msg})
-    
-    if action != "restart" and action != "stop":
-        print("Invalid action:", action)
-        return
+    if device == "terminal" or device == "server" or device == "network":
+        # Update connection status of the module in the config file
+        update_and_write_json(CONFIG_PATH, f"modules.{device}.isConnected", False)
 
-    if device != "network":
-        update_and_write_json(CONFIG_PATH, f"modules.{device}.isConnected", False)
-        sio.emit(action, room=device)
-    else:
-        update_and_write_json(CONFIG_PATH, f"modules.{device}.isConnected", False)
-        if action == "restart":
-            execute_command(RESTART_CMD)
+        if device != "network":
+            # Forward the action to the corresponding module
+            sio.emit(action, room=device)
         else:
-            execute_command(STOP_CMD)
+            # Execute the action on the network module
+            if action == "restart":
+                execute_command(RESTART_CMD)
+            else:
+                execute_command(STOP_CMD)
     
 @sio.event
 def stress_module(data):
-    device = data["device"]
+    """
+    Event handler triggered when a stress command is sent to a module.
+    data: { "device": "module", "level": 1/2/3, "time": "10s" }
+    """
+    device = get_device_from_addr(request.remote_addr)
     level = data["level"]
     time = data["time"]
 
-    if device != "terminal" and device != "server" and device != "network":
+    if device == "client":
         msg = "Invalid module: {}".format(device)
         return jsonify({"error": msg})
     
@@ -199,8 +178,9 @@ def stress_module(data):
     cmd[-1] = time
 
     if device != "network":
+        # TODO: Emit stress event to the corresponding module
         # sio.emit("stress", {"level": level}, room=device)
-        print("")
+        pass
     else:
         execute_command(cmd)
 

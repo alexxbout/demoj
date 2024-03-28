@@ -33,8 +33,27 @@ def ping(hostname):
     - True if the host is reachable, False otherwise.
     """
     return os.system("ping -c 1 " + hostname) == 0
+    
+def update_and_write_json(file_path, path, new_value):
+    """
+    Update the value in a JSON file using a specified path and write the updated JSON to the file.
 
-def update_json_value(json_data, path, new_value):
+    Parameters:
+    - file_path (str): The path to the JSON file.
+    - path (str): The path to the value to be updated, e.g., "modules.terminal.isConnected".
+    - new_value: The new value to set.
+    """
+    # Read JSON data from file
+    with open(file_path, 'r') as json_file:
+        json_data = json.load(json_file)
+
+    # Update the value at the specified path
+    updated_json_data = __update_json_value(json_data, path, new_value)
+
+    # Write the updated data back to the file
+    __write_json_to_file(updated_json_data, file_path)
+
+def __update_json_value(json_data, path, new_value):
     """
     Update the value in a JSON object using a specified path.
 
@@ -58,7 +77,7 @@ def update_json_value(json_data, path, new_value):
 
     return json_data
 
-def write_json_to_file(json_data, file_path):
+def __write_json_to_file(json_data, file_path):
     """
     Write the JSON data to a file.
 
@@ -68,25 +87,6 @@ def write_json_to_file(json_data, file_path):
     """
     with open(file_path, 'w') as json_file:
         json.dump(json_data, json_file, indent=2)
-
-def update_and_write_json(file_path, path, new_value):
-    """
-    Update the value in a JSON file using a specified path and write the updated JSON to the file.
-
-    Parameters:
-    - file_path (str): The path to the JSON file.
-    - path (str): The path to the value to be updated, e.g., "modules.terminal.isConnected".
-    - new_value: The new value to set.
-    """
-    # Read JSON data from file
-    with open(file_path, 'r') as json_file:
-        json_data = json.load(json_file)
-
-    # Update the value at the specified path
-    updated_json_data = update_json_value(json_data, path, new_value)
-
-    # Write the updated data back to the file
-    write_json_to_file(updated_json_data, file_path)
 
 def get_device_from_addr(addr):
     """
