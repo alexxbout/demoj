@@ -9,9 +9,9 @@ SPEED = 0.5
 LED_COUNT = 30
 CHANNEL = 0
 LED_PIN = 18    
-BLACK = Color(0, 0, 0, 0)
-RED = Color(255, 0, 0, 0)
-GREEN = Color(0, 255, 0, 0)
+NOCOLOR = Color(0, 0, 0, 0)
+RED = Color(255, 0, 0)
+GREEN = Color(0, 255, 0)
 
 class ConccurentAnimation(Exception):
     """
@@ -26,15 +26,16 @@ class DemoLedsController:
     A small class to coordinates processes in order to mannipulate the DemoJ Leds with some animations senarios.
     """
     def __init__(self):
-        self.__demoj_process = Process(target=self.__demoj_routine, args=(self.__gauges, self.__wattmeter,), daemon=True)
-        self.__loading_process =  Process(target=self.__loading_routine, args=(self.__gauges,), daemon=True)
-        self.__current: Process = self.__demoj_process
         try:
-            self.__wattmeter = Wattmeter
-            self.__gauges = Gauges(LED_COUNT, CHANNEL, LED_PIN, getCPUtemperature(), self.__wattmeter.getWattsMW())
+            self.__wattmeter = Wattmeter()
+            self.__gauges = Gauges(LED_COUNT, CHANNEL, LED_PIN)
         except WattmeterTimeout:
             print("Wattmeter timed out on init")
         self.__gauges.clearAll()
+        
+        self.__demoj_process = Process(target=self.__demoj_routine, args=(self.__gauges, self.__wattmeter,), daemon=True)
+        self.__loading_process =  Process(target=self.__loading_routine, args=(self.__gauges,), daemon=True)
+        self.__current: Process = self.__demoj_process
 
     def __start(self, p: Process):
         self.__current = p
@@ -48,7 +49,7 @@ class DemoLedsController:
         """
         return self.__current.is_alive()
     
-    def __loading_routine(gauges: Gauges):
+    def __loading_routine(self, gauges: Gauges):
         while True:
             gauges.blinkColorSmoothed(RED, 3)            
 
@@ -67,7 +68,7 @@ class DemoLedsController:
         """
         End the current running animation. isRunning will return False and all leds will be cleared smoothly
         """
-        if self.__current.is_alive: 
+        if self.__current.is_alive(): 
             self.__current.terminate()
             self.__current.join()
             self.__gauges.clearAllSmoothed()
@@ -79,13 +80,14 @@ class DemoLedsController:
         self.end_animation()
         self.__gauges.fillColorSmoothed(GREEN)
         time.sleep(1)
+        self.__gauges.clearAllSmoothed()
 
-    def __demoj_routine(self):
+    def __demoj_routine(self, gauges: Gauges, wattmeter: Wattmeter):
         while True:
             temp: float = getCPUtemperature()
-            watts: float = self.__wattmeter.getWattsMW()
-            self.__gauges.displayTemp(temp)
-            self.__gauges.displayWatts(watts)
+            watts: float = wattmeter.getWattsMW()
+            gauges.displayTemp(temp)
+            gauges.displayWatts(watts)
             time.sleep(SPEED)
             print(f"temperature : {temp}")
             print(f"watts: {watts/1000}")
@@ -102,5 +104,6 @@ class DemoLedsController:
         """
         Release resources held by the processes. Error if the animation still running.
         """
+        self.end_animation()
         self.__loading_process.close()
         self.__demoj_process.close()

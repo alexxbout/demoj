@@ -219,11 +219,14 @@ class Gauges:
         filling a color with a smooth animation
         """
         mid = self.__ledsPerGauge
+        print(mid)
         for i in range(0, mid):
             self.__strip.setPixelColor(i, color)
+            self.__strip.show()
             time.sleep(ANIM_SPEED)
         for i in range(mid, self.__led_count):
             self.__strip.setPixelColor(i, color)
+            self.__strip.show()
             time.sleep(ANIM_SPEED)
 
     def __fillColor(self, color: RGBW):
