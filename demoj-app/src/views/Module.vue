@@ -52,9 +52,9 @@
 import BatteryStatus from "@/components/BatteryStatus.vue";
 import ConnectStatus from "@/components/ConnectStatus.vue";
 import API from "@/services/API";
-import { CustomSocket } from "@/services/CustomSocket";
+import { Chaussette } from "@/services/Chaussette";
 import { SoundEnum, SoundManager } from "@/services/SoundManager";
-import type { DeviceTypes, IParameter } from "@/types/IConfig";
+import { DeviceActions, type DeviceTypes, type IParameter } from "@/types/IConfig";
 import { ActionSheetButton, IonActionSheet, IonButton, IonCol, IonContent, IonFooter, IonGrid, IonHeader, IonInput, IonItem, IonList, IonPage, IonRange, IonRow, IonTitle, IonToast, IonToggle, IonToolbar } from "@ionic/vue";
 import { checkmarkCircle } from "ionicons/icons";
 import { computed, inject, onMounted, ref } from "vue";
@@ -65,7 +65,7 @@ const props = defineProps<{
 
 const soundManager = new SoundManager();
 
-const socket = inject("socket") as CustomSocket;
+const socket = inject("socket") as Chaussette;
 const config = socket.getConfig();
 
 const isConnected = computed<boolean>(() => config.value?.modules[props.device].isConnected ?? false);
@@ -113,7 +113,7 @@ const pinFormatter = (value: number) => `${value}%`;
 
 const handleRestart = async (event: CustomEvent) => {
     if (event.detail.role == "destructive") {
-        socket.updateModuleStatus(props.device, "restart");
+        socket.updateModuleStatus(props.device, DeviceActions.RESTART);
         soundManager.playSound(SoundEnum.NAVIGATION_SELECTION_COMPLETE_CELEBRATION);
         toastOpen.value = true;
     }
@@ -121,7 +121,7 @@ const handleRestart = async (event: CustomEvent) => {
 
 const handleStop = async (event: CustomEvent) => {
     if (event.detail.role == "destructive") {
-        socket.updateModuleStatus(props.device, "stop");
+        socket.updateModuleStatus(props.device, DeviceActions.STOP);
         soundManager.playSound(SoundEnum.NAVIGATION_SELECTION_COMPLETE_CELEBRATION);
         toastOpen.value = true;
     }
@@ -139,3 +139,4 @@ onMounted(() => {
     soundManager.loadSounds([SoundEnum.NAVIGATION_SELECTION_COMPLETE_CELEBRATION]);
 });
 </script>
+@/services/Chaussette

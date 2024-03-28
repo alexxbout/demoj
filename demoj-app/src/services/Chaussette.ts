@@ -1,10 +1,12 @@
-import { DeviceTypes, IConfig } from "@/types/IConfig";
+import { DeviceActions, DeviceStates, DeviceTypes, IConfig } from "@/types/IConfig";
 import { Socket, io } from "socket.io-client";
 import { Ref, ref } from "vue";
 import API from "./API";
 import { SoundEnum, SoundManager } from "./SoundManager";
 
-export class CustomSocket {
+export class Chaussette {
+    private IP_NETWORK = import.meta.env.VITE_IP_NETWORK;
+    private PORT = import.meta.env.VITE_PORT;
     private socket: Socket | null;
     private config: Ref<IConfig | null>;
     private soundManager: SoundManager;
@@ -14,25 +16,34 @@ export class CustomSocket {
         this.config = ref(null);
 
         this.soundManager = new SoundManager();
-        this.soundManager.loadSounds([SoundEnum.NAVIGATION_FORWARD_SELECTION, SoundEnum.NAVIGATION_BACKWARD_SELECTION, SoundEnum.UI_LOADING])
+        this.soundManager.loadSounds([SoundEnum.NAVIGATION_FORWARD_SELECTION, SoundEnum.NAVIGATION_BACKWARD_SELECTION, SoundEnum.UI_LOADING]);
     }
 
     public connect() {
-        console.log("Connecting to socket...");
-        this.socket = io(`http://${import.meta.env.VITE_IP_NETWORK}:${import.meta.env.VITE_PORT}`);
+        console.info("Connecting to socket...");
+        this.socket = io(`http://${this.IP_NETWORK}:${this.PORT}`);
+
+        /**
+         * Default events
+         */
 
         this.socket.on("connect", () => {
-            console.log("Socket connected");
+            console.info("Socket connected");
             this.soundManager.playSound(SoundEnum.NAVIGATION_FORWARD_SELECTION);
-            this.socket?.emit("ready", { device: "client" });
 
+            // Request the configuration
             API.getConfig().then((config) => {
-                this.config.value = config;
+                if (config) {
+                    this.config.value = config;
+
+                    console.log("Configuration loaded");
+                    console.log(this.config.value);
+                }
             });
         });
 
         this.socket.on("disconnect", () => {
-            console.log("Socket closed");
+            console.info("Socket closed");
             if (this.config.value) {
                 this.config.value.modules.terminal.isConnected = false;
                 this.config.value.modules.server.isConnected = false;
@@ -42,36 +53,34 @@ export class CustomSocket {
         });
 
         this.socket.on("error", (error: any) => {
-            console.log("Socket error");
-            console.log(error);
+            console.info("Socket error");
+            console.info(error);
         });
 
-        this.socket.on("connect_error", (error: any) => {
-            console.log("Socket connection error, reconnecting...");
-            // console.log(error);
+        this.socket.on("connect_error", () => {
+            console.info("Socket connection error, reconnecting...");
             this.reconnect();
         });
 
-        this.socket.on("connect_timeout", (error: any) => {
-            console.log("Socket timeout, reconnecting...");
-            // console.log(error);
+        this.socket.on("connect_timeout", () => {
+            console.info("Socket timeout, reconnecting...");
             this.reconnect();
         });
 
-        this.socket.on("module_status", (data: { device: DeviceTypes; status: "on" | "off" }) => {
-            console.log(`Socket ${data.device} status: ${data.status}`);
+        /**
+         * Custom events
+         */
 
-            if (this.config.value) this.config.value.modules[data.device].isConnected = data.status == "on";
+        this.socket.on("module_status", (data: { device: DeviceTypes; status: DeviceStates }) => {
+            console.info(`Socket ${data.device} status: ${data.status}`);
+            this.soundManager.playSound(data.status == DeviceStates.ON ? SoundEnum.NAVIGATION_FORWARD_SELECTION : SoundEnum.NAVIGATION_BACKWARD_SELECTION);
 
-            if (data.status == "on") {
-                this.soundManager.playSound(SoundEnum.NAVIGATION_FORWARD_SELECTION);
-            } else {
-                this.soundManager.playSound(SoundEnum.NAVIGATION_BACKWARD_SELECTION);
-            }
+            // Update the status of the module
+            if (this.config.value) this.config.value.modules[data.device].isConnected = data.status == DeviceStates.ON;
         });
     }
 
-    private reconnect() {
+    public reconnect() {
         setTimeout(() => {
             this.soundManager.playSound(SoundEnum.UI_LOADING);
 
@@ -87,7 +96,7 @@ export class CustomSocket {
         return this.socket?.connected;
     }
 
-    public updateModuleStatus(module: DeviceTypes, action: "restart" | "stop") {
+    public updateModuleStatus(module: DeviceTypes, action: DeviceActions) {
         if (this.socket) this.socket.emit("update_module_status", { device: module, action: action });
     }
 
@@ -100,4 +109,4 @@ export class CustomSocket {
     }
 }
 
-export default new CustomSocket();
+export default new Chaussette();

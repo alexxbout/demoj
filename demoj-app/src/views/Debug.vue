@@ -15,7 +15,7 @@
                                 <ion-title size="large">Debug</ion-title>
                             </ion-col>
 
-                            <ion-col size="auto" style="--ion-grid-column-padding: 0px; padding-right: 5px;">
+                            <ion-col size="auto" style="--ion-grid-column-padding: 0px; padding-right: 5px">
                                 <ion-spinner v-show="isLoading"></ion-spinner>
                             </ion-col>
                         </ion-row>
@@ -24,10 +24,7 @@
             </ion-header>
 
             <ion-content class="ion-padding">
-                <Running :presenting="presenting" />
                 <Stress :presenting="presenting" />
-
-                <Ping @@start="isLoading = true" @@end="isLoading = false" />
             </ion-content>
         </ion-content>
 
@@ -40,8 +37,6 @@
 <script setup lang="ts">
 import { IonCol, IonContent, IonFooter, IonGrid, IonHeader, IonPage, IonRow, IonSpinner, IonText, IonTitle, IonToolbar } from "@ionic/vue";
 import { onMounted, ref } from "vue";
-import Ping from "./debug/Ping.vue";
-import Running from "./debug/Running.vue";
 import Stress from "./debug/Stress.vue";
 
 const page = ref();

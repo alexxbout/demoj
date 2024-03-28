@@ -39,12 +39,12 @@
 </template>
 
 <script setup lang="ts">
-import { CustomSocket } from "@/services/CustomSocket";
+import { Chaussette } from "@/services/Chaussette";
 import { IonIcon, IonLabel, IonPage, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs } from "@ionic/vue";
 import { globe, hardwareChip, layers, phonePortrait, server } from "ionicons/icons";
-import { computed, inject, onMounted, ref } from "vue";
+import { computed, inject, ref } from "vue";
 
-const socket = inject("socket") as CustomSocket;
+const socket = inject("socket") as Chaussette;
 const config = socket.getConfig();
 
 const status = computed(() => {
@@ -55,13 +55,8 @@ const status = computed(() => {
     };
 });
 
-const mode = ref<"client" | "operator">("client");
-const debugModeEnabled = ref(false);
-
-onMounted(() => {
-    if (localStorage.getItem("debugMode") === "true") debugModeEnabled.value = true;
-    if (localStorage.getItem("mode") === "operator") mode.value = "operator";
-});
+const mode = ref<"client" | "operator">(localStorage.getItem("mode") === "operator" ? "operator" : "client");
+const debugModeEnabled = ref(localStorage.getItem("debugMode") === "true");
 </script>
 
 <style scoped>
@@ -69,3 +64,4 @@ ion-tab-button {
     position: relative;
 }
 </style>
+@/services/Chaussette

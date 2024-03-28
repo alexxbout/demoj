@@ -7,24 +7,25 @@ export interface IParameter {
     type: ParameterTypes;
     isActive: boolean;
     value?: number;
-}
+};
 
 export interface IScenario {
     name: string;
     description: string;
     id: number;
-    clientAvailable: boolean;
-    to: keyof DeviceTypes;
-    multipleInstance: boolean;
-    parameters: {
-        name: string;
-        value: number;
-    }[];
-    instances: {}[];
-    icon?: string;
-}
+};
 
 export interface IConfig {
     modules: { [key in DeviceTypes]: { isConnected: boolean, parameters?: IParameter[] } };
     scenarios: IScenario[];
-}
+};
+
+export enum DeviceStates {
+    ON = "on",
+    OFF = "off"
+};
+
+export enum DeviceActions {
+    RESTART = "restart",
+    STOP = "stop"
+};

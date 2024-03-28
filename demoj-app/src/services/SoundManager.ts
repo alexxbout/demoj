@@ -17,7 +17,7 @@ enum SoundEnum {
     NOTIFICATION_SIMPLE_01 = "notification_simple-01.wav",
     NOTIFICATION_SIMPLE_02 = "notification_simple-02.wav",
     UI_LOADING = "ui_loading.wav",
-    UI_UNLOCK = "ui_unlock.wav"
+    UI_UNLOCK = "ui_unlock.wav",
 }
 
 class SoundManager {
@@ -38,7 +38,8 @@ class SoundManager {
     playSound(sound: SoundEnum) {
         if (this.sounds[sound]) {
             this.sounds[sound].muted = false;
-            this.sounds[sound].play();
+
+            this.sounds[sound].play().catch(() => {});
         } else {
             console.error(`Sound ${sound} not found`);
         }
@@ -46,4 +47,3 @@ class SoundManager {
 }
 
 export { SoundEnum, SoundManager };
-
