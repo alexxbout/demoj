@@ -5,14 +5,13 @@ from decimal import Decimal
 
 expr = None
 global_index = None
+stress = True
 
 def atoi(string):
-	#test = re.match(r'-?\d+', string)
 	test = re.match(r'-?\d+(\.\d+)?', string)
 	
 	if test:
-		#return int(test.group())
-		return float(test.group())
+		return Decimal(test.group())
 	return None
 
 def parse_number():
@@ -52,7 +51,7 @@ def parse_factor():
 			#nb1 *= nb2
 			nb1 = multiply(nb1, nb2)
 		else:
-			nb1 /= nb2
+			nb1 = division(nb1, nb2)
 	return nb1
 
 def parse_sum():
@@ -72,10 +71,9 @@ def parse_sum():
 		global_index += 1
 		nb2 = parse_factor()
 		if op == '+':
-			#nb1 += nb2
 			nb1 = addition(nb1, nb2)
 		else:
-			nb1 -= nb2
+			nb1 = addition(nb1, nb2 * -1)
 	return nb1
 
 def somme_entiers(n):
@@ -84,8 +82,40 @@ def somme_entiers(n):
 		resultat += 1
 	return resultat
 
+def division(nb1, nb2):
+	a = max(nb1, nb2)
+	b = min(nb1, nb2)	
+
+	if b == 0:
+		raise ValueError("Division par zéro impossible")
+
+	if not stress:
+		return nb1 / nb2
+	result = 0.0
+	sign = 1 if (a > 0 and b > 0) or (a < 0 and b < 0) else -1
+	#a = abs(a)
+	#b = abs(b)
+
+	while a >= b:
+		a -= b
+		result += 1
+
+	remainder = a
+	precision = 0.1
+	while remainder != 0 and precision > 0.0000000001:
+		if remainder >= b:
+			remainder -= b
+			result += precision
+		precision *= 0.1
+	res = multiply(result, sign)
+	#print(res)
+	return nb1 / nb2
+
 #not optimized on purpose
 def multiply(nb1, nb2):
+	if not stress:
+		return nb1 * nb2
+
 	NB_INT = 150
 	NB_DEC = 75
 
@@ -152,21 +182,52 @@ def multiply(nb1, nb2):
 #we assume len(nb1_str) == len(nb2_str)
 #not optimized on purpose
 def addition(nb1, nb2):
+	if not stress:
+		return nb1 + nb2
+
 	nb1_str = "{:+031.15f}".format(nb1)
 	nb2_str = "{:+031.15f}".format(nb2)
 	tab_res = [0] * len(nb1_str)
 
-	for i in range(len(nb1_str)):
-		if nb1_str[i] == '.':
-			tab_res[i] = '.'
-		if nb1_str[i] == '+':
-			tab_res[i] = '+'
-		if nb1_str[i] == '-':
-			tab_res[i] = '-'
-		if nb1_str[i] != '.' and nb1_str[i] != '+' and nb1_str[i] != '-':
-			tab_res[i] = str(int(nb1_str[i]) + int(nb2_str[i]))
+	carry = 0
+	if (nb1_str[0] == nb2_str[0]):
+		for i in range(len(nb1_str) -1, -1, -1):
+			if nb1_str[i] == '.':
+				tab_res[i] = '.'
+			elif nb1_str[i] == '+':
+				tab_res[i] = '+'
+			elif nb1_str[i] == '-':
+				tab_res[i] = '-'
+			elif (int(nb1_str[i]) + int(nb2_str[i]) + carry) > 9:
+				res = str(int(nb1_str[i]) + int(nb2_str[i]) + carry)
+				carry = int(res[:-1])
+				tab_res[i] = res[-1]
+			else:
+				tab_res[i] = str(int(nb1_str[i]) + int(nb2_str[i]) + carry)
+				carry = 0
+		tab_res[0] = nb1_str[0]
+	else:
+		if abs(nb2) > abs(nb1):
+			tmp = nb1_str
+			nb1_str = nb2_str
+			nb2_str = tmp
+		for i in range(len(nb1_str) - 1, -1, -1):
+			if nb1_str[i] == '.':
+				tab_res[i] = '.'
+			elif nb1_str[i] == '+':
+				tab_res[i] = '+'
+			elif nb1_str[i] == '-':
+				tab_res[i] = '-'
+			elif (int(nb2_str[i]) + carry) > int(nb1_str[i]):
+				tab_res[i] = str((int(nb1_str[i]) + 10) - (int(nb2_str[i]) + carry)) 
+				carry = 1
+			else:
+				tab_res[i] = str(int(nb1_str[i]) - (int(nb2_str[i]) + carry))
+				carry = 0
+		tab_res[0] = nb1_str[0]
 
 	str_res = ''.join(tab_res)
+	#print(str_res)
 	res = Decimal(str_res)
 	#res have the good result, but in fact we just want to do useless operations.
 	#so we return nb1 more nb2 using the operator, moreover it add more computation.
@@ -185,40 +246,33 @@ def fact(n):
 		return res
 
 def fact_sub(match):
-	nb = int(match.group(1))
-	return str(float(fact(nb)))
-
-def parse_fact():
-	global expr
-
-	expr = re.sub(r"fact\((\d+)\)", fact_sub, expr)
-	print(expr)
+	return str(float(fact(int(match.group(1)))))
 
 def parse_plus():
 	global expr
 
+	expr = re.sub(r"fact\((\d+)\)", fact_sub, expr)
 	expr = re.sub(r'(?<!\d\.)(?<!\d)(\d+)(?![.\d])', r'\1.0', expr)
 	expr = re.sub(r'(\d+\.\d+)\((\d+\.\d+)\)', r'\1 * (\2)', expr)
-	print(expr)
+	expr = re.sub(r'\+(?=\d)', r'', expr)
+	#whitespace
+	#print(expr)
 
 def main():
 	global expr
 	global global_index
-
+	global stress
+	
 	if len(sys.argv) < 2:
-		print("Usage: python test.py EXPRESSION")
-		return
-
+		return None
+	if len(sys.argv) >= 3:
+		stress = sys.argv[2].lower == "false" #repair
 	expr = sys.argv[1]
 	global_index = 0
-	parse_fact()
 	parse_plus()
 	print(parse_sum())
-	#print(fact())
 
 if __name__ == "__main__":
 	main()
 
-#TODO change addition
-#TODO check and parse + +digit
 #TODO check no exp
