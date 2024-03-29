@@ -22,6 +22,11 @@ if ! ping -q -c 1 -W 1 google.com >/dev/null; then
   exit 1
 fi
 
+# Check if .logs.txt exists, if not, create it
+if [ ! -f .logs.txt ]; then
+  touch .logs.txt
+fi
+
 # Set executable permissions for other scripts
 chmod +x others/appservice.sh
 chmod +x others/raspap.sh

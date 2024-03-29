@@ -51,7 +51,13 @@ create_bak() {
     if [ ! -f "$file.bak" ]; then
         cp "$file" "$file.bak"
         return 0
+    else
+        # create a backup with 1, 2, 3, ... suffix
+        i=1
+        while [ -f "$file.bak.$i" ]; do
+            i=$((i + 1))
+        done
+        cp "$file" "$file.bak.$i"
+        return 0
     fi
-
-    return 1
 }

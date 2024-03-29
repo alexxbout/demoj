@@ -18,7 +18,7 @@ app_script="/home/$user/demoj/module/scripts/app.py"
 service_file="/etc/systemd/system/app.service"
 
 # Creating and writing to the service file
-{
+({
     echo "[Unit]"
     echo "Description=Start $user app"
     echo ""
@@ -28,7 +28,7 @@ service_file="/etc/systemd/system/app.service"
     echo ""
     echo "[Install]"
     echo "WantedBy=multi-user.target"
-} > "$service_file" >> "$log_file" 2>&1 || die "Failed to create service file: $service_file"
+} > "$service_file") >> "$log_file" 2>&1 || die "Failed to create service file: $service_file"
 
 # Enabling the service
 echo "Enabling app.service"
