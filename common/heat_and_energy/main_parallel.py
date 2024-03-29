@@ -7,7 +7,13 @@ if __name__ == "__main__":
     #animation should run in parallel
     time.sleep(20)
     leds.loading_done()
-    leds.demoj()
-    time.sleep(20)
-    #leds.end_animation()
-    leds.close()
+    try:
+        leds.demoj()
+        #run flask app
+        while True:
+            time.sleep(20)
+    except KeyboardInterrupt:
+        pass
+    finally:
+        leds.close()
+    
