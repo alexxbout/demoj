@@ -11,6 +11,7 @@ MAX_WATTS = 2700 # value reached at approximatly 50 degrees
 NB_OF_GAUGES = 2
 NO_COLOR = Color(0, 0, 0, 0)
 ANIM_SPEED = 0.020
+ANIM_SPEED2 = 0.030
 ORANGE = Color(250, 77, 0)
 
 class Gauges:
@@ -159,7 +160,7 @@ class Gauges:
         gaugeEnd: int = self.__ledsPerGauge
         self.__colorizeLedsTemp(colored_leds)
         self.__clearLeds(colored_leds, gaugeEnd)
-        self.__strip.show() #show at the end of calculation
+        self.__strip.show()
 
     def displayWatts(self, miliWatts: float): 
         """
@@ -177,7 +178,7 @@ class Gauges:
         colorEnd: int = self.__ledsPerGauge+colored_leds
         self.__clearLeds(self.__ledsPerGauge, colorEnd)
         self.__colorizeLedsWatts(colored_leds)
-        self.__strip.show() #show at the end of calculation
+        self.__strip.show()
         
     def clearAll(self):
         """Clear all the leds"""
@@ -264,12 +265,12 @@ class Gauges:
         """
         The k2000 animation
         """
-        rStep = color.r / 8
-        gStep = color.g / 8
+        rStep = color.r / (self.__ledsPerGauge)
+        gStep = color.g / (self.__ledsPerGauge)
         for i in range(0, self.__led_count):
             r = float(color.r)
             g = float(color.g)
-            for j in range(0, 9):
+            for j in range(0, self.__ledsPerGauge+1):
                 if j >= 0:
                     self.__strip.setPixelColor(i-j, Color(int(r), int(g), 0))
                 r -= rStep
@@ -279,7 +280,7 @@ class Gauges:
         for i in range(0, self.__led_count-1):
             r = float(color.r)
             g = float(color.g)
-            for j in range(0, 9):
+            for j in range(0, self.__ledsPerGauge+1):
                 if j >= 0:
                     self.__strip.setPixelColor(self.__led_count-1-i+j, Color(int(r), int(g), 0))
                 r -= rStep
