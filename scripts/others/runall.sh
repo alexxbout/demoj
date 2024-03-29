@@ -1,5 +1,5 @@
 #!/bin/bash
-# shellcheck shell=bash source=/dev/null
+# shellcheck shell=bash source=/dev/null disable=SC2154
 
 # Including utility functions
 source "$(dirname "$0")"/utils.sh

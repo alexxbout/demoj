@@ -1,5 +1,5 @@
 #!/bin/bash
-# shellcheck shell=bash source=/dev/null
+# shellcheck shell=bash source=/dev/null disable=SC2154
 
 # Including utility functions
 source "$(dirname "$0")"/utils.sh
@@ -22,7 +22,7 @@ command_line="$user ALL=(ALL) NOPASSWD:"
 # Creating a backup of /etc/sudoers if the backup file doesn't exist
 file="/etc/sudoers"
 echo "Creating backup of $file"
-create_bak "$file"
+create_bak "$file" || die "Failed to create backup of $file"
 
 # Adding reboot and shutdown commands to the sudoers file
 if ! grep -q "$command_line /sbin/reboot" "$file"; then

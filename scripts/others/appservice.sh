@@ -1,5 +1,5 @@
 #!/bin/bash
-# shellcheck shell=bash source=/dev/null
+# shellcheck shell=bash source=/dev/null disable=SC2154
 
 # Including utility functions
 source "$(dirname "$0")"/utils.sh
@@ -28,11 +28,11 @@ service_file="/etc/systemd/system/app.service"
     echo ""
     echo "[Install]"
     echo "WantedBy=multi-user.target"
-} > "$service_file" || die "Failed to create service file: $service_file"
+} > "$service_file" >> "$log_file" 2>&1 || die "Failed to create service file: $service_file"
 
 # Enabling the service
 echo "Enabling app.service"
-systemctl enable app.service || die "Failed to enable app.service"
+systemctl enable app.service >> "$log_file" 2>&1 || die "Failed to enable app.service"
 
 echo "App service initialized"
 

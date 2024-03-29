@@ -1,28 +1,28 @@
 #!/bin/bash
-# shellcheck shell=bash
+# shellcheck shell=bash disable=SC2154
 
-log_file=".logs.txt"
+log_file="../.logs.txt"
 
-# Fonction pour afficher un message d'erreur et quitter le script avec un code de sortie non nul
 die() {
+    echo "$1"
     echo "Something went wrong. Do you want to see the logs? (y/n)"
     read -r answer
     if [ "$answer" = "y" ]; then
         cat "$log_file"
     fi
 
-    echo "$1" >&2
     exit 1
 }
 
-# Fonction pour vérifier si le script est exécuté en tant que root
 check_root() {
     if [ "$EUID" -ne 0 ]; then
-        die "Please run this script as root."
+        echo "Please run this script as root"
+
+        # No return here because the script should exit
+        exit 1
     fi
 }
 
-# Fonction pour vérifier si un paramètre fait partie d'un tableau de paramètres
 check_param_in_array() {
     local param="$1"
     shift
@@ -30,25 +30,28 @@ check_param_in_array() {
 
     for p in "${param_array[@]}"; do
         if [ "$param" = "$p" ]; then
-            return 0  # Paramètre trouvé dans le tableau
+            return 0
         fi
     done
 
-    return 1  # Paramètre non trouvé dans le tableau
+    return 1
 }
 
-# Fonction pour vérifier si le répertoire d'exécution existe
 check_directory() {
     local dir="$1"
     if [ ! -d "$dir" ]; then
-        die "Directory $dir does not exist"
+        return 1
     fi
+
+    return 0
 }
 
-# Function pour créer une sauvegarde d'un fichier
 create_bak() {
     local file="$1"
     if [ ! -f "$file.bak" ]; then
-        cp "$file" "$file.bak" || die "Failed to create backup of $file"
+        cp "$file" "$file.bak"
+        return 0
     fi
+
+    return 1
 }

@@ -1,5 +1,5 @@
 #!/bin/bash
-# shellcheck shell=bash source=/dev/null
+# shellcheck shell=bash source=/dev/null disable=SC2154
 
 # Inclusion of utility functions
 source "$(dirname "$0")"/utils.sh
@@ -22,7 +22,7 @@ file="/etc/dhcpcd.conf"
 # Check if the file already exists
 if [ -f "$file" ]; then
     echo "Creating backup of $file"
-    create_bak "$file"
+    create_bak "$file" || die "Failed to create backup of $file"
 
     read -rp "The file $file already exists. Do you want to overwrite it? (y/n) " overwrite
     case $overwrite in
@@ -37,7 +37,7 @@ if [ -f "$file" ]; then
 fi
 
 # Write the configuration to the file
-cat <<EOL >"$file" || die "Failed to write to $file"
+cat <<EOL >"$file"
 interface $wlan_interface
 static ip_address=$static_ip/$subnet_mask
 static routers=$gateway
@@ -45,7 +45,7 @@ static domain_name_servers=8.8.8.8 8.8.4.4
 EOL
 
 # Restart the networking service
-systemctl restart networking
+systemctl restart networking >> "$log_file" 2>&1 || die "Failed to restart networking service"
 
 echo "Static IP configured successfully."
 

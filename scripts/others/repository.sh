@@ -1,5 +1,5 @@
 #!/bin/bash
-# shellcheck shell=bash source=/dev/null
+# shellcheck shell=bash source=/dev/null disable=SC2154
 
 # Include utility functions
 source "$(dirname "$0")"/utils.sh
@@ -27,14 +27,14 @@ readonly clone_dir="/home/$user/demoj"
 # Check if Git is installed
 if ! command -v git &> /dev/null; then
     echo "Installing git"
-    apt install git -y || die "Failed to install git"
+    apt install git -y >> "$log_file" 2>&1 || die "Failed to install git"
 fi
 
 # Clone the Git repository to the specified directory
 echo "Cloning repo"
 if [ ! -d "$clone_dir" ]; then
-    mkdir -p "$clone_dir" || die "Failed to create directory $clone_dir"
-    chown "$user":"$user" "$clone_dir" || die "Failed to set ownership for $clone_dir"
+    mkdir -p "$clone_dir" >> "$log_file" 2>&1 || die "Failed to create directory $clone_dir"
+    chown "$user":"$user" "$clone_dir" >> "$log_file" 2>&1 || die "Failed to set ownership for $clone_dir"
 fi
 
 if sudo -u "$user" git clone "$repo" "$clone_dir"; then
@@ -45,11 +45,12 @@ fi
 
 # Switch to the user's branch
 echo "Switching to $user branch"
-cd "$clone_dir" || die "Failed to change directory to $clone_dir"
+cd "$clone_dir" >> "$log_file" 2>&1 || die "Failed to change directory to $clone_dir"
 if ! sudo -u "$user" git checkout "$user"; then
     die "Failed to switch to $user branch"
 fi
 
 # Finish repository initialization
 echo "Repo initialized"
+
 exit 0

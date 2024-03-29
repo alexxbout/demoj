@@ -1,5 +1,5 @@
 #!/bin/bash
-# shellcheck shell=bash source=/dev/null
+# shellcheck shell=bash source=/dev/null disable=SC2154
 
 # Including utility functions
 source "$(dirname "$0")"/utils.sh
@@ -12,11 +12,11 @@ echo "Configuring default language"
 
 # Not sure if this command is working
 # Check: https://www.raspberrypi.com/documentation/computers/configuration.html
-raspi-config nonint do_wifi_country FR
+raspi-config nonint do_wifi_country FR >> "$log_file" 2>&1 || die "Failed to configure default language"
 
 echo "Installing RaspAP"
 
-curl -sL https://install.raspap.com | bash -s -- --yes --wireguard 0 --adblock 0 --openvpn 0 --provider 0
+(curl -sL https://install.raspap.com | bash -s -- --yes --wireguard 0 --adblock 0 --openvpn 0 --provider 0) >> "$log_file" 2>&1 || die "Failed to install RaspAP"
 
 echo "RaspAP installed"
 
@@ -25,7 +25,7 @@ echo "Configuring RaspAP"
 file="/etc/hostapd/hostapd.conf"
 
 echo "Creating backup of $file"
-create_bak "$file"
+create_bak "$file" >> "$log_file" 2>&1 || die "Failed to create backup of $file"
 
 # TODO: Change default SSID: Maybe here /etc/raspap/raspap.auth or /etc/hostapd/hostapd.conf
 # echo "Changing default SSID"
