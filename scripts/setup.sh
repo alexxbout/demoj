@@ -5,26 +5,7 @@
 # Including utility functions
 source "$(dirname "$0")"/others/utils.sh
 
-# Fonction pour demander à l'utilisateur de sélectionner un utilisateur
-#! PROBLEME SUR LA SELECTION DE L'UTILISATEUR
-select_user() {
-    clear
-    echo "Please select the user you want to install the project for:"
-
-    local ret=""
-
-    options=("Terminal" "Network" "Server")
-    select user_option in "${options[@]}"; do
-        case $REPLY in
-            1) ret="terminal"; break;;
-            2) ret="network"; break;;
-            3) ret="server"; break;;
-            *) echo "Invalid option. Please try again.";;
-        esac
-    done
-
-    echo "$ret"
-}
+user="$SUDO_USER"
 
 # Check if the script is run as root
 check_root
@@ -64,11 +45,11 @@ echo "Please select the options you want to install:"
 options=("Install DemoJ on this device" "Run appservice" "Run repository" "Run sudoers" "Run virtualenv" "Run raspap" "Run staticip" "Run raspios" "Run demojconnect" "Exit")
 select install_option in "${options[@]}"; do
     case $REPLY in
-        1) user=$(select_user); "others/runall.sh" "$user"; echo "Setup complete. Have fun with DemoJ!"; break;;
-        2) user=$(select_user); "others/appservice.sh" "$user"; break;;
-        3) user=$(select_user); "others/repository.sh" "$user"; break;;
-        4) user=$(select_user); "others/sudoers.sh" "$user"; break;;
-        5) user=$(select_user); "others/virtualenv.sh" "$user"; break;;
+        1) "others/runall.sh" "$user"; echo "Setup complete. Have fun with DemoJ!"; break;;
+        2) "others/appservice.sh" "$user"; break;;
+        3) "others/repository.sh" "$user"; break;;
+        4) "others/sudoers.sh" "$user"; break;;
+        5) "others/virtualenv.sh" "$user"; break;;
         6) "others/raspap.sh"; break;;
         7) "others/staticip.sh"; break;;
         8) "others/raspios.sh"; break;;
