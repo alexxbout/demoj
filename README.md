@@ -13,7 +13,7 @@
 - Hadrien Moulhérat
 - Cameron Salomé
 - Yann Lainé Odic
-- Anaelle Dumand
+- Anaelle Daumand
 - Charly Piaud
 
 # Summary
