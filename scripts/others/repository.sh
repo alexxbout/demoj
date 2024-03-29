@@ -10,12 +10,8 @@ check_root
 # Display initialization message
 echo "Initializing repo"
 
-# Get the user from the arguments
-user="$1"
-
-# Check the validity of the user
-valid_users=("terminal" "network" "server")
-check_param_in_array "$user" "${valid_users[@]}" || die "Invalid user: " "$user"
+# Get the user
+user="$SUDO_USER"
 
 # Define constants
 readonly access_token="glpat-yskhYMsdxsxV4VbFrz2M"
@@ -51,6 +47,6 @@ if ! sudo -u "$user" git checkout "$user"; then
 fi
 
 # Finish repository initialization
-echo "Repo initialized"
+echo -e "${GREEN}Repo initialized ${RESET}"
 
 exit 0

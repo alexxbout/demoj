@@ -10,12 +10,8 @@ check_root
 # Displaying initialization message
 echo "Initializing sudoers file"
 
-# Retrieving the user
-user="$1"
-
-# Checking the validity of the user
-valid_users=("terminal" "network" "server")
-check_param_in_array "$user" "${valid_users[@]}" || die "Invalid user: " "$user"
+# Get the user
+user="$SUDO_USER"
 
 command_line="$user ALL=(ALL) NOPASSWD:"
 
@@ -39,6 +35,6 @@ else
     echo "Shutdown command already in sudoers file"
 fi
 
-echo "Sudoers file initialized"
+echo -e "${GREEN}Sudoers file initialized ${RESET}"
 
 exit 0

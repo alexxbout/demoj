@@ -1,11 +1,16 @@
 #!/bin/bash
-# shellcheck shell=bash disable=SC2154
+# shellcheck shell=bash disable=SC2154,SC2034
 
 log_file="../.logs.txt"
 
+RED="\e[31m"
+GREEN="\e[32m"
+ORANGE="\e[33m"
+RESET="\e[0m"
+
 die() {
     echo "$1"
-    echo "Something went wrong. Do you want to see the logs? (y/n)"
+    echo -e "${RED}Something went wrong.${RESET} Do you want to see the logs? (y/n)"
     read -r answer
     if [ "$answer" = "y" ]; then
         cat "$log_file"
@@ -16,25 +21,11 @@ die() {
 
 check_root() {
     if [ "$EUID" -ne 0 ]; then
-        echo "Please run this script as root"
+        echo -e "${RED}Please run this script as root ${RESET}"
 
         # No return here because the script should exit
         exit 1
     fi
-}
-
-check_param_in_array() {
-    local param="$1"
-    shift
-    local param_array=("$@")
-
-    for p in "${param_array[@]}"; do
-        if [ "$param" = "$p" ]; then
-            return 0
-        fi
-    done
-
-    return 1
 }
 
 check_directory() {

@@ -4,6 +4,13 @@
 # Including utility functions
 source "$(dirname "$0")"/utils.sh
 
+user="$SUDO_USER"
+
+if [ "$user" != "network" ]; then
+    echo "User is not network"
+    exit 1
+fi
+
 # Displaying initialization message
 echo "Initializing Demoj Connect"
 
@@ -72,5 +79,5 @@ mv "$temp_dir/demojconnect" "$dir/module" >> "$log_file" 2>&1 || die "Failed to 
 echo "App moved to $dir/module"
 
 # Finalization message
-echo "DemoJ Connect initialized"
+echo -e "${GREEN}DemoJ Connect initialized ${RESET}"
 exit 0

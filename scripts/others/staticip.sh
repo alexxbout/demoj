@@ -22,18 +22,7 @@ file="/etc/dhcpcd.conf"
 # Check if the file already exists
 if [ -f "$file" ]; then
     echo "Creating backup of $file"
-    create_bak "$file" || die "Failed to create backup of $file"
-
-    read -rp "The file $file already exists. Do you want to overwrite it? (y/n) " overwrite
-    case $overwrite in
-        [yY])
-            echo "Overwriting $file"
-            ;;
-        *)
-            echo "Exiting..."
-            exit 1
-            ;;
-    esac
+    create_bak "$file"
 fi
 
 # Write the configuration to the file
@@ -47,6 +36,6 @@ EOL
 # Restart the networking service
 systemctl restart networking >> "$log_file" 2>&1 || die "Failed to restart networking service"
 
-echo "Static IP configured successfully."
+echo -e "${GREEN}Static IP configured successfully ${RESET}"
 
 exit 0

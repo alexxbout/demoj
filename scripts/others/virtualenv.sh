@@ -10,12 +10,8 @@ check_root
 # Displaying initialization message
 echo "Initializing virtualenv"
 
-# Getting the user
-user="$1"
-
-# Checking the validity of the user
-valid_users=("terminal" "network" "server")
-check_param_in_array "$user" "${valid_users[@]}" || die "Invalid user: " "$user"
+# Get the user
+user="$SUDO_USER"
 
 # Checking the existence of the demoj directory
 check_directory "/home/$user/demoj" || die "Directory /home/$user/demoj does not exist. Please run repository.sh first"
@@ -42,6 +38,6 @@ fi
 # Deactivating the virtual environment
 deactivate >> "$log_file" 2>&1 || die "Failed to deactivate virtual environment"
 
-echo "Virtualenv initialized"
+echo -e "${GREEN}Virtualenv initialized ${RESET}"
 
 exit 0

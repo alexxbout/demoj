@@ -7,10 +7,8 @@ source "$(dirname "$0")"/utils.sh
 # Checking if the script is executed as root
 check_root
 
-# Checking arguments
-valid_params=("terminal" "network" "server")
-user="$1"
-check_param_in_array "$user" "${valid_params[@]}" || die "Invalid user"
+# Get the user
+user="$SUDO_USER"
 
 # Defining paths
 venv_path="/home/$user/demoj/venv/bin/python3"
@@ -34,6 +32,6 @@ service_file="/etc/systemd/system/app.service"
 echo "Enabling app.service"
 systemctl enable app.service >> "$log_file" 2>&1 || die "Failed to enable app.service"
 
-echo "App service initialized"
+echo -e "${GREEN}App service initialized ${RESET}"
 
 exit 0

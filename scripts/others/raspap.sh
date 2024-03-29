@@ -4,6 +4,13 @@
 # Including utility functions
 source "$(dirname "$0")"/utils.sh
 
+user="$SUDO_USER"
+
+if [ "$user" != "network" ]; then
+    echo "User is not network"
+    exit 1
+fi
+
 echo "Initializing RaspAP"
 
 echo "After reboot, remember to disable your personal hotspot to let RaspAP take over"
@@ -37,6 +44,6 @@ create_bak "$file" >> "$log_file" 2>&1 || die "Failed to create backup of $file"
 
 # TODO: Update default login and password to portal
 
-echo "RaspAP configured"
+echo -e "${GREEN}RaspAP configured ${RESET}"
 
 exit 0

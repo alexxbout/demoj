@@ -18,7 +18,7 @@ fi
 
 # Check if internet connection is available
 if ! ping -q -c 1 -W 1 google.com >/dev/null; then
-  echo "Internet is not available. Please connect to the internet and try again."
+  echo -e "${RED}Internet is not available. Please connect to the internet and try again. ${RESET}"
   exit 1
 fi
 
@@ -40,17 +40,18 @@ chmod +x others/demojconnect.sh
 
 clear
 
-echo "Welcome to the DemoJ setup script!"
+echo -e "${GREEN}Welcome to the DemoJ setup script! ${RESET}"
 echo "Installing dependencies for the DemoJ project."
 echo "Ensure SSH connection to the target device with internet access."
 echo
 
 # Afficher les options disponibles
-echo "Please select the options you want to install:"
+echo -e "${ORANGE}Please select the options you want to install: ${RESET}"
+echo "Recommended order: raspios.sh, sudoers.sh, repository.sh, virtualenv.sh, staticip.sh, demojconnect.sh (network only), raspap.sh (network only), appservice.sh"
 options=("Install DemoJ on this device" "Run appservice" "Run repository" "Run sudoers" "Run virtualenv" "Run raspap" "Run staticip" "Run raspios" "Run demojconnect" "Exit")
 select install_option in "${options[@]}"; do
     case $REPLY in
-        1) "others/runall.sh" "$user"; echo "Setup complete. Have fun with DemoJ!"; break;;
+        1) "others/runall.sh" "$user"; break;;
         2) "others/appservice.sh" "$user"; break;;
         3) "others/repository.sh" "$user"; break;;
         4) "others/sudoers.sh" "$user"; break;;
@@ -60,7 +61,7 @@ select install_option in "${options[@]}"; do
         8) "others/raspios.sh"; break;;
         9) "others/demojconnect.sh"; break;;
         10) echo "Exiting..."; exit 0;;
-        *) echo "Invalid option. Please try again.";;
+        *) echo -e "${RED}Invalid option. Please try again. ${RESET}";;
     esac
 done
 
@@ -78,6 +79,6 @@ while true; do
     exit 0
     ;;
   *)
-    echo "Invalid response. Please try again."
+    echo -e "${RED}Invalid response. Please try again. ${RESET}"
   esac
 done

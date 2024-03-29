@@ -19,6 +19,10 @@ apt -y full-upgrade >> "$log_file" 2>&1 || die "Failed to upgrade system"
 echo "Installing pip"
 apt install python3-pip -y >> "$log_file" 2>&1 || die "Failed to install pip"
 
+# Upgrading pip
+echo "Upgrading pip"
+pip3 install --upgrade pip >> "$log_file" 2>&1 || die "Failed to upgrade pip"
+
 # Installing venv
 echo "Installing venv"
 apt install python3.11-venv -y >> "$log_file" 2>&1 || die "Failed to install venv"
@@ -45,6 +49,6 @@ else
 fi
 
 # End of Raspios initialization
-echo "Raspios initialized"
+echo -e "${GREEN}Raspios initialized ${RESET}"
 
 exit 0
