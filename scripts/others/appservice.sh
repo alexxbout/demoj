@@ -13,20 +13,20 @@ user="$SUDO_USER"
 # Defining paths
 venv_path="/home/$user/demoj/venv/bin/python3"
 app_script="/home/$user/demoj/module/scripts/app.py"
-service_file="/etc/systemd/system/app.service"
+file="/etc/systemd/system/app.service"
 
 # Creating and writing to the service file
-({
-    echo "[Unit]"
-    echo "Description=Start $user app"
-    echo ""
-    echo "[Service]"
-    echo "ExecStart=$venv_path $app_script"
-    echo "Restart=always"
-    echo ""
-    echo "[Install]"
-    echo "WantedBy=multi-user.target"
-} > "$service_file") >> "$log_file" 2>&1 || die "Failed to create service file: $service_file"
+cat <<EOL >"$file"
+[Unit]
+Description=Start $user app
+
+[Service]
+ExecStart=$venv_path $app_script
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+EOL
 
 # Enabling the service
 echo "Enabling app.service"
