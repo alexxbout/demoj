@@ -116,8 +116,8 @@ def multiply(nb1, nb2):
 	if not stress:
 		return nb1 * nb2
 
-	NB_INT = 150
-	NB_DEC = 75
+	NB_INT = 100
+	NB_DEC = 50
 
 	nb1_str = "{:+0{nb_int}.{nb_dec}f}".format(Decimal(nb1), nb_int=NB_INT, nb_dec=NB_DEC)
 	nb2_str = "{:+0{nb_int}.{nb_dec}f}".format(Decimal(nb2), nb_int=NB_INT, nb_dec=NB_DEC)
@@ -127,9 +127,9 @@ def multiply(nb1, nb2):
 
 	tableau = [[0] * len(nb1_str2) for _ in range(len(nb1_str2))]
 	
-	for i in range(len(nb1_str2)):
-		for j in range(len(nb1_str2)):
-			tableau[i][j] = int(nb2_str2[i]) * int(nb1_str2[j])
+	#for i in range(len(nb1_str2)):
+	#	for j in range(len(nb1_str2)):
+	#		tableau[i][j] = int(nb2_str2[i]) * int(nb1_str2[j])
 
 	tableau.reverse()
 	tableau = [line[::-1] for line in tableau]
@@ -244,13 +244,29 @@ def fact(n):
 		for i in range(1, n + 1):
 			res = multiply(res, i)
 		return res
+def fib(n):
+	if n <= 0:
+		return None
+	elif n == 1:
+		return 0
+	elif n == 2:
+		return 1
+	else:
+		fib_sequence = [0, 1]
+		for i in range(2, n):
+			fib_sequence.append(fib_sequence[-1] + fib_sequence[-2])
+		return fib_sequence[-1]
 
 def fact_sub(match):
 	return str(float(fact(int(match.group(1)))))
 
+def fib_sub(match):
+	return str(float(fib(int(match.group(1)))))
+
 def parse_plus():
 	global expr
 
+	expr = re.sub(r"fib\((\d+)\)", fib_sub, expr)
 	expr = re.sub(r"fact\((\d+)\)", fact_sub, expr)
 	expr = re.sub(r'(?<!\d\.)(?<!\d)(\d+)(?![.\d])', r'\1.0', expr)
 	expr = re.sub(r'(\d+\.\d+)\((\d+\.\d+)\)', r'\1 * (\2)', expr)
