@@ -52,14 +52,3 @@ create_bak() {
         cp "$file" "$file.bak" || die "Failed to create backup of $file"
     fi
 }
-
-# Fonction pour rediriger la sortie standard et la sortie d'erreur vers un fichier de log
-redirect_output() {
-    # Redirection de stdout des échos vers le terminal
-    exec > >(while IFS= read -r line; do printf '%s\n' "$line"; done)
-    # Utilisation d'une sous-coquille pour rediriger seulement la sortie des commandes
-    {
-        # Redirection de stderr et stdout des commandes vers le fichier de log
-        exec 2>> >(while IFS= read -r line; do printf '%s %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$line"; done >> "$log_file")
-    }
-}

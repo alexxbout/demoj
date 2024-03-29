@@ -4,9 +4,6 @@
 # Including utility functions
 source "$(dirname "$0")"/utils.sh
 
-# Redirecting output to log file
-redirect_output
-
 echo "Initializing RaspAP"
 
 echo "After reboot, remember to disable your personal hotspot to let RaspAP take over"
@@ -31,12 +28,12 @@ echo "Creating backup of $file"
 create_bak "$file"
 
 # TODO: Change default SSID: Maybe here /etc/raspap/raspap.auth or /etc/hostapd/hostapd.conf
-echo "Changing default SSID"
-sed -i 's/^ssid=raspi-webgui/ssid=NewSSID/' /etc/hostapd/hostapd.conf
+# echo "Changing default SSID"
+# sed -i 's/^ssid=raspi-webgui/ssid=NewSSID/' /etc/hostapd/hostapd.conf
 
 # TODO: Maybe remove the password: https://docs.raspap.com/faq/#can-i-remove-the-ap-password-to-create-an-open-wifi-network
-echo "Removing default password"
-sed -i '/wpa_passphrase=/s/^/#/g' /etc/hostapd/hostapd.conf
+# echo "Removing default password"
+# sed -i '/wpa_passphrase=/s/^/#/g' /etc/hostapd/hostapd.conf
 
 # TODO: Update default login and password to portal
 

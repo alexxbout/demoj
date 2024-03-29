@@ -4,9 +4,6 @@
 # Including utility functions
 source "$(dirname "$0")"/utils.sh
 
-# Redirecting output to log file
-redirect_output
-
 # Checking if the script is executed as root
 check_root
 
