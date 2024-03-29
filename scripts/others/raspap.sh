@@ -44,6 +44,6 @@ create_bak "$file" >> "$log_file" 2>&1 || die "Failed to create backup of $file"
 
 # TODO: Update default login and password to portal
 
-echo -e "${GREEN}RaspAP configured ${RESET}"
+echo -e "${GREEN}RaspAP initialized ${RESET}"
 
 exit 0
