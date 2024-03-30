@@ -34,6 +34,7 @@ static domain_name_servers=8.8.8.8 8.8.4.4
 EOL
 
 # Restart the networking service
+echo "Restarting networking service"
 systemctl restart networking >> "$log_file" 2>&1 || die "Failed to restart networking service"
 
 echo -e "${GREEN}Static IP configured successfully ${RESET}"

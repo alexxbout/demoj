@@ -13,7 +13,7 @@ fi
 
 echo "Initializing RaspAP"
 
-echo "After reboot, remember to disable your personal hotspot to let RaspAP take over"
+echo -e "${ORANGE}After reboot, remember to disable your personal hotspot to let RaspAP take over ${RESET}"
 
 echo "Configuring default language"
 
@@ -22,13 +22,9 @@ echo "Configuring default language"
 raspi-config nonint do_wifi_country FR >> "$log_file" 2>&1 || die "Failed to configure default language"
 
 echo "Installing RaspAP"
-
 (curl -sL https://install.raspap.com | bash -s -- --yes --wireguard 0 --adblock 0 --openvpn 0 --provider 0) >> "$log_file" 2>&1 || die "Failed to install RaspAP"
 
-echo "RaspAP installed"
-
 echo "Configuring RaspAP"
-
 file="/etc/hostapd/hostapd.conf"
 
 echo "Creating backup of $file"

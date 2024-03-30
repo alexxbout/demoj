@@ -49,19 +49,16 @@ npm install >> "$log_file" 2>&1 || die "Failed to install dependencies"
 echo "Building app"
 ionic build >> "$log_file" 2>&1 || die "Failed to build app"
 
-echo "App built"
-echo "Moving app to /home/network/temp"
-
 # Defining temporary directory
 temp_dir="/home/network/temp"
+
+echo "Moving app to $temp_dir"
 
 # Creating temporary directory if it doesn't exist
 mkdir -p "$temp_dir" >> "$log_file" 2>&1 || die "Failed to create temp directory: $temp_dir"
 
 # Moving the application to the temporary directory
 mv "$dir/demoj-app/demojconnect" "$temp_dir" >> "$log_file" 2>&1 || die "Failed to move app to $temp_dir"
-
-echo "App moved to $temp_dir"
 
 # Changing Git branch
 echo "Switching to network branch"
@@ -75,8 +72,6 @@ fi
 # Moving the application to the final directory
 echo "Moving app to /home/network/demoj/module"
 mv "$temp_dir/demojconnect" "$dir/module" >> "$log_file" 2>&1 || die "Failed to move app to $dir/module"
-
-echo "App moved to $dir/module"
 
 # Finalization message
 echo -e "${GREEN}DemoJ Connect initialized ${RESET}"
