@@ -30,13 +30,11 @@ file="/etc/hostapd/hostapd.conf"
 echo "Creating backup of $file"
 create_bak "$file" >> "$log_file" 2>&1 || die "Failed to create backup of $file"
 
-# TODO: Change default SSID: Maybe here /etc/raspap/raspap.auth or /etc/hostapd/hostapd.conf
-# echo "Changing default SSID"
-# sed -i 's/^ssid=raspi-webgui/ssid=NewSSID/' /etc/hostapd/hostapd.conf
-
-# TODO: Maybe remove the password: https://docs.raspap.com/faq/#can-i-remove-the-ap-password-to-create-an-open-wifi-network
-# echo "Removing default password"
-# sed -i '/wpa_passphrase=/s/^/#/g' /etc/hostapd/hostapd.conf
+echo "Changing default SSID"
+sed -i '/auth_algs=1/s/^/#/g' "$file"
+sed -i '/wpa_key_mgmt=WPA-PSK/s/^/#/g' "$file"
+sed -i '/wpa=2/s/^/#/g' "$file"
+sed -i '/wpa_pairwise=cCMp/s/^/#/g' "$file"
 
 # TODO: Update default login and password to portal
 

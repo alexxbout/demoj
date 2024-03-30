@@ -79,6 +79,4 @@ For any other document look [here](/docs)
 6. You are good to run anything you want from this repo.
 
 ## TODO
-- raspap.sh: Change default raspap SSID
-- raspap.sh: Remove raspap password
 - raspap.sh: Change default Raspap web interface password
