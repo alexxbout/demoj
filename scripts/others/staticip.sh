@@ -10,11 +10,8 @@ check_root
 # Display initialization message
 echo "Initializing static IP"
 
-# Read parameters
-read -rp "Enter the static IP address: " static_ip
-read -rp "Enter the router/gateway address: " gateway
-read -rp "Enter the subnet mask: " subnet_mask
-read -rp "Enter the WLAN interface name: " wlan_interface
+# Get the user
+user="$SUDO_USER"
 
 # Configuration file location
 file="/etc/dhcpcd.conf"
@@ -24,6 +21,18 @@ if [ -f "$file" ]; then
     echo "Creating backup of $file"
     create_bak "$file"
 fi
+
+wlan_interface="wlan0"
+static_ip=""
+
+if [ "$user" = "terminal" ]; then
+    static_ip="10.3.141.2"
+elif [ "$user" = "server" ]; then
+    static_ip="10.3.141.3"
+fi
+
+subnet_mask="24"
+gateway="10.3.141.1"
 
 # Write the configuration to the file
 cat <<EOL >"$file"
