@@ -87,3 +87,4 @@ For any other document look [here](/docs)
 - SEE IF VIRTUALENV IS REALLY NEEDED
 - update some script to update the repos manually
 - get more information about static address with raspap (see dhcp-range to start at 3, in order to have 1 (terminal) and 2 (server) for static address see https://docs.raspap.com/defaults/#managing-config-values (RaspAP a également configuré le DHCP pour qu'il distribue des adresses entre 10.3.141.50 et 10.3.141.255))
+- add a script to update default wifi endpoint for terminal and server

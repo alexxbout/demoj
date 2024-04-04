@@ -22,21 +22,15 @@ if ! ping -q -c 1 -W 1 google.com >/dev/null; then
   exit 1
 fi
 
-# Check if .logs.txt exists, if not, create it
+# Check if .logs.txt exists, if not, create it else clear it
 if [ ! -f .logs.txt ]; then
   touch .logs.txt
+else
+  truncate -s 0 .logs.txt
 fi
 
-# Set executable permissions for other scripts
-chmod +x others/appservice.sh
-chmod +x others/raspap.sh
-chmod +x others/raspios.sh
-chmod +x others/repository.sh
-chmod +x others/runall.sh
-chmod +x others/staticip.sh
-chmod +x others/sudoers.sh
-chmod +x others/virtualenv.sh
-chmod +x others/demojconnect.sh
+# Set executable permissions for all scripts in the others directory
+chmod +x others/*.sh
 
 clear
 
@@ -47,8 +41,7 @@ echo
 
 # Afficher les options disponibles
 echo -e "${ORANGE}Please select the options you want to install: ${RESET}"
-echo "Recommended order: raspios.sh, sudoers.sh, repository.sh, virtualenv.sh, staticip.sh, demojconnect.sh (network only), raspap.sh (network only), appservice.sh"
-options=("Install DemoJ on this device" "Run appservice" "Run repository" "Run sudoers" "Run virtualenv" "Run raspap" "Run staticip" "Run raspios" "Run demojconnect" "Exit")
+options=("Install DemoJ on this device" "Run appservice" "Run repository" "Run sudoers" "Run virtualenv" "Run raspap" "Run staticip" "Run raspios" "Run demojconnect" "Run wifi" "Exit")
 select install_option in "${options[@]}"; do
     case $REPLY in
         1) "others/runall.sh" "$user"; break;;
@@ -60,7 +53,8 @@ select install_option in "${options[@]}"; do
         7) "others/staticip.sh"; break;;
         8) "others/raspios.sh"; break;;
         9) "others/demojconnect.sh"; break;;
-        10) echo "Exiting..."; exit 0;;
+        10) "others/wifi.sh"; break;;
+        11) echo "Exiting..."; exit 0;;
         *) echo -e "${RED}Invalid option. Please try again. ${RESET}";;
     esac
 done

@@ -42,6 +42,8 @@ if [ "$user" = "network" ]; then
 else
     "./others/staticip.sh" "$user" || die "Failed to execute staticip.sh"
     echo -e "${GREEN}5/$nbScripts${RESET} scripts executed"
+
+    # TODO: Add a case for the server to build apps
 fi
 
 "./others/appservice.sh" "$user" || die "Failed to execute appservice.sh"

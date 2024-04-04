@@ -34,22 +34,34 @@ source venv/bin/activate >> "$log_file" 2>&1 || die "Failed to activate virtual 
 
 # NOTE: ALL PIP INSTALL COMMANDS GOES HERE
 # Installing dependencies based on the user
-echo "Installing dependencies for $user"
-if [ "$user" = "terminal" ] || [ "$user" = "server" ]; then
-    pip install "python-socketio[client]" >> "$log_file" 2>&1 || die "Failed to install python-socketio"
-elif [ "$user" = "network" ]; then
-    pip install flask flask_cors flask-socketio >> "$log_file" 2>&1 || die "Failed to install flask"
-fi
+case "$user" in
+    terminal)
+        pip install "python-socketio[client]" >> "$log_file" 2>&1 || die "Failed to install socketio"
+        ;;
+    server)
+        pip install "python-socketio[client]" >> "$log_file" 2>&1 || die "Failed to install socketio"
+        pip install "flask" >> "$log_file" 2>&1 || die "Failed to install flask"
+        pip install "flask-cors" >> "$log_file" 2>&1 || die "Failed to install flask-cors"
+        ;;
+    network)
+        pip install flask >> "$log_file" 2>&1 || die "Failed to install flask"
+        pip install flask_cors >> "$log_file" 2>&1 || die "Failed to install flask_cors"
+        pip install flask-socketio >> "$log_file" 2>&1 || die "Failed to install flask-socketio"
+        ;;
+    *)
+        die "Invalid user"
+        ;;
+esac
 
 # Installing libs to manage I2C
 
 # Installing smbus package via pip
 echo "Installing smbus"
-pip install smbus --break-system-packages >> "$log_file" 2>&1 || die "Failed to install smbus"
+pip install smbus >> "$log_file" 2>&1 || die "Failed to install smbus"
 
 # Installing rpi_ws281x package via pip
 echo "Installing strip led API"
-pip install rpi_ws281x --break-system-packages >> "$log_file" 2>&1 || die "Failed to install rpi_ws281x"
+pip install rpi_ws281x >> "$log_file" 2>&1 || die "Failed to install rpi_ws281x"
 
 # Deactivating the virtual environment
 echo "Deactivating virtual environment"
