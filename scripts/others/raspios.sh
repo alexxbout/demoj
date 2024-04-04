@@ -27,14 +27,6 @@ apt install python3.11-venv -y >> "$log_file" 2>&1 || die "Failed to install ven
 echo "Installing build-essential"
 apt install build-essential -y >> "$log_file" 2>&1 || die "Failed to install build-essential"
 
-# Installing smbus package via pip
-echo "Installing smbus"
-pip3 install smbus --break-system-packages >> "$log_file" 2>&1 || die "Failed to install smbus"
-
-# Installing rpi_ws281x package via pip
-echo "Installing strip led API"
-pip3 install rpi_ws281x --break-system-packages >> "$log_file" 2>&1 || die "Failed to install rpi_ws281x"
-
 # Configuring I2C
 echo "Setup I2C"
 if [ "$(raspi-config nonint get_i2c)" -eq 0 ]; then

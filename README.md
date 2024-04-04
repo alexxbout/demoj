@@ -80,3 +80,10 @@ For any other document look [here](/docs)
 
 ## TODO
 - raspap.sh: Change default Raspap web interface password
+- build the flask server: https://flask.palletsprojects.com/en/2.3.x/tutorial/deploy/
+- dns.sh (not created yet): access demoj.fr rather than ipaddress:5000/app/ 
+    - https://www.geeksforgeeks.org/subdomain-in-flask-python/
+    - https://chat.openai.com/share/e2a7ab22-93fe-4565-9299-0fca3c7413d0
+- SEE IF VIRTUALENV IS REALLY NEEDED
+- update some script to update the repos manually
+- get more information about static address with raspap (see dhcp-range to start at 3, in order to have 1 (terminal) and 2 (server) for static address see https://docs.raspap.com/defaults/#managing-config-values (RaspAP a également configuré le DHCP pour qu'il distribue des adresses entre 10.3.141.50 et 10.3.141.255))

@@ -32,6 +32,7 @@ python3 -m venv venv >> "$log_file" 2>&1 || die "Failed to create virtual enviro
 echo "Activating virtual environment"
 source venv/bin/activate >> "$log_file" 2>&1 || die "Failed to activate virtual environment"
 
+# NOTE: ALL PIP INSTALL COMMANDS GOES HERE
 # Installing dependencies based on the user
 echo "Installing dependencies for $user"
 if [ "$user" = "terminal" ] || [ "$user" = "server" ]; then
@@ -39,6 +40,16 @@ if [ "$user" = "terminal" ] || [ "$user" = "server" ]; then
 elif [ "$user" = "network" ]; then
     pip install flask flask_cors flask-socketio >> "$log_file" 2>&1 || die "Failed to install flask"
 fi
+
+# Installing libs to manage I2C
+
+# Installing smbus package via pip
+echo "Installing smbus"
+pip install smbus --break-system-packages >> "$log_file" 2>&1 || die "Failed to install smbus"
+
+# Installing rpi_ws281x package via pip
+echo "Installing strip led API"
+pip install rpi_ws281x --break-system-packages >> "$log_file" 2>&1 || die "Failed to install rpi_ws281x"
 
 # Deactivating the virtual environment
 echo "Deactivating virtual environment"
