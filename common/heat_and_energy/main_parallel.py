@@ -4,7 +4,7 @@ import time
 if __name__ == "__main__":
     leds = DemoLedsController()
     try:
-        leds.loading()
+        leds.loading(255, 0, 0)
         #launch flask
         time.sleep(20)
         leds.loading_done()

@@ -4,6 +4,7 @@ from leds.DemoDisplay import Gauges
 from temperature.temp import getCPUtemperature
 from wattmeter.DemoWattmeter import *
 from rpi_ws281x import Color
+from rpi_ws281x import RGBW
 
 SPEED = 0.5 
 LED_COUNT = 30
@@ -32,7 +33,7 @@ class DemoLedsController:
         except WattmeterTimeout:
             print("Wattmeter timed out on init")
         self.__gauges.clearAll()
-        
+        self.__loading_color: RGBW = RED
         self.__demoj_process = Process(target=self.__demoj_routine, args=(self.__gauges, self.__wattmeter,), daemon=True)
         self.__loading_process =  Process(target=self.__loading_routine, args=(self.__gauges,), daemon=True)
         self.__current: Process = self.__demoj_process
@@ -51,9 +52,9 @@ class DemoLedsController:
     
     def __loading_routine(self, gauges: Gauges):
         while True:
-            gauges.k2000(RED)           
+            gauges.k2000(self.__loading_color)           
 
-    def loading(self):
+    def loading(self, r: int, g: int, b: int):
         """
         Start the loading led animation process.
 
@@ -62,6 +63,7 @@ class DemoLedsController:
         """
         if self.is_running(): 
             raise ConccurentAnimation()
+        self.__loading_color = Color(r, g, b)
         self.__start(self.__loading_process)
     
     def end_animation(self): 
