@@ -1,10 +1,15 @@
 import json
-from const import IP_TERMINAL, IP_NETWORK, IP_SERVER
+from const import IP_TERMINAL, IP_NETWORK, IP_SERVER, RESTART_CMD, STOP_CMD, STRESS_LVL_1_CMD, STRESS_LVL_2_CMD, STRESS_LVL_3_CMD
 from utils import execute_command, update_and_write_json, get_device_from_addr
 
 from flask import Flask, jsonify, request, render_template, redirect, url_for
 from flask_socketio import SocketIO, join_room, leave_room
 from flask_cors import CORS
+
+APP_FOLDER = "../demojconnect"
+APP_URL = "/app/"
+CONFIG_PATH = "/home/network/demoj/module/config/config.json"
+SERVER_PORT = 5000
 
 devices = {
     "terminal": IP_TERMINAL,
@@ -12,19 +17,9 @@ devices = {
     "network": IP_NETWORK
 }
 
-app = Flask(__name__, template_folder="../demojconnect", static_folder="../demojconnect", static_url_path="/app/")
+app = Flask(__name__, template_folder=APP_FOLDER, static_folder=APP_FOLDER, static_url_path=APP_URL)
 sio = SocketIO(app, cors_allowed_origins="*")
 CORS(app)
-
-CONFIG_PATH = "/home/network/demoj/module/config/config.json"
-SERVER_PORT = 5000
-
-RESTART_CMD = ["sudo", "reboot"]
-STOP_CMD = ["sudo", "shutdown", "-h", "now"]
-
-STRESS_LVL_1_CMD = ["stress", "-c", "1", "-i", "1", "-m", "1", "--timeout", "10s"]
-STRESS_LVL_2_CMD = ["stress", "-c", "2", "-i", "2", "-m", "2", "--timeout", "10s"]
-STRESS_LVL_3_CMD = ["stress", "-c", "4", "-i", "4", "-m", "4", "--timeout", "10s"]
 
 #################################################################
 # * DémoJ Connect API Routes
