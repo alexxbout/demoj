@@ -116,8 +116,8 @@ def multiply(nb1, nb2):
 	if not stress:
 		return nb1 * nb2
 
-	NB_INT = 100
-	NB_DEC = 50
+	NB_INT = 6
+	NB_DEC = 2
 
 	nb1_str = "{:+0{nb_int}.{nb_dec}f}".format(Decimal(nb1), nb_int=NB_INT, nb_dec=NB_DEC)
 	nb2_str = "{:+0{nb_int}.{nb_dec}f}".format(Decimal(nb2), nb_int=NB_INT, nb_dec=NB_DEC)
@@ -271,8 +271,6 @@ def parse_plus():
 	expr = re.sub(r'(?<!\d\.)(?<!\d)(\d+)(?![.\d])', r'\1.0', expr)
 	expr = re.sub(r'(\d+\.\d+)\((\d+\.\d+)\)', r'\1 * (\2)', expr)
 	expr = re.sub(r'\+(?=\d)', r'', expr)
-	#whitespace
-	#print(expr)
 
 def main():
 	global expr
@@ -282,11 +280,12 @@ def main():
 	if len(sys.argv) < 2:
 		return None
 	if len(sys.argv) >= 3:
-		stress = sys.argv[2].lower == "false" #repair
+		stress = sys.argv[2].lower == "false" #TODO: repair
 	expr = sys.argv[1]
 	global_index = 0
 	parse_plus()
 	print(parse_sum())
+
 
 if __name__ == "__main__":
 	main()
