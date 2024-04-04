@@ -7,20 +7,7 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: "/",
         name: "home",
-        component: () => import("./App.vue"),
-        redirect: "/client",
-        children: [
-            {
-                path: "client",
-                name: "client",
-                component: () => import("./App.vue"),
-            },
-            {
-                path: "server",
-                name: "server",
-                component: () => import("./App.vue"),
-            },
-        ],
+        component: () => import("./App.vue")
     },
 ];
 

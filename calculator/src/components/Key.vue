@@ -30,7 +30,7 @@ const styles = computed<StyleValue>(() => {
             styles.color = "#000000";
             break;
         case "operator":
-            styles.backgroundColor = "#ff9f0a";
+            styles.backgroundColor = "#007AFF";
             styles.color = "#FFFFFF";
             break;
         case "action":
