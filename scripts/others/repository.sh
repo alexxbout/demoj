@@ -1,6 +1,12 @@
 #!/bin/bash
 # shellcheck shell=bash source=/dev/null disable=SC2154
 
+: '
+This script initializes the repository for the demoj project.
+The script clones the Git repository to the specified directory.
+The script switches to the user s branch.
+'
+
 # Include utility functions
 source "$(dirname "$0")"/utils.sh
 
@@ -14,11 +20,11 @@ echo "Initializing repo"
 user="$SUDO_USER"
 
 # Define constants
-readonly access_token="glpat-yskhYMsdxsxV4VbFrz2M"
-readonly gitlab_url="gitlab.istic.univ-rennes1.fr"
-readonly repo_path="/arthadam/demoj.git"
-readonly repo="https://demoj:$access_token@$gitlab_url$repo_path"
-readonly clone_dir="/home/$user/demoj"
+access_token="glpat-yskhYMsdxsxV4VbFrz2M"
+gitlab_url="gitlab.istic.univ-rennes1.fr"
+repo_path="/arthadam/demoj.git"
+repo="https://demoj:$access_token@$gitlab_url$repo_path"
+clone_dir="/home/$user/demoj"
 
 # Check if Git is installed
 if ! command -v git &> /dev/null; then

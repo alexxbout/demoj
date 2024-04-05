@@ -1,6 +1,12 @@
 #!/bin/bash
 # shellcheck shell=bash source=/dev/null disable=SC2154
 
+: '
+This script initializes the Raspios for the demoj project.
+The script updates the system, installs pip, venv, and build-essential.
+The script also configures I2C.
+'
+
 # Including utility functions
 source "$(dirname "$0")"/utils.sh
 

@@ -1,6 +1,14 @@
 #!/bin/bash
 # shellcheck shell=bash source=/dev/null disable=SC2154
 
+: '
+This script initializes the static IP for the demoj project.
+
+Network: 10.3.141.1
+Terminal: 10.3.141.2
+Server: 10.3.141.3
+'
+
 # Inclusion of utility functions
 source "$(dirname "$0")"/utils.sh
 

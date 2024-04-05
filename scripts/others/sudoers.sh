@@ -1,6 +1,11 @@
 #!/bin/bash
 # shellcheck shell=bash source=/dev/null disable=SC2154
 
+: '
+This script initializes the sudoers file for the demoj project.
+The script adds the reboot and shutdown commands to the sudoers file.
+'
+
 # Including utility functions
 source "$(dirname "$0")"/utils.sh
 

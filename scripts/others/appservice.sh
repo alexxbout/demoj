@@ -1,6 +1,11 @@
 #!/bin/bash
 # shellcheck shell=bash source=/dev/null disable=SC2154
 
+: '
+This script initializes the app service for the demoj project.
+The app service runs the app.py script in the virtual environment when the system boots.
+'
+
 # Including utility functions
 source "$(dirname "$0")"/utils.sh
 

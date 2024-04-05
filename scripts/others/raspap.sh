@@ -1,6 +1,14 @@
 #!/bin/bash
 # shellcheck shell=bash source=/dev/null disable=SC2154
 
+: '
+This script initializes RaspAP on the Raspberry Pi.
+RaspAP is a web interface to manage a wireless access point.
+
+The SSID is changed to "demoj".
+The password is removed.
+'
+
 # Including utility functions
 source "$(dirname "$0")"/utils.sh
 
@@ -30,11 +38,14 @@ file="/etc/hostapd/hostapd.conf"
 echo "Creating backup of $file"
 create_bak "$file" >> "$log_file" 2>&1 || die "Failed to create backup of $file"
 
-echo "Changing default SSID"
+echo "Removing wifi password"
 sed -i '/auth_algs=1/s/^/#/g' "$file"
 sed -i '/wpa_key_mgmt=WPA-PSK/s/^/#/g' "$file"
 sed -i '/wpa=2/s/^/#/g' "$file"
 sed -i '/wpa_pairwise=cCMp/s/^/#/g' "$file"
+
+echo "Changing SSID to demoj"
+sed -i 's/ssid=raspi-webgui/ssid=demoj/g' "$file"
 
 # TODO: Update default login and password to portal
 

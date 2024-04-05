@@ -1,6 +1,10 @@
 #!/bin/bash
 # shellcheck shell=bash disable=SC2154,SC2034
 
+: '
+This script is a collection of utility functions.
+'
+
 log_file="../.logs.txt"
 
 RED="\e[31m"

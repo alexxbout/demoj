@@ -1,6 +1,12 @@
 #!/bin/bash
 # shellcheck shell=bash source=/dev/null disable=SC2154
 
+: '
+This script initializes the virtual environment for the demoj project.
+All libraries and dependencies are installed in the virtual environment.
+The deamon will use the virtual environment to run scripts.
+'
+
 # Including utility functions
 source "$(dirname "$0")"/utils.sh
 

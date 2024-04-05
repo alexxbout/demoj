@@ -1,6 +1,11 @@
 #!/bin/bash
 # shellcheck shell=bash source=/dev/null disable=SC2154
 
+: '
+This script initializes the Demoj Connect application.
+The application is built and moved to the final directory.
+'
+
 # Including utility functions
 source "$(dirname "$0")"/utils.sh
 

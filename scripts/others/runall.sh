@@ -1,6 +1,10 @@
 #!/bin/bash
 # shellcheck shell=bash source=/dev/null disable=SC2154
 
+: '
+This script runs all the scripts in the others directory.
+'
+
 # Including utility functions
 source "$(dirname "$0")"/utils.sh
 
