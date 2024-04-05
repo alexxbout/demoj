@@ -14,17 +14,23 @@ cond_global = None
 # Socket
 #################################################################
 
+def notifyMain():
+    global cond_global
+    with cond_global:
+        cond_global.notify()
+
 @sio.event
 def connect():
     print("Connected to network")
+    notifyMain() # Notify the main process to stop loading animation and start demoj animation
+
 
 @sio.event
 def disconnect():
     print("Disconnected from network")
 
     # Notifying the main process to restart the socket
-    global cond_global
-    cond_global.notify()
+    notifyMain()
 
 @sio.event
 def stop():
@@ -54,6 +60,7 @@ def socket_routine(cond):
         except socketio.exceptions.ConnectionError:
             print("Connection to network socket failed, retrying in 5 seconds")
             time.sleep(5)
-
-    cond.notify()
+    #with cond:
+    #    cond.notify()
+    # I added this in events instead
     sio.wait()
