@@ -20,8 +20,10 @@ nbScripts=0
 
 if [ "$user" = "network" ]; then
     nbScripts=7
-else
-    nbScripts=6
+elif [ "$user" = "terminal" ]; then
+    nbScripts=7
+elif [ "$user" = "server" ]; then
+    nbScripts=7
 fi
 
 # Executing scripts based on the user
@@ -46,6 +48,9 @@ if [ "$user" = "network" ]; then
 else
     "./others/staticip.sh" "$user" || die "Failed to execute staticip.sh"
     echo -e "${GREEN}5/$nbScripts${RESET} scripts executed"
+
+    "./others/wifi.sh" || die "Failed to execute wifi.sh"
+    echo -e "${GREEN}6/$nbScripts${RESET} scripts executed"
 
     # TODO: Add a case for the server to build apps
 fi
