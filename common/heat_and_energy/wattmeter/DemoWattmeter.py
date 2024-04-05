@@ -46,3 +46,10 @@ class Wattmeter:
     def getWattsMW(self):
         """Get watts in mW"""
         return self.__ina.get_power_mW()
+
+    def getVoltsV(self):
+        """Get volts in V"""
+        return self.__ina.get_bus_voltage_V()
+
+    def getIntensityMA(self):
+        return self.__ina.get_current_mA()
