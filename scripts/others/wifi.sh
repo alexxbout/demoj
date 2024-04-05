@@ -2,8 +2,8 @@
 # shellcheck shell=bash source=/dev/null disable=SC2154
 
 : '
-This script initializes the wifi for the demoj project.
-The script adds a new entry in wpasupplicant.conf with a no password network called demoj.
+This script initializes the wifi for the DemoJ project.
+The script adds a new entry in wpasupplicant.conf with a no password network called DemoJ.
 '
 
 # Including utility functions
@@ -12,11 +12,11 @@ source "$(dirname "$0")"/utils.sh
 # Checking if the script is executed as root
 check_root
 
-# Add a new entry in wpasupplicant.conf with a no password network called demoj
+# Add a new entry in wpasupplicant.conf with a no password network called DemoJ
 echo "Adding a new entry in wpasupplicant.conf"
 cat <<EOL >> /etc/wpa_supplicant/wpa_supplicant.conf
 network={
-    ssid="demoj"
+    ssid="DemoJ"
     key_mgmt=NONE
 }
 EOL

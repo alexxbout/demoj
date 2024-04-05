@@ -5,7 +5,7 @@
 This script initializes RaspAP on the Raspberry Pi.
 RaspAP is a web interface to manage a wireless access point.
 
-The SSID is changed to "demoj".
+The SSID is changed to "DemoJ".
 The password is removed.
 '
 
@@ -44,8 +44,8 @@ sed -i '/wpa_key_mgmt=WPA-PSK/s/^/#/g' "$file"
 sed -i '/wpa=2/s/^/#/g' "$file"
 sed -i '/wpa_pairwise=cCMp/s/^/#/g' "$file"
 
-echo "Changing SSID to demoj"
-sed -i 's/ssid=raspi-webgui/ssid=demoj/g' "$file"
+echo "Changing SSID to DemoJ"
+sed -i 's/ssid=raspi-webgui/ssid=DemoJ/g' "$file"
 
 # TODO: Update default login and password to portal
 
