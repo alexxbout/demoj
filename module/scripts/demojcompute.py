@@ -87,7 +87,7 @@ def division(nb1, nb2):
 	b = min(nb1, nb2)	
 
 	if b == 0:
-		raise ValueError("Division par zéro impossible")
+		raise ValueError("Division par zero impossible")
 
 	if not stress:
 		return nb1 / nb2
@@ -272,22 +272,13 @@ def parse_plus():
 	expr = re.sub(r'(\d+\.\d+)\((\d+\.\d+)\)', r'\1 * (\2)', expr)
 	expr = re.sub(r'\+(?=\d)', r'', expr)
 
-def main():
+def compute(value):
 	global expr
 	global global_index
 	global stress
 	
-	if len(sys.argv) < 2:
-		return None
-	if len(sys.argv) >= 3:
-		stress = sys.argv[2].lower == "false" #TODO: repair
-	expr = sys.argv[1]
+	stress = True
+	expr = value
 	global_index = 0
 	parse_plus()
-	print(parse_sum())
-
-
-if __name__ == "__main__":
-	main()
-
-#TODO check no exp
+	return parse_sum()

@@ -1,5 +1,6 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, make_response
 from flask_cors import CORS
+from demojcompute import compute
 
 APP_FOLDER = "../app"
 APP_URL = "/app/"
@@ -15,14 +16,31 @@ CORS(app)
 
 @app.route("/api")
 def api():
-    return jsonify({"message": "Server API is running"})
+    return make_response(jsonify({"message": "Server API is running"}), 200)
     
 #################################################################
 # Scenarios
 #################################################################
     
-# TODO: Calculator (fibonacci, factorial, prime number)
+# TODO: Calculator (standard, fibonacci, factorial, prime)
+@app.route("/api/scenarios/calculator/<string:mode>/<string:value>")
+def calculator(mode, value):
+    if mode == "standard":
+        pass
+    elif mode == "fibonacci":
+        value = "fib(" + value + ")"
+    elif mode == "factorial":
+        value = "fact(" + value + ")"
+    elif mode == "prime":
+        value = "prime(" + value + ")"
+    else:
+        return make_response(jsonify({"error": "Invalid mode"}), 400)
     
+    # Call function
+    result = compute(value)
+
+    return make_response(jsonify({"result": result}), 200)
+
 # TODO: Streaming video
     
 # TODO: Image processing
