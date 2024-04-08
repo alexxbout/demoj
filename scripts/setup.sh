@@ -31,6 +31,7 @@ fi
 
 # Set executable permissions for all scripts in the others directory
 chmod +x others/*.sh
+chmod +x daemons/*.sh
 
 clear
 
