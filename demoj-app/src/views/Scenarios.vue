@@ -27,7 +27,8 @@ import ScenarioCard from "@/components/ScenarioCard.vue";
 import { Chaussette } from "@/services/Chaussette";
 import type { IScenario } from "@/types/IConfig";
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from "@ionic/vue";
-import { computed, inject, onMounted, ref } from "vue";
+import { calculator } from "ionicons/icons";
+import { inject, onMounted, ref } from "vue";
 
 const page = ref();
 const presenting = ref();
@@ -35,7 +36,14 @@ const presenting = ref();
 const socket = inject("socket") as Chaussette;
 const config = socket.getConfig();
 
-const scenarios = computed<IScenario[]>(() => config.value?.scenarios ?? []);
+const scenarios = ref<IScenario[]>([
+    {
+        name: "calculator",
+        title: "Calculatrice",
+        description: "Effectuez des calculs avancés. Choisissez le niveau de complexité et l'endroit où le calcul sera effectué.",
+        icon: calculator,
+    },
+]);
 
 const mode = ref<"client" | "operator">("client");
 

@@ -1,7 +1,17 @@
 <template>
     <ion-card>
         <ion-card-header>
-            <ion-card-title>{{ props.data.name }}</ion-card-title>
+            <ion-grid style="width: 100%;">
+                <ion-row class="ion-align-items-start ion-justify-content-start">
+                    <ion-col size="auto">
+                        <ion-icon :icon="calculator" size="large" style="color: black;" />
+                    </ion-col>
+
+                    <ion-col size="auto">
+                        <ion-card-title>{{ props.data.title }}</ion-card-title>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
         </ion-card-header>
 
         <ion-card-content>{{ props.data.description }}</ion-card-content>
@@ -12,7 +22,8 @@
 
 <script setup lang="ts">
 import { IScenario } from "@/types/IConfig";
-import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle } from "@ionic/vue";
+import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonGrid, IonIcon, IonRow } from "@ionic/vue";
+import { calculator } from "ionicons/icons";
 import { useRouter } from "vue-router";
 
 const props = defineProps<{
@@ -22,6 +33,6 @@ const props = defineProps<{
 const router = useRouter();
 
 const go = () => {
-    router.push({ name: "scenario-details", params: { id: props.data.id } });
+    router.push({ name: "scenario-details", params: { id: props.data.name } });
 };
 </script>

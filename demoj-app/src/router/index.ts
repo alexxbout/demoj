@@ -59,6 +59,9 @@ const routes: Array<RouteRecordRaw> = [
                 path: "scenarios/:id",
                 name: "scenario-details",
                 component: ScenarioDetails,
+                children: [
+                    // TODO: Ajouter les routes des scénarios ici, plutot que de faire un systeme dynamique
+                ]
             },
             {
                 path: "terminal",

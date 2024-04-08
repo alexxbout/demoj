@@ -11,8 +11,9 @@ export interface IParameter {
 
 export interface IScenario {
     name: string;
+    title: string;
     description: string;
-    id: number;
+    icon?: string;
 };
 
 export interface IConfig {
