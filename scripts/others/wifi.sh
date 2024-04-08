@@ -12,18 +12,26 @@ source "$(dirname "$0")"/utils.sh
 # Checking if the script is executed as root
 check_root
 
-# Add a new entry in wpasupplicant.conf with a no password network called DemoJ
-echo "Adding a new entry in wpasupplicant.conf"
-cat <<EOL >> /etc/wpa_supplicant/wpa_supplicant.conf
-network={
-    ssid="DemoJ"
-    key_mgmt=NONE
-}
-EOL
+connection="demoj_connection"
+ssid="DemoJ"
 
-# Restarting the network service
-echo "Restarting the network service"
-systemctl restart networking.service >> "$log_file" 2>&1 || die "Failed to restart the network service"
+# Create a new entry in nmcli
+echo "Creating a new wifi connection"
+nmcli connection add type wifi ifname wlan0 con-name $connection ssid $ssid >> "$log_file" 2>&1 || die "Failed to create a new wifi connection"
+
+# Removing password from the wifi connection
+echo "Removing password from the wifi connection"
+nmcli connection modify $connection wifi-sec.key-mgmt none >> "$log_file" 2>&1 || die "Failed to remove password from the wifi connection"
+
+# Configure autoconnection and retry parameters
+echo "Configuring autoconnection and retry parameters"
+nmcli connection modify $connection connection.autoconnect yes >> "$log_file" 2>&1 || die "Failed to configure autoconnection"
+nmcli connection modify $connection connection.auth-retries 0 >> "$log_file" 2>&1 || die "Failed to configure auth retries"
+nmcli connection modify $connection connection.autoconnect-priority 1 >> "$log_file" 2>&1 || die "Failed to configure autoconnection priority"
+nmcli connection modify $connection connection.autoconnect-retries 0 >> "$log_file" 2>&1 || die "Failed to configure autoconnection retries"
+
+nmcli connection modify $connection connection.mode auto >> "$log_file" 2>&1 || die "Failed to configure mode"
+# nmcli connection modify $connection ipv4.method auto >> "$log_file" 2>&1 || die "Failed to configure IPv4 method"
 
 echo -e "${GREEN}Wifi setup complete ${RESET}"
 

@@ -1,6 +1,8 @@
 #!/bin/bash
 # shellcheck shell=bash source=/dev/null disable=SC2154
 
+# NOTE: MAYBE USE NMCLI INSTEAD OF THIS SCRIPT
+
 : '
 This script initializes the static IP for the demoj project.
 
@@ -22,7 +24,7 @@ echo "Initializing static IP"
 user="$SUDO_USER"
 
 # Configuration file location
-file="/etc/dhcpcd.conf"
+file="/etc/network/interfaces"
 
 # Check if the file already exists
 if [ -f "$file" ]; then
@@ -44,10 +46,12 @@ gateway="10.3.141.1"
 
 # Write the configuration to the file
 cat <<EOL >"$file"
-interface $wlan_interface
-static ip_address=$static_ip/$subnet_mask
-static routers=$gateway
-static domain_name_servers=8.8.8.8 8.8.4.4
+auto $wlan_interface
+iface $wlan_interface inet static
+    address $static_ip
+    netmask $subnet_mask
+    gateway $gateway
+    dns-nameservers 8.8.8.8 8.8.4.4
 EOL
 
 # Restart the networking service
