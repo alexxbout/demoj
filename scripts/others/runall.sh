@@ -53,7 +53,7 @@ else
     # "./others/staticip.sh" "$user" || die "Failed to execute staticip.sh"
     # echo -e "${GREEN}6/$nbScripts${RESET} scripts executed"
 
-    "./others/wifi.sh" || die "Failed to execute wifi.sh"
+    "./others/wifiservice.sh" || die "Failed to execute wifiservice.sh"
     echo -e "${GREEN}6/$nbScripts${RESET} scripts executed"
 
     # TODO: Add a case for the server to build apps
