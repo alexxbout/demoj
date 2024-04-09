@@ -2,6 +2,7 @@
 
 # SSID to monitor
 ssid="DemoJ"
+pass=""
 
 # Check if the Raspberry Pi is already connected to a network with the SSID "DemoJ"
 connected_ssid=$(iwgetid -r)
@@ -13,10 +14,10 @@ fi
 # Loop to monitor and connect to the network
 while true; do
     # Check if the network exists
-    if iwlist wlan0 scan | grep -q "$ssid"; then
+    if sudo iwlist wlan0 scanning | grep -q "$ssid"; then
         echo "The $ssid network has been found. Attempting to connect..."
         # Try to connect to the network
-        raspi-config nonint do_wifi_ssid_passphrase "$ssid" ""
+        raspi-config nonint do_wifi_ssid_passphrase "$ssid" "$pass"
         # Check if the connection was successful
         connected_ssid=$(iwgetid -r)
         if [ "$connected_ssid" == "$ssid" ]; then
