@@ -31,7 +31,6 @@ fi
 
 # Set executable permissions for all scripts in the others directory
 chmod +x others/*.sh
-chmod +x daemons/*.sh
 
 clear
 
@@ -42,7 +41,7 @@ echo
 
 # Afficher les options disponibles
 echo -e "${ORANGE}Please select the options you want to install: ${RESET}"
-options=("Install DemoJ on this device" "Run appservice" "Run repository" "Run sudoers" "Run virtualenv" "Run raspap" "Run staticip" "Run raspios" "Run demojconnect" "Run wifiservice" "Exit")
+options=("Install DemoJ on this device" "Run appservice" "Run repository" "Run sudoers" "Run virtualenv" "Run raspap" "Run raspios" "Run demojconnect" "Run wifi" "Exit")
 select install_option in "${options[@]}"; do
     case $REPLY in
         1) "others/runall.sh" "$user"; break;;
@@ -51,11 +50,10 @@ select install_option in "${options[@]}"; do
         4) "others/sudoers.sh" "$user"; break;;
         5) "others/virtualenv.sh" "$user"; break;;
         6) "others/raspap.sh"; break;;
-        7) "others/staticip.sh"; break;;
-        8) "others/raspios.sh"; break;;
-        9) "others/demojconnect.sh"; break;;
-        10) "others/wifiservice.sh"; break;;
-        11) echo "Exiting..."; exit 0;;
+        7) "others/raspios.sh"; break;;
+        8) "others/demojconnect.sh"; break;;
+        9) "others/wifi.sh"; break;;
+        10) echo "Exiting..."; exit 0;;
         *) echo -e "${RED}Invalid option. Please try again. ${RESET}";;
     esac
 done
