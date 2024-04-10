@@ -33,6 +33,6 @@ const props = defineProps<{
 const router = useRouter();
 
 const go = () => {
-    router.push({ name: "scenario-details", params: { id: props.data.name } });
+    router.push({ name: props.data.name });
 };
 </script>

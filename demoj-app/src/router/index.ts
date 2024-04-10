@@ -1,16 +1,6 @@
 import { createRouter, createWebHistory } from "@ionic/vue-router";
 import { NavigationGuardNext, RouteLocationNormalized, RouteRecordRaw } from "vue-router";
 
-// Import des composants
-import Debug from "@/views/Debug.vue";
-import Home from "@/views/Home.vue";
-import ScenarioDetails from "@/views/ScenarioDetails.vue";
-import Scenarios from "@/views/Scenarios.vue";
-import Tabs from "@/views/Tabs.vue";
-import Network from "@/views/modules/Network.vue";
-import Server from "@/views/modules/Server.vue";
-import Terminal from "@/views/modules/Terminal.vue";
-
 // Déclaration de la fonction authGuard avant son utilisation
 const authGuard = (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
     const mode = localStorage.getItem("mode");
@@ -29,22 +19,27 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: "/home",
         name: "home",
-        component: Home,
+        component: () => import("@/views/Home.vue"),
     },
     {
         path: "/tabs/",
         redirect: "/tabs/scenarios",
-        component: Tabs,
+        component: () => import("@/views/Tabs.vue"),
         children: [
             {
                 path: "scenarios",
                 name: "scenarios",
-                component: Scenarios,
+                component: () => import("@/views/Scenarios.vue"),
+            },
+            {
+                path: "scenarios/calculator",
+                name: "calculator",
+                component: () => import("@/views/scenarios/Calculator.vue"),
             },
             {
                 path: "debug",
                 name: "debug",
-                component: Debug,
+                component: () => import("@/views/Debug.vue"),
                 beforeEnter: (to, from, next) => {
                     const debugMode = localStorage.getItem("debugMode");
                     const mode = localStorage.getItem("mode");
@@ -56,29 +51,21 @@ const routes: Array<RouteRecordRaw> = [
                 },
             },
             {
-                path: "scenarios/:id",
-                name: "scenario-details",
-                component: ScenarioDetails,
-                children: [
-                    // TODO: Ajouter les routes des scénarios ici, plutot que de faire un systeme dynamique
-                ]
-            },
-            {
                 path: "terminal",
                 name: "terminal",
-                component: Terminal,
+                component: () => import("@/views/modules/Terminal.vue"),
                 beforeEnter: authGuard,
             },
             {
                 path: "network",
                 name: "network",
-                component: Network,
+                component: () => import("@/views/modules/Network.vue"),
                 beforeEnter: authGuard,
             },
             {
                 path: "server",
                 name: "server",
-                component: Server,
+                component: () => import("@/views/modules/Server.vue"),
                 beforeEnter: authGuard,
             },
         ],

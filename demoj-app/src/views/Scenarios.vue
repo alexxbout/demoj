@@ -13,10 +13,6 @@
                 </ion-toolbar>
             </ion-header>
 
-            <!-- <div v-show="mode == 'operator'" class="ion-padding">
-                <RunningScenarios :presenting="presenting" />
-            </div> -->
-
             <scenario-card v-for="scenario in scenarios" :data="scenario" />
         </ion-content>
     </ion-page>
@@ -40,7 +36,7 @@ const scenarios = ref<IScenario[]>([
     {
         name: "calculator",
         title: "Calculatrice",
-        description: "Effectuez des calculs avancés. Choisissez le niveau de complexité et l'endroit où le calcul sera effectué.",
+        description: "Effectuez des calculs simples ou exécutez des fonctions complexes, côté client ou serveur.",
         icon: calculator,
     },
 ]);
