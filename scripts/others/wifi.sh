@@ -28,8 +28,8 @@ fi
 
 # Initialize the network service
 echo "Initializing network service"
-nmcli connection add type wifi ifname wlan0 ssid "$ssid"
-nmcli connection modify "wifi-wlan0" ipv4.method manual ipv4.addresses $static_ip/$mask ipv4.gateway $gateway ipv4.dns $dns
+nmcli connection add type wifi ifname wlan0 ssid "$ssid" >> "$log_file" 2>&1 || die "Failed to add wifi connection"
+nmcli connection modify "wifi-wlan0" ipv4.method manual ipv4.addresses $static_ip/$mask ipv4.gateway $gateway ipv4.dns $dns >> "$log_file" 2>&1 || die "Failed to modify wifi connection"
 
 echo -e "${GREEN}Network service initialized ${RESET}"
 
