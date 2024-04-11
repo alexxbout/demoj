@@ -40,7 +40,7 @@ const result = ref("");
 
 const loading = ref<boolean>(false);
 
-const handleFuncExec = (mode: string, value: string) => {
+const handleFuncExec = (_mode: string, _value: string) => {
     loading.value = true;
 
     // TODO: Implement the server-side logic
