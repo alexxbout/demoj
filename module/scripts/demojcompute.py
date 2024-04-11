@@ -258,10 +258,10 @@ def fib(n):
 		return fib_sequence[-1]
 
 def fact_sub(match):
-	return str(float(fact(int(match.group(1)))))
+	return str(Decimal(fact(int(match.group(1)))))
 
 def fib_sub(match):
-	return str(float(fib(int(match.group(1)))))
+	return str(Decimal(fib(int(match.group(1)))))
 
 def parse_plus():
 	global expr
@@ -281,4 +281,6 @@ def compute(value):
 	expr = value
 	global_index = 0
 	parse_plus()
-	return parse_sum()
+	res = parse_sum();
+	#print(res)
+	return res
