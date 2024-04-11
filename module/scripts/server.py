@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, make_response
+from flask import Flask, jsonify, request, render_template, redirect, url_for, make_response
 from flask_cors import CORS
 from demojcompute import compute
 
@@ -17,9 +17,24 @@ CORS(app)
 @app.route("/api")
 def api():
     return make_response(jsonify({"message": "Server API is running"}), 200)
+
+#################################################################
+# Scenarios app
+#################################################################
+
+@app.errorhandler(404)
+def not_found():
+    if request.path.startswith("/app"):
+        return redirect(url_for("index"))
+    return jsonify({"error": "Not found"}), 404
+
+@app.route("/")
+@app.route("/app")
+def index():
+    return render_template("index.html")
     
 #################################################################
-# Scenarios
+# Scenarios endoints
 #################################################################
     
 # TODO: Calculator (standard, fibonacci, factorial, prime)
