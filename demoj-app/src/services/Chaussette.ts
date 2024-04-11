@@ -33,12 +33,7 @@ export class Chaussette {
 
             // Request the configuration
             API.getConfig().then((config) => {
-                if (config) {
-                    this.config.value = config;
-
-                    console.log("Configuration loaded");
-                    console.log(this.config.value);
-                }
+                if (config) this.config.value = config;
             });
         });
 
