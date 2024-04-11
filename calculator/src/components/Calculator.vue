@@ -83,15 +83,6 @@ const operator = (op: string) => {
 
 const equal = () => {
     emits("@execute", formula.value);
-    // if (mode.value === "client") {
-    //     try {
-    //         formula.value = eval(formula.value);
-    //     } catch (e) {
-    //         formula.value = ":(";
-    //     }
-    // } else {
-    //     // TODO: Send the formula to the server and receive the result
-    // }
 
     if (field.value) {
         setTimeout(scrollToLeft, 1);
