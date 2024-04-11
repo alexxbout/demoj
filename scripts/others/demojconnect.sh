@@ -9,6 +9,9 @@ The application is built and moved to the final directory.
 # Including utility functions
 source "$(dirname "$0")"/utils.sh
 
+# Checking if the script is executed as root
+check_root
+
 user="$SUDO_USER"
 
 if [ "$user" != "network" ]; then
