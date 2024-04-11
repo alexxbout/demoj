@@ -1,9 +1,7 @@
 <template>
-    <div class="flex flex-col justify-between w-screen h-screen px-5 py-5 overflow-x-hidden">
+    <div class="flex flex-col w-screen h-screen px-5 py-5 overflow-x-hidden justify-stretch">
         <div class="flex flex-col w-full h-max gap-y-5">
             <div class="flex items-center justify-between">
-                <!-- <button class="text-lg font-medium text-blue-600 w-max">Retour</button> -->
-
                 <span class="text-4xl font-semibold">Calculatrice</span>
 
                 <div class="w-10 h-10">
@@ -20,8 +18,8 @@
             </div>
         </div>
 
-        <Functions v-if="appMode == 'functions'" @@execute="handleFuncExec" />
-        <Calculator ref="calculator" :result="result" v-else @@execute="handleCalcExec" />
+        <Functions v-if="appMode == 'functions'" @@execute="handleFuncExec" ref="functions" :result="result" />
+        <Calculator v-else @@execute="handleCalcExec" ref="calculator" :result="result" />
     </div>
 </template>
 
@@ -30,43 +28,60 @@ import axios, { AxiosResponse } from "axios";
 import { onMounted, ref } from "vue";
 import Calculator from "./components/Calculator.vue";
 import Functions from "./components/Functions.vue";
+import * as compute from "./compute.ts";
+import { FuncTypes } from "./types";
 
 const communicationMode = ref<"server" | "client">("client");
 const appMode = ref<"calculator" | "functions">("calculator");
 
 const calculator = ref<InstanceType<typeof Calculator> | null>(null);
+const functions = ref<InstanceType<typeof Functions> | null>(null);
 
 // Variable used to store standard calcul
 const result = ref("");
 
 const loading = ref<boolean>(false);
 
-const handleFuncExec = (_mode: string, _value: string) => {
+const handleFuncExec = async (mode: FuncTypes, value: string) => {
     loading.value = true;
 
-    // TODO: Implement the server-side logic
+    if (functions.value) {
+        if (communicationMode.value == "client") {
+            const n = parseInt(value);
+            switch (mode) {
+                case FuncTypes.FACTORIAL:
+                    functions.value.setResult(compute.fact(n).toString());
+                    break;
+                case FuncTypes.PRIME:
+                    functions.value.setResult(compute.prime(n) ? "Vrai" : "Faux");
+                    break;
+                case FuncTypes.FIBONACCI:
+                    functions.value.setResult(compute.fib(n).toString());
+                    break;
+            }
+        } else {
+            await axios.get(`/api/scenarios/calculator/${mode}/${value}`).then((response: AxiosResponse<{ result: string }>) => {
+                functions.value?.setResult(response.data.result);
+            });
+        }
+    }
 
-    setTimeout(() => {
-        loading.value = false;
-    }, 2000);
+    loading.value = false;
 };
 
 const handleCalcExec = async (value: string) => {
+    loading.value = true;
+
     if (calculator.value) {
         if (communicationMode.value == "client") {
             calculator.value.setResult(performCalculation(value));
         } else {
-            loading.value = true;
-            // TODO: Send the calculation to the server
-            // using axios, import from .env VITE_API_ENDPOINT and call IP/api/scenarios/calculator/<mode>/<value>
-
             await axios.get(`/api/scenarios/calculator/standard/${value}`).then((response: AxiosResponse<{ result: string }>) => {
                 calculator.value?.setResult(response.data.result);
             });
-
-            loading.value = false;
         }
     }
+    loading.value = false;
 };
 
 const performCalculation = (value: string) => {
