@@ -3,7 +3,6 @@ import re
 import random
 from decimal import Decimal
 
-expr = None
 global_index = None
 stress = True
 
@@ -244,18 +243,26 @@ def fact(n):
 		for i in range(1, n + 1):
 			res = multiply(res, i)
 		return res
+
 def fib(n):
-	if n <= 0:
-		return None
-	elif n == 1:
-		return 0
-	elif n == 2:
-		return 1
-	else:
-		fib_sequence = [0, 1]
-		for i in range(2, n):
-			fib_sequence.append(fib_sequence[-1] + fib_sequence[-2])
-		return fib_sequence[-1]
+    if n <= 0:
+        return None
+    elif n == 1:
+        return 0
+    elif n == 2:
+        return 1
+    else:
+        fib_sequence = [0, 1]
+        for i in range(2, n):
+            fib_sequence.append(fib_sequence[-1] + fib_sequence[-2])
+        return fib_sequence[-1]
+
+def fib(n):
+    if (n <= 0):
+    	return 0;
+    if (n == 1):
+    	return 1;
+    return fib(n - 1) + fib(n - 2);
 
 def fact_sub(match):
 	return str(Decimal(fact(int(match.group(1)))))
@@ -263,7 +270,8 @@ def fact_sub(match):
 def fib_sub(match):
 	return str(Decimal(fib(int(match.group(1)))))
 
-def parse_plus():
+#Parsing the expresion given by the user
+def clean_expr():
 	global expr
 
 	expr = re.sub(r"fib\((\d+)\)", fib_sub, expr)
@@ -271,6 +279,7 @@ def parse_plus():
 	expr = re.sub(r'(?<!\d\.)(?<!\d)(\d+)(?![.\d])', r'\1.0', expr)
 	expr = re.sub(r'(\d+\.\d+)\((\d+\.\d+)\)', r'\1 * (\2)', expr)
 	expr = re.sub(r'\+(?=\d)', r'', expr)
+	return (expr)
 
 def compute(value):
 	global expr
@@ -278,9 +287,15 @@ def compute(value):
 	global stress
 	
 	stress = True
-	expr = value
 	global_index = 0
-	parse_plus()
+	expr = value
+
+	clean_expr()
 	res = parse_sum();
-	#print(res)
+	print(res)
 	return res
+
+if __name__ == "__main__":
+	compute(sys.argv[1])
+
+#TODO fact and fib doesn't need more parsing (change)
