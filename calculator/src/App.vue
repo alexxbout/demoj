@@ -42,6 +42,10 @@ const result = ref("");
 
 const loading = ref<boolean>(false);
 
+const escapeDivOperator = (value: string) => {
+    return value.replace(/\//g, 'div');
+};
+
 const handleFuncExec = async (mode: FuncTypes, value: string) => {
     loading.value = true;
 
@@ -60,6 +64,7 @@ const handleFuncExec = async (mode: FuncTypes, value: string) => {
                     break;
             }
         } else {
+            value = escapeDivOperator(value); // Escape the division operator
             await axios.get(`/api/scenarios/calculator/${mode}/${value}`).then((response: AxiosResponse<{ result: string }>) => {
                 functions.value?.setResult(response.data.result);
             });
@@ -76,6 +81,7 @@ const handleCalcExec = async (value: string) => {
         if (communicationMode.value == "client") {
             calculator.value.setResult(performCalculation(value));
         } else {
+            value = escapeDivOperator(value); // Escape the division operator
             await axios.get(`/api/scenarios/calculator/standard/${value}`).then((response: AxiosResponse<{ result: string }>) => {
                 calculator.value?.setResult(response.data.result);
             });
