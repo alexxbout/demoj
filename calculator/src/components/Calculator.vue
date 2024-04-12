@@ -51,6 +51,7 @@ const nbOpenParentheses = ref(0);
 
 const clear = () => {
     formula.value = "";
+    nbOpenParentheses.value = 0;
 };
 
 const invertSign = () => {
@@ -99,7 +100,7 @@ const setResult = (value: string) => {
     formula.value = value;
 };
 
-const parenthese = () => {
+const parenthese = () => {    
     if (nbOpenParentheses.value === 0) {
         nbOpenParentheses.value++;
         formula.value += "(";
