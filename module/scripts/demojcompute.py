@@ -276,6 +276,7 @@ def clean_expr():
 
 	expr = re.sub(r"fib\((\d+)\)", fib_sub, expr)
 	expr = re.sub(r"fact\((\d+)\)", fact_sub, expr)
+	expr = re.sub(r'div', r'/', expr)
 	expr = re.sub(r'(?<!\d\.)(?<!\d)(\d+)(?![.\d])', r'\1.0', expr)
 	expr = re.sub(r'(\d+\.\d+)\((\d+\.\d+)\)', r'\1 * (\2)', expr)
 	expr = re.sub(r'\+(?=\d)', r'', expr)
