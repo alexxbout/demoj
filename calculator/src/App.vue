@@ -12,10 +12,10 @@
                 <button @click="communicationMode = 'client'" :class="communicationMode == 'client' ? 'bg-white text-black' : 'text-gray-500'" class="w-full px-5 py-2 text-lg font-medium text-center rounded-lg">Client</button>
                 <button @click="communicationMode = 'server'" :class="communicationMode == 'server' ? 'bg-white text-black' : 'text-gray-500'" class="w-full px-5 py-2 text-lg font-medium text-center rounded-lg">Serveur</button>
             </div>
-            <div class="flex items-center justify-center w-full p-1 overflow-hidden bg-gray-200 rounded-xl">
+            <!-- <div class="flex items-center justify-center w-full p-1 overflow-hidden bg-gray-200 rounded-xl">
                 <button @click="appMode = 'calculator'" :class="appMode == 'calculator' ? 'bg-white text-black' : 'text-gray-500'" class="w-full px-5 py-2 text-lg font-medium text-center rounded-lg">Standard</button>
                 <button @click="appMode = 'functions'" :class="appMode == 'functions' ? 'bg-white text-black' : 'text-gray-500'" class="w-full px-5 py-2 text-lg font-medium text-center rounded-lg">Fonctions</button>
-            </div>
+            </div> -->
         </div>
 
         <Functions v-if="appMode == 'functions'" @@execute="handleFuncExec" ref="functions" :result="result" />

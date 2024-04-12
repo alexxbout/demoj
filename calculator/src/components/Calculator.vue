@@ -6,6 +6,11 @@
     </div>
 
     <div class="grid grid-cols-4 gap-4">
+        <Key @@click="fact" text="Fact" type="action" />
+        <Key @@click="fib" text="Fib" type="action" />
+        <Key @@click="prim" text="Prim" type="action" />
+        <Key @@click="parenthese" text="( )" type="action" />
+
         <Key @@click="clear" text="AC" type="action" />
         <Key @@click="invertSign" text="+/-" type="action" />
         <Key @@click="append('%')" text="%" type="action" />
@@ -42,6 +47,7 @@ const emits = defineEmits<{
 
 const field = ref<HTMLElement | null>(null);
 const formula = ref("");
+const nbOpenParentheses = ref(0);
 
 const clear = () => {
     formula.value = "";
@@ -91,6 +97,38 @@ const equal = () => {
 
 const setResult = (value: string) => {
     formula.value = value;
+};
+
+const parenthese = () => {
+    if (nbOpenParentheses.value === 0) {
+        nbOpenParentheses.value++;
+        formula.value += "(";
+    } else {
+        const lastChar = formula.value.slice(-1);
+        const operators = ["+", "-", "*", "/"];
+        if (operators.includes(lastChar) || lastChar === "(") {
+            formula.value += "(";
+            nbOpenParentheses.value++;
+        } else {
+            nbOpenParentheses.value--;
+            formula.value += ")";
+        }
+    }
+};
+
+const fact = () => {
+    formula.value += "fact(";
+    nbOpenParentheses.value++;
+};
+
+const fib = () => {
+    formula.value += "fib(";
+    nbOpenParentheses.value++;
+};
+
+const prim = () => {
+    formula.value += "prim(";
+    nbOpenParentheses.value++;
 };
 
 defineExpose({
