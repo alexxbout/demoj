@@ -1,5 +1,5 @@
 <template>
-    <button @click.prevent="emits('@click')" :class="props.span ? 'w-full justify-start' : 'w-20 flex justify-center'" class="flex items-center h-20 p-6 text-3xl rounded-full disabled:grayscale" :style="styles">
+    <button @click.prevent="emits('@click')" :class="props.span ? 'w-full justify-start' : 'w-20 flex justify-center'" class="flex items-center h-20 p-6 text-3xl transition-all duration-200 rounded-full disabled:grayscale" :style="styles" :disabled="props.disabled">
         <span>{{ props.text }}</span>
     </button>
 </template>
@@ -9,8 +9,9 @@ import { StyleValue, computed } from "vue";
 
 const props = defineProps<{
     text: string;
-    type: "number" | "operator" | "action";
+    type: "number" | "operator" | "action" | "function";
     span?: number;
+    disabled?: boolean;
 }>();
 
 const emits = defineEmits<{
@@ -34,8 +35,12 @@ const styles = computed<StyleValue>(() => {
             styles.color = "#FFFFFF";
             break;
         case "action":
-            styles.backgroundColor = "#CBCBCB";
+            styles.backgroundColor = "#C4C4C4";
             styles.color = "#000000";
+            break;
+        case "function":
+            styles.backgroundColor = "#54BC3A";
+            styles.color = "#FFFFFF";
     }
 
     return styles;

@@ -6,8 +6,11 @@ import "./style.css";
 const routes: Array<RouteRecordRaw> = [
     {
         path: "/",
-        name: "home",
-        component: () => import("./App.vue")
+        component: () => import("./App.vue"),
+    },
+    {
+        path: "/app/calculator",
+        component: () => import("./components/Calculator.vue"),
     },
 ];
 
