@@ -1,0 +1,21 @@
+<template>
+    <div class="flex flex-col w-screen h-screen p-5 overflow-x-hidden justify-stretch">
+        <div class="flex flex-col w-full h-max gap-y-5">
+            <div class="flex items-center justify-between">
+                <span class="text-4xl font-semibold">IA</span>
+
+                <!-- <div class="w-10 h-10">
+                    <img v-show="loading" class="w-full h-full aspect-square" src="../assets/spinner.svg" alt="" />
+                </div> -->
+            </div>
+        </div>
+    </div>
+</template>
+
+<script setup lang="ts">
+import { onMounted } from "vue";
+
+onMounted(() => {
+    console.log("AI mounted");
+});
+</script>

@@ -7,8 +7,13 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: "/app/calculator",
         name: "calculator",
-        component: () => import("./components/Calculator.vue"),
+        component: () => import("./scenarios/Calculator.vue"),
     },
+    {
+        path: "/app/ai",
+        name: "ai",
+        component: () => import("./scenarios/AI.vue"),
+    }
 ];
 
 const router = createRouter({

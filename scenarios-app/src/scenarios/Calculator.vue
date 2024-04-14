@@ -59,8 +59,8 @@
 <script setup lang="ts">
 import axios, { AxiosResponse } from "axios";
 import { onMounted, ref } from "vue";
+import Key from "../components/Key.vue";
 import * as compute from "../compute.ts";
-import Key from "./Key.vue";
 
 const field = ref<HTMLElement | null>(null);
 const formula = ref("");
