@@ -14,7 +14,7 @@
             <!-- <div v-for="msg in messages" class="flex flex-row w-full h-full gap-y-5"> -->
             <div v-for="msg in messages" class="flex w-full h-max gap-x-3">
                 <!-- Image -->
-                <svg v-if="msg.isResponse" class="w-6 h-6 fill-purple-500" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <svg v-if="msg.role == 'assistant'" class="w-6 h-6 fill-purple-500" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                     <path d="M7.657 6.247c.11-.33.576-.33.686 0l.645 1.937a2.89 2.89 0 0 0 1.829 1.828l1.936.645c.33.11.33.576 0 .686l-1.937.645a2.89 2.89 0 0 0-1.828 1.829l-.645 1.936a.361.361 0 0 1-.686 0l-.645-1.937a2.89 2.89 0 0 0-1.828-1.828l-1.937-.645a.361.361 0 0 1 0-.686l1.937-.645a2.89 2.89 0 0 0 1.828-1.828zM3.794 1.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387A1.73 1.73 0 0 0 4.593 5.69l-.387 1.162a.217.217 0 0 1-.412 0L3.407 5.69A1.73 1.73 0 0 0 2.31 4.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387A1.73 1.73 0 0 0 3.407 2.31zM10.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.16 1.16 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.16 1.16 0 0 0-.732-.732L9.1 2.137a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732z" />
                 </svg>
                 <svg v-else class="w-6 h-6 fill-blue-500" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -24,8 +24,8 @@
 
                 <!-- Message -->
                 <div class="flex flex-col w-full gap-y-2 h-max">
-                    <span class="font-medium">{{ msg.isResponse ? "Assistant" : "Moi" }}</span>
-                    <span>{{ msg.text }}</span>
+                    <span class="font-medium">{{ msg.role == "assistant" ? "Assistant" : "Moi" }}</span>
+                    <span>{{ msg.content }}</span>
                 </div>
             </div>
         </div>
@@ -53,51 +53,9 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import OllamaService, { OllamaApiRequest } from "../services/OllamaService";
+import OllamaService, { OllamaApiRequest, OllamaMessage } from "../services/OllamaService";
 
-interface IMessage {
-    text: string;
-    isResponse: boolean;
-}
-
-const messages = ref<IMessage[]>([
-    // {
-    //     text: "Hello, how can I help you?",
-    //     isResponse: true,
-    // },
-    // {
-    //     text: "I need help with my account",
-    //     isResponse: false,
-    // },
-    // {
-    //     text: "Sure, what do you need help with?",
-    //     isResponse: true,
-    // },
-    // {
-    //     text: "I need to change my password",
-    //     isResponse: false,
-    // },
-    // {
-    //     text: "I can help you with that, please provide me with your email address, and I will send you a link to reset your password, is that okay?",
-    //     isResponse: true,
-    // },
-    // {
-    //     text: "Thank you",
-    //     isResponse: false,
-    // },
-    // {
-    //     text: "You're welcome, have a nice day!",
-    //     isResponse: true,
-    // },
-    // {
-    //     text: "Goodbye",
-    //     isResponse: false,
-    // },
-    // {
-    //     text: "Goodbye, take care!",
-    //     isResponse: true,
-    // },
-]);
+const messages = ref<OllamaMessage[]>([]);
 
 const prompt = ref<string>("");
 const messagesContainer = ref<HTMLElement | null>(null);
@@ -133,8 +91,8 @@ const handleSend = async () => {
     loading.value = true;
 
     messages.value.push({
-        text: prompt.value,
-        isResponse: false,
+        role: "user",
+        content: prompt.value,
     });
 
     setTimeout(scrollToBottom, 1);
@@ -142,22 +100,23 @@ const handleSend = async () => {
     const requestData: OllamaApiRequest = {
         model: "mistral",
         prompt: prompt.value,
+        messages: messages.value,
         stream: false,
     };
 
     prompt.value = "";
 
     const response = await new OllamaService("http://localhost:11434/api").generateResponse(requestData);
-    
-    if (!Array.isArray(response)) {
+
+    if (!Array.isArray(response) && response.message) {
         loading.value = false;
-        
-        messages.value.push({
-            text: response.response,
-            isResponse: true,
-        });
+
+        messages.value.push(response.message);
 
         setTimeout(() => scrollToBottom("smooth"), 1);
+
+        console.log(response);
+        
         return;
     }
 };

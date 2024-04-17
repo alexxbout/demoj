@@ -12,12 +12,19 @@ export interface OllamaApiResponse {
   prompt_eval_duration: number;
   eval_count: number;
   eval_duration: number;
+  message?: OllamaMessage;
 }
 
 export interface OllamaApiRequest {
   model: string;
   prompt: string;
   stream: boolean;
+  messages?: OllamaMessage[];
+}
+
+export interface OllamaMessage {
+  role: "user" | "assistant";
+  content: string;
 }
 
 class OllamaService {
@@ -32,7 +39,7 @@ class OllamaService {
   async generateResponse(requestData: OllamaApiRequest): Promise<OllamaApiResponse | OllamaApiResponse[]> {
     try {
       const response = await axios.post<OllamaApiRequest, AxiosResponse<OllamaApiResponse | OllamaApiResponse[]>>(
-        `${this.baseUrl}/generate`,
+        `${this.baseUrl}/chat`,
         requestData
       );
       return response.data;
