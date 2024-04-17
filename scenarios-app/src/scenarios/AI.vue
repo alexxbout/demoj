@@ -1,12 +1,12 @@
 <template>
     <div class="relative flex flex-col justify-between w-screen h-[100svh] overflow-hidden">
-        <div class="flex flex-col w-full p-5 h-max gap-y-5">
+        <div class="z-10 flex flex-col w-full p-5 bg-white h-max gap-y-5">
             <div class="flex items-center justify-between">
-                <span class="text-4xl font-semibold">Intelligence Artificielle</span>
+                <span class="text-4xl font-semibold">IA</span>
 
-                <!-- <div class="w-10 h-10">
+                <div class="w-10 h-10">
                     <img v-show="loading" class="w-full h-full aspect-square" src="../assets/spinner.svg" alt="" />
-                </div> -->
+                </div>
             </div>
         </div>
 
@@ -31,13 +31,15 @@
         </div>
         <!-- </div> -->
 
-        <div class="relative flex items-center justify-center w-full shadow-[0px_-40px_60px_20px_rgba(255,255,255,1)] px-2 pt-2 pb-5 h-max bg-white">
+        <div class="relative z-10 flex items-center justify-center w-full shadow-[0px_-30px_60px_20px_rgba(255,255,255,1)] px-2 pt-2 pb-5 h-max bg-white">
             <label for="prompt" class="flex w-full p-2 px-3 border border-gray-300 rounded-full gap-x-2">
                 <input v-model="prompt" type="text" placeholder="Message..." id="prompt" name="prompt" class="w-full outline-none" />
 
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" :class="prompt.length == 0 ? 'fill-gray-300' : 'fill-gray-800'" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0m-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707z" />
-                </svg>
+                <button @click="handleSend" :disabled="prompt.length == 0">
+                    <svg xmlns="http://www.w3.org/2000/svg" :class="prompt.length == 0 ? 'fill-gray-300' : 'fill-gray-800'" class="w-8 h-8" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0m-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707z" />
+                    </svg>
+                </button>
             </label>
 
             <div v-show="downArrowVisible" @click="handleGoToBottom" class="absolute flex items-center justify-center p-px bg-white border border-gray-300 rounded-full -inset-y-12 w-max h-max aspect-square">
@@ -51,6 +53,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
+import OllamaService, { OllamaApiRequest } from "../services/OllamaService";
 
 interface IMessage {
     text: string;
@@ -58,61 +61,59 @@ interface IMessage {
 }
 
 const messages = ref<IMessage[]>([
-    {
-        text: "Hello, how can I help you?",
-        isResponse: true,
-    },
-    {
-        text: "I need help with my account",
-        isResponse: false,
-    },
-    {
-        text: "Sure, what do you need help with?",
-        isResponse: true,
-    },
-    {
-        text: "I need to change my password",
-        isResponse: false,
-    },
-    {
-        text: "I can help you with that, please provide me with your email address, and I will send you a link to reset your password, is that okay?",
-        isResponse: true,
-    },
-    {
-        text: "Thank you",
-        isResponse: false,
-    },
-    {
-        text: "You're welcome, have a nice day!",
-        isResponse: true,
-    },
-    {
-        text: "Goodbye",
-        isResponse: false,
-    },
-    {
-        text: "Goodbye, take care!",
-        isResponse: true,
-    },
+    // {
+    //     text: "Hello, how can I help you?",
+    //     isResponse: true,
+    // },
+    // {
+    //     text: "I need help with my account",
+    //     isResponse: false,
+    // },
+    // {
+    //     text: "Sure, what do you need help with?",
+    //     isResponse: true,
+    // },
+    // {
+    //     text: "I need to change my password",
+    //     isResponse: false,
+    // },
+    // {
+    //     text: "I can help you with that, please provide me with your email address, and I will send you a link to reset your password, is that okay?",
+    //     isResponse: true,
+    // },
+    // {
+    //     text: "Thank you",
+    //     isResponse: false,
+    // },
+    // {
+    //     text: "You're welcome, have a nice day!",
+    //     isResponse: true,
+    // },
+    // {
+    //     text: "Goodbye",
+    //     isResponse: false,
+    // },
+    // {
+    //     text: "Goodbye, take care!",
+    //     isResponse: true,
+    // },
 ]);
 
 const prompt = ref<string>("");
 const messagesContainer = ref<HTMLElement | null>(null);
 const downArrowVisible = ref<boolean>(false);
+const loading = ref<boolean>(false);
 
 const handleGoToBottom = () => {
-    messagesContainer.value?.scrollTo({
-        top: messagesContainer.value.scrollHeight,
-        behavior: "smooth",
-    });
+    scrollToBottom("smooth");
 
     downArrowVisible.value = false;
 };
 
-const scrollToBottom = () => {
+const scrollToBottom = (mode: ScrollBehavior = "instant") => {
     messagesContainer.value?.scrollTo({
         top: messagesContainer.value.scrollHeight,
-        behavior: "instant",
+        behavior: mode,
     });
 
     downArrowVisible.value = false;
@@ -126,7 +127,42 @@ const handleMessagesScroll = () => {
     }
 };
 
-onMounted(() => {
+const handleSend = async () => {
+    if (prompt.value.length == 0) return;
+
+    loading.value = true;
+
+    messages.value.push({
+        text: prompt.value,
+        isResponse: false,
+    });
+
+    setTimeout(scrollToBottom, 1);
+
+    const requestData: OllamaApiRequest = {
+        model: "mistral",
+        prompt: prompt.value,
+        stream: false,
+    };
+
+    prompt.value = "";
+
+    const response = await new OllamaService("http://localhost:11434/api").generateResponse(requestData);
+    
+    if (!Array.isArray(response)) {
+        loading.value = false;
+        
+        messages.value.push({
+            text: response.response,
+            isResponse: true,
+        });
+
+        setTimeout(() => scrollToBottom("smooth"), 1);
+        return;
+    }
+};
+
+onMounted(async () => {
     console.log("AI mounted");
 
     scrollToBottom();
