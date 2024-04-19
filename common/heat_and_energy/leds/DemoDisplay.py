@@ -121,7 +121,7 @@ class Gauges:
             - maxStep The max value for a step
         """
         for i in range(0, leds):
-            self.__strip.setPixelColor(i, self.__colorize(i, self.__ledsPerGauge))
+            self.__strip.setPixelColor(self.__ledsPerGauge+i-1, self.__colorize(i, self.__ledsPerGauge))
         
     def __colorizeLedsWatts(self, leds: int):
         """
@@ -137,7 +137,7 @@ class Gauges:
         for i in range(0, leds):
             color: RGBW = self.__colorize(i, self.__ledsPerGauge)
             #print(f"coloring :  {self.__led_count-1-i} r {color.r} g {color.g} b {color.b}")
-            self.__strip.setPixelColor(self.__led_count-1-i, color)
+            self.__strip.setPixelColor(self.__ledsPerGauge+i, color)
 
     
 
@@ -152,14 +152,10 @@ class Gauges:
             degrees = self.__max_temp 
         averagedTemp = self.__instantAverageTemp(degrees)
         colored_leds: int = int((averagedTemp - self.__min_temp ) * self.__tempStep)
-        #print(f"ratio : {averagedTemp - self.__min_temp }")
-        #print(f"ratio : {self.__tempStep }")
         if colored_leds < 0:
             colored_leds = 0
-        #print(f"led_colored : {colored_leds}")
-        gaugeEnd: int = self.__ledsPerGauge
         self.__colorizeLedsTemp(colored_leds)
-        self.__clearLeds(colored_leds, gaugeEnd)
+        self.__clearLeds(0, colored_leds)
         self.__strip.show()
 
     def displayWatts(self, miliWatts: float): 
@@ -176,7 +172,7 @@ class Gauges:
         if colored_leds < 0:
             colored_leds = 0
         colorEnd: int = self.__ledsPerGauge+colored_leds
-        self.__clearLeds(self.__ledsPerGauge, colorEnd)
+        self.__clearLeds(colorEnd, self.__led_count)
         self.__colorizeLedsWatts(colored_leds)
         self.__strip.show()
         
