@@ -37,6 +37,11 @@ const routes: Array<RouteRecordRaw> = [
                 component: () => import("@/views/scenarios/Calculator.vue"),
             },
             {
+                path: "scenarios/ai",
+                name: "ai",
+                component: () => import("@/views/scenarios/AI.vue"),
+            },
+            {
                 path: "debug",
                 name: "debug",
                 component: () => import("@/views/Debug.vue"),

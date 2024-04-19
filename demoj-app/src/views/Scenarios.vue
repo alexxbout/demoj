@@ -20,17 +20,13 @@
 
 <script setup lang="ts">
 import ScenarioCard from "@/components/ScenarioCard.vue";
-import { Chaussette } from "@/services/Chaussette";
 import type { IScenario } from "@/types/IConfig";
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from "@ionic/vue";
-import { calculator } from "ionicons/icons";
-import { inject, onMounted, ref } from "vue";
+import { calculator, sparkles } from "ionicons/icons";
+import { onMounted, ref } from "vue";
 
 const page = ref();
 const presenting = ref();
-
-const socket = inject("socket") as Chaussette;
-const config = socket.getConfig();
 
 const scenarios = ref<IScenario[]>([
     {
@@ -38,6 +34,12 @@ const scenarios = ref<IScenario[]>([
         title: "Calculatrice",
         description: "Effectuez des calculs simples ou exécutez des fonctions complexes, côté client ou serveur.",
         icon: calculator,
+    },
+    {
+        name: "ai",
+        title: "Intelligence Artificielle",
+        description: "Générez du texte avec une IA conversationnelle similaire à ChatGPT.",
+        icon: sparkles,
     },
 ]);
 

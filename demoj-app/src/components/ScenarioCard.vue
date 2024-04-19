@@ -2,9 +2,9 @@
     <ion-card>
         <ion-card-header>
             <ion-grid style="width: 100%;">
-                <ion-row class="ion-align-items-start ion-justify-content-start">
+                <ion-row class="ion-align-items-center ion-justify-content-start">
                     <ion-col size="auto">
-                        <ion-icon :icon="calculator" size="large" style="color: black;" />
+                        <ion-icon :icon="data.icon" size="large" style="color: black;" />
                     </ion-col>
 
                     <ion-col size="auto">
@@ -23,7 +23,6 @@
 <script setup lang="ts">
 import { IScenario } from "@/types/IConfig";
 import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonGrid, IonIcon, IonRow } from "@ionic/vue";
-import { calculator } from "ionicons/icons";
 import { useRouter } from "vue-router";
 
 const props = defineProps<{
