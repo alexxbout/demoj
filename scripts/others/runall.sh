@@ -19,7 +19,7 @@ user="$SUDO_USER"
 nbScripts=0
 
 if [ "$user" = "network" ]; then
-    nbScripts=7
+    nbScripts=8
 elif [ "$user" = "terminal" ]; then
     nbScripts=6
 elif [ "$user" = "server" ]; then
@@ -48,6 +48,9 @@ if [ "$user" = "network" ]; then
     
     "./others/raspap.sh" || die "Failed to execute raspap.sh"
     echo -e "${GREEN}7/$nbScripts${RESET} scripts executed"
+
+    "./others/dns.sh" || die "Failed to execute dns.sh"
+    echo -e "${GREEN}8/$nbScripts${RESET} scripts executed"
 else
     "./others/wifi.sh" || die "Failed to execute wifi.sh"
     echo -e "${GREEN}6/$nbScripts${RESET} scripts executed"
