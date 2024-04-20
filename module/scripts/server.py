@@ -36,25 +36,10 @@ def index():
 #################################################################
 # Scenarios endoints
 #################################################################
-    
-# TODO: Calculator (standard, fibonacci, factorial, prime)
-@app.route("/api/scenarios/calculator/<string:mode>/<string:value>")
-def calculator(mode, value):
-    if mode == "standard":
-        pass
-    elif mode == "fibonacci":
-        value = "fib(" + value + ")"
-    elif mode == "factorial":
-        value = "fact(" + value + ")"
-    elif mode == "prime":
-        value = "prime(" + value + ")"
-    else:
-        return make_response(jsonify({"error": "Invalid mode"}), 400)
-    
-    # Call function
-    result = compute(value)
 
-    return make_response(jsonify({"result": result}), 200)
+@app.route("/api/scenarios/calculator/<string:value>")
+def calculator(value):
+    return make_response(jsonify({"result": compute(value)}), 200)
 
 # TODO: Streaming video
     
