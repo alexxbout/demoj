@@ -2,10 +2,10 @@
     <div class="flex flex-col w-screen h-screen p-5 overflow-x-hidden justify-stretch">
         <div class="flex flex-col w-full h-max gap-y-5">
             <div class="flex items-center justify-between">
-                <span class="text-4xl font-semibold">Calculatrice</span>
+                <span class="text-4xl font-semibold dark:text-white">Calculatrice</span>
 
                 <div class="w-10 h-10">
-                    <img v-show="loading" class="w-full h-full aspect-square" src="../assets/spinner.svg" alt="" />
+                    <img v-show="loading" class="w-full h-full aspect-square dark:invert" src="../assets/spinner.svg" alt="" />
                 </div>
             </div>
             <div class="flex items-center justify-center w-full p-1 overflow-hidden bg-gray-200 rounded-xl">
@@ -19,7 +19,7 @@
                 <span v-show="showPreviousFormula" class="absolute text-slate-400">{{ previousFormula }}</span>
             </div>
             <div class="flex items-center justify-end h-24 min-w-full px-5 pb-5 w-max">
-                <span class="text-6xl font-medium text-slate-700">{{ formula }}</span>
+                <span class="text-6xl font-medium text-slate-700 dark:text-gray-200">{{ formula }}</span>
             </div>
         </div>
 
