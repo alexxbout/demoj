@@ -6,7 +6,7 @@ from flask import Flask, jsonify, request, render_template, redirect, url_for
 from flask_socketio import SocketIO, join_room, leave_room
 from flask_cors import CORS
 
-APP_FOLDER = "../demojconnect"
+APP_FOLDER = "../app"
 APP_URL = "/app/"
 CONFIG_PATH = "/home/network/demoj/module/config/config.json"
 SERVER_PORT = 5000
@@ -70,16 +70,6 @@ def get_config():
     except Exception as e:
         print(f"Error getting config: {str(e)}")
         return jsonify({"error": str(e)}), 500
-    
-#################################################################
-# Scenarios
-#################################################################
-    
-# TODO: Calculator (fibonacci, factorial, prime number)
-    
-# TODO: Streaming video
-    
-# TODO: Image processing
     
 #################################################################
 # Socket
