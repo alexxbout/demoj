@@ -17,45 +17,61 @@ echo "Running all scripts"
 # Get the user
 user="$SUDO_USER"
 nbScripts=0
+nbScriptsExecuted=0
 
 if [ "$user" = "network" ]; then
     nbScripts=8
 elif [ "$user" = "terminal" ]; then
     nbScripts=6
 elif [ "$user" = "server" ]; then
-    nbScripts=6
+    nbScripts=7
 fi
 
 # Executing scripts based on the user
 "./others/raspios.sh" || die "Failed to execute raspios.sh"
-echo -e "${GREEN}1/$nbScripts${RESET} scripts executed"
+nbScriptsExecuted=$((nbScriptsExecuted + 1))
+echo -e "${GREEN}$nbScriptsExecuted/$nbScripts${RESET} scripts executed"
 
 "./others/sudoers.sh" "$user" || die "Failed to execute sudoers.sh"
-echo -e "${GREEN}2/$nbScripts${RESET} scripts executed"
+nbScriptsExecuted=$((nbScriptsExecuted + 1))
+echo -e "${GREEN}$nbScriptsExecuted/$nbScripts${RESET} scripts executed"
 
 "./others/repository.sh" "$user" || die "Failed to execute repository.sh"
-echo -e "${GREEN}3/$nbScripts${RESET} scripts executed"
+nbScriptsExecuted=$((nbScriptsExecuted + 1))
+echo -e "${GREEN}$nbScriptsExecuted/$nbScripts${RESET} scripts executed"
 
 "./others/virtualenv.sh" "$user" || die "Failed to execute virtualenv.sh"
-echo -e "${GREEN}4/$nbScripts${RESET} scripts executed"
+nbScriptsExecuted=$((nbScriptsExecuted + 1))
+echo -e "${GREEN}$nbScriptsExecuted/$nbScripts${RESET} scripts executed"
 
 "./others/appservice.sh" "$user" || die "Failed to execute appservice.sh"
-echo -e "${GREEN}5/$nbScripts${RESET} scripts executed"
+nbScriptsExecuted=$((nbScriptsExecuted + 1))
+echo -e "${GREEN}$nbScriptsExecuted/$nbScripts${RESET} scripts executed"
 
 if [ "$user" = "network" ]; then
     "./others/demojconnect.sh" || die "Failed to execute demojconnect.sh"
-    echo -e "${GREEN}6/$nbScripts${RESET} scripts executed"
+    nbScriptsExecuted=$((nbScriptsExecuted + 1))
+    echo -e "${GREEN}$nbScriptsExecuted/$nbScripts${RESET} scripts executed"
     
     "./others/raspap.sh" || die "Failed to execute raspap.sh"
-    echo -e "${GREEN}7/$nbScripts${RESET} scripts executed"
+    nbScriptsExecuted=$((nbScriptsExecuted + 1))
+    echo -e "${GREEN}$nbScriptsExecuted/$nbScripts${RESET} scripts executed"
 
     "./others/dns.sh" || die "Failed to execute dns.sh"
-    echo -e "${GREEN}8/$nbScripts${RESET} scripts executed"
+    nbScriptsExecuted=$((nbScriptsExecuted + 1))
+    echo -e "${GREEN}$nbScriptsExecuted/$nbScripts${RESET} scripts executed"
+elif [ "$user" = "server" ]; then
+    "./others/wifi.sh" || die "Failed to execute wifi.sh"
+    nbScriptsExecuted=$((nbScriptsExecuted + 1))
+    echo -e "${GREEN}$nbScriptsExecuted/$nbScripts${RESET} scripts executed"
+
+    "./others/scenariosapp.sh" || die "Failed to execute scenariosapp.sh"
+    nbScriptsExecuted=$((nbScriptsExecuted + 1))
+    echo -e "${GREEN}$nbScriptsExecuted/$nbScripts${RESET} scripts executed"
 else
     "./others/wifi.sh" || die "Failed to execute wifi.sh"
-    echo -e "${GREEN}6/$nbScripts${RESET} scripts executed"
-
-    # TODO: Add a case for the server to build apps
+    nbScriptsExecuted=$((nbScriptsExecuted + 1))
+    echo -e "${GREEN}$nbScriptsExecuted/$nbScripts${RESET} scripts executed"
 fi
 
 echo -e "${GREEN}Setup complete. Have fun with DemoJ! ${RESET}";
