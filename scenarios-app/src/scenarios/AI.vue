@@ -16,9 +16,13 @@
                 <svg v-if="msg.role == 'assistant'" class="w-6 h-6 fill-purple-500" :class="loading ? 'animate-pulse' : ''" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                     <path d="M7.657 6.247c.11-.33.576-.33.686 0l.645 1.937a2.89 2.89 0 0 0 1.829 1.828l1.936.645c.33.11.33.576 0 .686l-1.937.645a2.89 2.89 0 0 0-1.828 1.829l-.645 1.936a.361.361 0 0 1-.686 0l-.645-1.937a2.89 2.89 0 0 0-1.828-1.828l-1.937-.645a.361.361 0 0 1 0-.686l1.937-.645a2.89 2.89 0 0 0 1.828-1.828zM3.794 1.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387A1.73 1.73 0 0 0 4.593 5.69l-.387 1.162a.217.217 0 0 1-.412 0L3.407 5.69A1.73 1.73 0 0 0 2.31 4.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387A1.73 1.73 0 0 0 3.407 2.31zM10.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.16 1.16 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.16 1.16 0 0 0-.732-.732L9.1 2.137a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732z" />
                 </svg>
-                <svg v-else class="w-6 h-6 fill-blue-500" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <!-- <svg v-else class="w-6 h-6 fill-blue-500" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                     <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
                     <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
+                </svg> -->
+
+                <svg v-else class="w-6 h-6 fill-blue-500" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
                 </svg>
 
                 <!-- Message -->
@@ -29,34 +33,36 @@
             </div>
 
             <div v-if="messages.length == 0" class="flex flex-col items-center justify-center w-full h-full gap-y-7">
-                <svg class="w-20 h-20 fill-purple-500" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <svg class="w-24 h-24 fill-purple-500" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                     <path d="M7.657 6.247c.11-.33.576-.33.686 0l.645 1.937a2.89 2.89 0 0 0 1.829 1.828l1.936.645c.33.11.33.576 0 .686l-1.937.645a2.89 2.89 0 0 0-1.828 1.829l-.645 1.936a.361.361 0 0 1-.686 0l-.645-1.937a2.89 2.89 0 0 0-1.828-1.828l-1.937-.645a.361.361 0 0 1 0-.686l1.937-.645a2.89 2.89 0 0 0 1.828-1.828zM3.794 1.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387A1.73 1.73 0 0 0 4.593 5.69l-.387 1.162a.217.217 0 0 1-.412 0L3.407 5.69A1.73 1.73 0 0 0 2.31 4.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387A1.73 1.73 0 0 0 3.407 2.31zM10.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.16 1.16 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.16 1.16 0 0 0-.732-.732L9.1 2.137a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732z" />
                 </svg>
-                <span ref="helloContainer" class="text-4xl font-medium transition-opacity duration-[700ms]">{{ hello }}</span>
-
-                <div class="flex flex-col items-center justify-center mt-10 gap-y-3">
-                    <button v-for="randPrompt in randomPrompts" @click="sendMessage(randPrompt, 'user')" class="px-3 py-2 text-center text-gray-400 border border-gray-300 rounded-full">
-                        <span>{{ randPrompt }}</span>
-                    </button>
-                </div>
+                <span ref="helloContainer" class="text-5xl font-semibold transition-opacity duration-[700ms]">{{ hello }}</span>
             </div>
         </div>
 
-        <div class="relative z-10 flex items-center justify-center w-full shadow-[0px_-30px_60px_20px_rgba(255,255,255,1)] px-2 pt-2 pb-5 h-max bg-white">
-            <label for="prompt" class="flex w-full p-2 px-3 border border-gray-300 rounded-full gap-x-2">
-                <input v-model="prompt" @keyup.enter="handleSend" type="text" placeholder="Message..." id="prompt" name="prompt" class="w-full outline-none" />
-
-                <button @click="handleSend" :disabled="prompt.length == 0 || loading">
-                    <svg xmlns="http://www.w3.org/2000/svg" :class="prompt.length == 0 || loading ? 'fill-gray-300' : 'fill-gray-800'" class="w-8 h-8" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0m-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707z" />
-                    </svg>
+        <div class="flex flex-col w-full gap-y-2 h-max">
+            <div v-if="messages.length == 0" class="flex items-center w-full px-5 mt-10 overflow-x-auto no-scrollbar gap-y-3 gap-x-2 snap-x snap-mandatory">
+                <button v-for="randPrompt in randomPrompts" @click="sendMessage(randPrompt, 'user')" class="p-3 text-center text-black bg-gray-100 rounded-xl whitespace-nowrap w-max snap-center">
+                    <span>{{ randPrompt }}</span>
                 </button>
-            </label>
+            </div>
 
-            <div v-show="downArrowVisible" @click="handleGoToBottom" class="absolute flex items-center justify-center p-px bg-white border border-gray-300 rounded-full -inset-y-12 w-max h-max aspect-square">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 fill-gray-800" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4" />
-                </svg>
+            <div class="relative z-10 flex items-center justify-center w-full px-2 pt-2 pb-5 bg-white h-max">
+                <label for="prompt" class="flex w-full p-2 px-3 border border-gray-300 rounded-full gap-x-2">
+                    <input v-model="prompt" @keyup.enter="handleSend" type="text" placeholder="Message..." id="prompt" name="prompt" class="w-full outline-none" />
+
+                    <button @click="handleSend" :disabled="prompt.length == 0 || loading">
+                        <svg xmlns="http://www.w3.org/2000/svg" :class="prompt.length == 0 || loading ? 'fill-gray-300' : 'fill-gray-800'" class="w-8 h-8" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0m-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707z" />
+                        </svg>
+                    </button>
+                </label>
+
+                <div v-show="downArrowVisible" @click="handleGoToBottom" class="absolute flex items-center justify-center p-px bg-white border border-gray-300 rounded-full -inset-y-12 w-max h-max aspect-square">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 fill-gray-800" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4" />
+                    </svg>
+                </div>
             </div>
         </div>
     </div>
@@ -77,7 +83,7 @@ const loading = ref<boolean>(false);
 const helloList: string[] = ["Bonjour", "Hello", "Hola", "Ciao", "Hallo", "Olá", "Saluton", "Hej", "Hei", "Ahoj", "Zdravo", "Dobrý den", "Dzień dobry", "Guten Tag", "Goedendag", "Γεια σας", "こんにちは", "안녕하세요", "你好", "नमस्ते"];
 const hello = ref<string>(helloList[0]);
 
-const defaultPrompts: string[] = ["Raconte moi une histoire", "Recommande moi des activités", "Interroge-moi sur les capitales du monde", "Donne-moi une recette de cuisine", "Explique-moi un concept scientifique", "Décris-moi une journée parfaite", "Peux-tu me raconter une blague ?"];
+const defaultPrompts: string[] = ["Décris-moi une journée parfaite", "Peux-tu me raconter une blague ?", "Donne-moi une recette de cuisine", "Interroge-moi sur les capitales du monde", "Explique-moi un concept scientifique", "Recommande-moi des activités", "Raconte moi une histoire", "Propose-moi une playlist de musique", "Conseille-moi des livres à lire", "Donne-moi des conseils pour mieux dormir", "Présente-moi des films à regarder", "Recommande-moi des destinations de voyage", "Guide-moi pour méditer", "Parle-moi de la météo", "Donne-moi des idées de cadeaux", "Explique-moi les règles d'un jeu de société", "Raconte-moi une légende urbaine", "Recommande-moi des applications utiles", "Propose-moi des exercices de relaxation", "Parle-moi de ta journée"];
 const randomPrompts = ref<string[]>([]);
 
 const getRandomPrompts = (n: number) => {
@@ -156,7 +162,7 @@ const sendMessage = async (message: string, role: "user" | "assistant") => {
 onMounted(async () => {
     console.log("AI mounted");
 
-    randomPrompts.value = getRandomPrompts(3);
+    randomPrompts.value = getRandomPrompts(4);
 
     // Wait for 3 seconds
     await new Promise((resolve) => setTimeout(resolve, 3000));
@@ -186,3 +192,15 @@ onMounted(async () => {
     }
 });
 </script>
+
+<style scoped>
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+</style>
