@@ -2,7 +2,7 @@
 # shellcheck shell=bash source=/dev/null disable=SC2154
 
 : '
-This script initializes the Demoj Connect application.
+This script initializes the scenario application.
 The application is built and moved to the final directory.
 '
 
@@ -14,13 +14,13 @@ check_root
 
 user="$SUDO_USER"
 
-if [ "$user" != "network" ]; then
-    echo "User is not network"
+if [ "$user" != "server" ]; then
+    echo "User is not server"
     exit 1
 fi
 
 # Displaying initialization message
-echo "Initializing Demoj Connect"
+echo "Initializing scenario application"
 
 # Defining working directory
 dir="/home/$user/demoj"
@@ -32,14 +32,14 @@ check_directory "$dir" >> "$log_file" 2>&1 || die "Directory $dir does not exist
 cd "$dir" >> "$log_file" 2>&1 || die "Failed to change directory to $dir"
 
 # Updating code from Git repository
-if sudo -u "$user" git checkout demojconnect; then
-    echo "Switched to demojconnect branch"
+if sudo -u "$user" git checkout scenarios; then
+    echo "Switched to scenarios branch"
 else
-    die "Failed to switch to demojconnect branch"
+    die "Failed to switch to scenarios branch"
 fi
 
 # Changing directory to application directory
-cd "demoj-app" >> "$log_file" 2>&1 || die "Failed to change directory to demoj-app"
+cd "scenarios-app" >> "$log_file" 2>&1 || die "Failed to change directory to scenarios-app"
 
 # Checking if Node.js and npm are installed
 if ! command -v node &> /dev/null || ! command -v npm &> /dev/null; then
@@ -50,12 +50,11 @@ fi
 
 # Installing application dependencies
 echo "Installing dependencies"
-npm i -g @ionic/cli >> "$log_file" 2>&1 || die "Failed to install Ionic CLI"
 npm install >> "$log_file" 2>&1 || die "Failed to install dependencies"
 
 # Building the application
 echo "Building app"
-ionic build >> "$log_file" 2>&1 || die "Failed to build app"
+npm run build >> "$log_file" 2>&1 || die "Failed to build app"
 
 # Defining temporary directory
 tmp_dir="/home/$user/tmp"
@@ -66,7 +65,7 @@ echo "Moving app to $tmp_dir"
 mkdir -p "$tmp_dir" >> "$log_file" 2>&1 || die "Failed to create tmp directory: $tmp_dir"
 
 # Moving the application to the temporary directory
-mv "$dir/demoj-app/app" "$tmp_dir" >> "$log_file" 2>&1 || die "Failed to move app to $tmp_dir"
+mv "$dir/scenarios-app/app" "$tmp_dir" >> "$log_file" 2>&1 || die "Failed to move app to $tmp_dir"
 
 # Changing Git branch
 echo "Switching to $user branch"
@@ -82,5 +81,5 @@ echo "Moving app to /home/$user/demoj/module"
 mv "$tmp_dir/app" "$dir/module" >> "$log_file" 2>&1 || die "Failed to move app to $dir/module"
 
 # Finalization message
-echo -e "${GREEN}DemoJ Connect initialized ${RESET}"
+echo -e "${GREEN}Scenario application initialized ${RESET}"
 exit 0
