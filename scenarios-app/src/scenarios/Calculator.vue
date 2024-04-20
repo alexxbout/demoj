@@ -60,7 +60,7 @@
 import axios, { AxiosResponse } from "axios";
 import { onMounted, ref } from "vue";
 import Key from "../components/Key.vue";
-import * as compute from "../compute.ts";
+import * as compute from "../services/Compute.ts";
 
 const field = ref<HTMLElement | null>(null);
 const formula = ref("");
@@ -140,7 +140,7 @@ const equal = async () => {
     } else {
         // On the client side, we need to parse the formula and execute functions
         if (typeof Worker !== "undefined") {
-            const worker = new Worker(new URL("../calculatorWorker.ts", import.meta.url), { type: "module" });
+            const worker = new Worker(new URL("../services/CalculatorWorker.ts", import.meta.url), { type: "module" });
 
             worker.onmessage = (event) => {
                 formula.value = event.data;

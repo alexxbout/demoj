@@ -39,7 +39,7 @@ const styles = computed<StyleValue>(() => {
             styles.color = "#000000";
             break;
         case "function":
-            styles.backgroundColor = "#54BC3A";
+            styles.backgroundColor = "#EEAA21";
             styles.color = "#FFFFFF";
     }
 

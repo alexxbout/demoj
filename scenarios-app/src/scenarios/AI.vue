@@ -1,11 +1,11 @@
 <template>
     <div class="relative flex flex-col justify-between w-screen h-[100svh] overflow-hidden">
-        <div class="z-10 flex flex-col w-full p-5 bg-white h-max gap-y-5">
+        <div class="z-10 flex flex-col w-full p-5 h-max gap-y-5">
             <div class="flex items-center justify-between">
-                <span class="text-4xl font-semibold">IA</span>
+                <span class="text-4xl font-semibold dark:text-white">IA</span>
 
                 <div class="w-10 h-10">
-                    <img v-show="loading" class="w-full h-full aspect-square" src="../assets/spinner.svg" alt="" />
+                    <img v-show="loading" class="w-full h-full aspect-square dark:invert" src="../assets/spinner.svg" alt="" />
                 </div>
             </div>
         </div>
@@ -27,8 +27,8 @@
 
                 <!-- Message -->
                 <div class="flex flex-col w-full gap-y-2 h-max">
-                    <span class="font-medium">{{ msg.role == "assistant" ? "Assistant" : "Moi" }}</span>
-                    <span>{{ msg.content }}</span>
+                    <span class="font-medium dark:text-white">{{ msg.role == "assistant" ? "Assistant" : "Moi" }}</span>
+                    <span class="dark:text-white">{{ msg.content }}</span>
                 </div>
             </div>
 
@@ -36,30 +36,30 @@
                 <svg class="w-24 h-24 fill-purple-500" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                     <path d="M7.657 6.247c.11-.33.576-.33.686 0l.645 1.937a2.89 2.89 0 0 0 1.829 1.828l1.936.645c.33.11.33.576 0 .686l-1.937.645a2.89 2.89 0 0 0-1.828 1.829l-.645 1.936a.361.361 0 0 1-.686 0l-.645-1.937a2.89 2.89 0 0 0-1.828-1.828l-1.937-.645a.361.361 0 0 1 0-.686l1.937-.645a2.89 2.89 0 0 0 1.828-1.828zM3.794 1.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387A1.73 1.73 0 0 0 4.593 5.69l-.387 1.162a.217.217 0 0 1-.412 0L3.407 5.69A1.73 1.73 0 0 0 2.31 4.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387A1.73 1.73 0 0 0 3.407 2.31zM10.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.16 1.16 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.16 1.16 0 0 0-.732-.732L9.1 2.137a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732z" />
                 </svg>
-                <span ref="helloContainer" class="text-5xl font-semibold transition-opacity duration-[700ms]">{{ hello }}</span>
+                <span ref="helloContainer" class="text-5xl font-semibold transition-opacity duration-[700ms] dark:text-white">{{ hello }}</span>
             </div>
         </div>
 
         <div class="flex flex-col w-full gap-y-2 h-max">
             <div v-if="messages.length == 0" class="flex items-center w-full px-5 mt-10 overflow-x-auto no-scrollbar gap-y-3 gap-x-2 snap-x snap-mandatory">
-                <button v-for="randPrompt in randomPrompts" @click="sendMessage(randPrompt, 'user')" class="p-3 text-center text-black bg-gray-100 rounded-xl whitespace-nowrap w-max snap-center">
+                <button v-for="randPrompt in randomPrompts" @click="sendMessage(randPrompt, 'user')" class="p-3 text-center text-black bg-gray-100 dark:bg-zinc-800 dark:text-white rounded-xl whitespace-nowrap w-max snap-center">
                     <span>{{ randPrompt }}</span>
                 </button>
             </div>
 
-            <div class="relative z-10 flex items-center justify-center w-full px-2 pt-2 pb-5 bg-white h-max">
+            <div class="relative z-10 flex items-center justify-center w-full px-2 pt-2 pb-5 h-max">
                 <label for="prompt" class="flex w-full p-2 px-3 border border-gray-300 rounded-full gap-x-2">
-                    <input v-model="prompt" @keyup.enter="handleSend" type="text" placeholder="Message..." id="prompt" name="prompt" class="w-full outline-none" />
+                    <input v-model="prompt" @keyup.enter="handleSend" type="text" placeholder="Message..." id="prompt" name="prompt" class="w-full bg-transparent outline-none dark:text-white" />
 
-                    <button @click="handleSend" :disabled="prompt.length == 0 || loading">
+                    <button @click="handleSend" :disabled="prompt.length == 0 || loading" class="dark:invert">
                         <svg xmlns="http://www.w3.org/2000/svg" :class="prompt.length == 0 || loading ? 'fill-gray-300' : 'fill-gray-800'" class="w-8 h-8" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                             <path d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0m-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707z" />
                         </svg>
                     </button>
                 </label>
 
-                <div v-show="downArrowVisible" @click="handleGoToBottom" class="absolute flex items-center justify-center p-px bg-white border border-gray-300 rounded-full -inset-y-12 w-max h-max aspect-square">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 fill-gray-800" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <div v-show="downArrowVisible" @click="handleGoToBottom" class="absolute flex items-center justify-center p-px bg-white border border-gray-300 rounded-full dark:bg-zinc-800 -inset-y-12 w-max h-max aspect-square">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 fill-gray-800 dark:fill-white" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4" />
                     </svg>
                 </div>
