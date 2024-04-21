@@ -19,8 +19,6 @@
 import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonPage, IonText, IonTitle, IonToolbar } from "@ionic/vue";
 
 const handleClick = () => {
-    console.log("Click");
-    
     location.href = `http://${import.meta.env.VITE_IP_SERVER}:5000/app/calculator`;
 };
 </script>
