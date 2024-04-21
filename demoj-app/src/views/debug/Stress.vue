@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { Chaussette } from "@/services/Chaussette";
+import { Zocket } from "@/services/Zocket";
 import { DeviceTypes } from "@/types/IConfig";
 import { IonButton, IonButtons, IonContent, IonFooter, IonHeader, IonInput, IonItem, IonList, IonModal, IonSelect, IonSelectOption, IonTitle, IonToolbar } from "@ionic/vue";
 import { computed, inject, ref } from "vue";
@@ -49,7 +49,7 @@ const props = defineProps<{
     presenting: any;
 }>();
 
-const socket = inject("socket") as Chaussette;
+const socket = inject("socket") as Zocket;
 
 const isOpen = ref(false);
 const header = ref("Stresser un module");
@@ -88,4 +88,4 @@ const handleDismiss = () => {
     isOpen.value = false;
 };
 </script>
-@/services/Chaussette
+@/services/Zocket

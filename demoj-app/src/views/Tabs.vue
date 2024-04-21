@@ -39,12 +39,12 @@
 </template>
 
 <script setup lang="ts">
-import { Chaussette } from "@/services/Chaussette";
+import { Zocket } from "@/services/Zocket";
 import { IonIcon, IonLabel, IonPage, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs } from "@ionic/vue";
 import { globe, hardwareChip, layers, phonePortrait, server } from "ionicons/icons";
 import { computed, inject, ref } from "vue";
 
-const socket = inject("socket") as Chaussette;
+const socket = inject("socket") as Zocket;
 const config = socket.getConfig();
 
 const status = computed(() => {
@@ -64,4 +64,4 @@ ion-tab-button {
     position: relative;
 }
 </style>
-@/services/Chaussette
+@/services/Zocket

@@ -4,7 +4,7 @@ import { Ref, ref } from "vue";
 import API from "./API";
 import { SoundEnum, SoundManager } from "./SoundManager";
 
-export class Chaussette {
+export class Zocket {
     private IP_NETWORK = import.meta.env.VITE_IP_NETWORK;
     private PORT = import.meta.env.VITE_PORT;
     private socket: Socket | null;
@@ -104,4 +104,4 @@ export class Chaussette {
     }
 }
 
-export default new Chaussette();
+export default new Zocket();

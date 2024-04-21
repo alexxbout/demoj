@@ -21,7 +21,7 @@ import "@ionic/vue/css/text-alignment.css";
 import "@ionic/vue/css/text-transformation.css";
 
 /* Theme variables */
-import { Chaussette } from "./services/Chaussette";
+import { Zocket } from "./services/Zocket";
 import "./theme/variables.css";
 
 const app = createApp(App)
@@ -31,6 +31,6 @@ const app = createApp(App)
     .use(router);
 
 router.isReady().then(() => {
-    app.provide("socket", new Chaussette());
+    app.provide("socket", new Zocket());
     app.mount("#app");
 });
