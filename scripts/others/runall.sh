@@ -24,7 +24,7 @@ if [ "$user" = "network" ]; then
 elif [ "$user" = "terminal" ]; then
     nbScripts=6
 elif [ "$user" = "server" ]; then
-    nbScripts=7
+    nbScripts=8
 fi
 
 # Executing scripts based on the user
@@ -66,6 +66,10 @@ elif [ "$user" = "server" ]; then
     echo -e "${GREEN}$nbScriptsExecuted/$nbScripts${RESET} scripts executed"
 
     "./others/scenariosapp.sh" || die "Failed to execute scenariosapp.sh"
+    nbScriptsExecuted=$((nbScriptsExecuted + 1))
+    echo -e "${GREEN}$nbScriptsExecuted/$nbScripts${RESET} scripts executed"
+
+    "./others/ollama.sh" || die "Failed to execute ollama.sh"
     nbScriptsExecuted=$((nbScriptsExecuted + 1))
     echo -e "${GREEN}$nbScriptsExecuted/$nbScripts${RESET} scripts executed"
 else

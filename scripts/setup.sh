@@ -41,7 +41,7 @@ echo
 
 # Afficher les options disponibles
 echo -e "${ORANGE}Please select the options you want to install: ${RESET}"
-options=("Install DemoJ on this device" "Run appservice" "Run repository" "Run sudoers" "Run virtualenv" "Run raspap" "Run raspios" "Run demojconnect" "Run wifi" "Run dns" "Run scenariosapp" "Exit")
+options=("Install DemoJ on this device" "Run appservice" "Run repository" "Run sudoers" "Run virtualenv" "Run raspap" "Run raspios" "Run demojconnect" "Run wifi" "Run dns" "Run scenariosapp" "Run ollama" "Exit")
 select install_option in "${options[@]}"; do
     case $REPLY in
         1) "others/runall.sh" "$user"; break;;
@@ -55,7 +55,8 @@ select install_option in "${options[@]}"; do
         9) "others/wifi.sh"; break;;
         10) "others/dns.sh"; break;;
         11) "others/scenariosapp.sh"; break;;
-        12) echo "Exiting..."; exit 0;;
+        12) "others/ollama.sh"; break;;
+        13) echo "Exiting..."; exit 0;;
         *) echo -e "${RED}Invalid option. Please try again. ${RESET}";;
     esac
 done
