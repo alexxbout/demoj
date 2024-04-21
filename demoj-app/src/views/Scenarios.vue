@@ -22,7 +22,7 @@
 import ScenarioCard from "@/components/ScenarioCard.vue";
 import type { IScenario } from "@/types/IConfig";
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from "@ionic/vue";
-import { calculator, sparkles } from "ionicons/icons";
+import { calculator, logoYoutube, sparkles } from "ionicons/icons";
 import { onMounted, ref } from "vue";
 
 const page = ref();
@@ -41,6 +41,12 @@ const scenarios = ref<IScenario[]>([
         description: "Générez du texte avec une IA conversationnelle similaire à ChatGPT.",
         icon: sparkles,
     },
+    {
+        name: "streaming",
+        title: "Streaming Vidéo",
+        description: "Regardez des vidéos en streaming avec des fonctionnalités de contrôle similaires à Youtube.",
+        icon: logoYoutube,
+    }
 ]);
 
 const mode = ref<"client" | "operator">("client");

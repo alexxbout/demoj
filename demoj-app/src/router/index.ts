@@ -42,6 +42,11 @@ const routes: Array<RouteRecordRaw> = [
                 component: () => import("@/views/scenarios/AI.vue"),
             },
             {
+                path: "scenarios/streaming",
+                name: "streaming",
+                component: () => import("@/views/scenarios/Streaming.vue"),
+            },
+            {
                 path: "debug",
                 name: "debug",
                 component: () => import("@/views/Debug.vue"),
