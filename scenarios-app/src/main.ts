@@ -13,6 +13,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/app/ai",
         name: "ai",
         component: () => import("./scenarios/AI.vue"),
+    },
+    {
+        path: "/app/streaming",
+        name: "streaming",
+        component: () => import("./scenarios/Streaming.vue"),
     }
 ];
 
