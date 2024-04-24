@@ -34,17 +34,17 @@ const routes: Array<RouteRecordRaw> = [
             {
                 path: "scenarios/calculator",
                 name: "calculator",
-                component: () => import("@/views/scenarios/Calculator.vue"),
+                component: () => import("@/views/Scenario.vue"),
             },
             {
                 path: "scenarios/ai",
                 name: "ai",
-                component: () => import("@/views/scenarios/AI.vue"),
+                component: () => import("@/views/Scenario.vue"),
             },
             {
                 path: "scenarios/streaming",
                 name: "streaming",
-                component: () => import("@/views/scenarios/Streaming.vue"),
+                component: () => import("@/views/Scenario.vue"),
             },
             {
                 path: "debug",
