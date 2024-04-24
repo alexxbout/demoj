@@ -4,7 +4,7 @@
             <ion-grid style="width: 100%;">
                 <ion-row class="ion-align-items-center ion-justify-content-start">
                     <ion-col size="auto">
-                        <ion-icon :icon="data.icon" size="large" style="color: black;" />
+                        <ion-icon :icon="data.icon" size="large" />
                     </ion-col>
 
                     <ion-col size="auto">
@@ -35,3 +35,15 @@ const go = () => {
     router.push({ name: props.data.name });
 };
 </script>
+
+<style scoped>
+ion-icon {
+    color: black;
+}
+
+@media (prefers-color-scheme: dark) {
+    ion-icon {
+        color: white;
+    }
+}
+</style>

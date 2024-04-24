@@ -22,7 +22,7 @@
                 </ion-toolbar>
             </ion-header>
 
-            <ion-list v-if="config" class="ion-margin" :inset="true">
+            <!-- <ion-list v-if="config" class="ion-margin" :inset="true">
                 <ion-item v-for="param in config.modules[props.device].parameters">
                     <ion-grid>
                         <ion-row>
@@ -32,7 +32,7 @@
                         </ion-row>
                     </ion-grid>
                 </ion-item>
-            </ion-list>
+            </ion-list> -->
         </ion-content>
 
         <ion-footer class="ion-padding">
@@ -49,11 +49,10 @@
 
 <script setup lang="ts">
 import ConnectStatus from "@/components/ConnectStatus.vue";
-import API from "@/services/API";
 import { SoundEnum, SoundManager } from "@/services/SoundManager";
 import { Zocket } from "@/services/Zocket";
-import { DeviceActions, type DeviceTypes, type IParameter } from "@/types/IConfig";
-import { ActionSheetButton, IonActionSheet, IonButton, IonCol, IonContent, IonFooter, IonGrid, IonHeader, IonInput, IonItem, IonList, IonPage, IonRange, IonRow, IonTitle, IonToast, IonToggle, IonToolbar } from "@ionic/vue";
+import { DeviceActions, type DeviceTypes } from "@/types/IConfig";
+import { ActionSheetButton, IonActionSheet, IonButton, IonCol, IonContent, IonFooter, IonGrid, IonHeader, IonPage, IonRow, IonTitle, IonToast, IonToolbar } from "@ionic/vue";
 import { checkmarkCircle } from "ionicons/icons";
 import { computed, inject, onMounted, ref } from "vue";
 
@@ -107,7 +106,7 @@ const toastMessage = ref("Action effectuée avec succès");
 const toastDuration = ref(5000);
 const toastOpen = ref(false);
 
-const pinFormatter = (value: number) => `${value}%`;
+// const pinFormatter = (value: number) => `${value}%`;
 
 const handleRestart = async (event: CustomEvent) => {
     if (event.detail.role == "destructive") {
@@ -125,13 +124,13 @@ const handleStop = async (event: CustomEvent) => {
     }
 };
 
-const onParameterToggle = async (parameter: IParameter) => {
-    await API.setParameterState(props.device, parameter.id, parameter.isActive);
-};
+// const onParameterToggle = async (parameter: IParameter) => {
+//     await API.setParameterState(props.device, parameter.id, parameter.isActive);
+// };
 
-const onParameterUpdate = async (parameter: IParameter) => {
-    await API.setParameterValue(props.device, parameter.id, parameter.value!);
-};
+// const onParameterUpdate = async (parameter: IParameter) => {
+//     await API.setParameterValue(props.device, parameter.id, parameter.value!);
+// };
 
 onMounted(() => {
     soundManager.loadSounds([SoundEnum.NAVIGATION_SELECTION_COMPLETE_CELEBRATION]);
