@@ -1,5 +1,5 @@
 from utils import execute_command
-from const import STOP_CMD, RESTART_CMD, IP_NETWORK
+from const import STOP_CMD, RESTART_CMD, IP_NETWORK, STRESS_CMD
 import socketio
 import time
 
@@ -43,6 +43,11 @@ def restart():
     print("Restarting module...")
     sio.disconnect()
     execute_command(RESTART_CMD)
+
+@sio.event
+def stress_test():
+    print("Stressing module...")
+    execute_command(STRESS_CMD)
 
 #################################################################
 # Main
