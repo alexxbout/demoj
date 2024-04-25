@@ -12,14 +12,6 @@
             <div v-if="current" style="height: 100%; display: flex; flex-direction: column; justify-items: center; align-items: center; justify-content: space-between">
                 <div>
                     <ion-list :inset="true" style="margin: 0">
-                        <ion-item v-if="mode == 'operator'">
-                            <ion-grid>
-                                <ion-row>
-                                    <ion-toggle @ion-change="onParameterToggle()">Accès au public</ion-toggle>
-                                </ion-row>
-                            </ion-grid>
-                        </ion-item>
-
                         <ion-item>
                             <ion-grid>
                                 <ion-row>
@@ -42,8 +34,8 @@
                 </div>
 
                 <div style="height: max-content; width: 100%; display: flex; flex-direction: column; align-items: center">
-                    <ion-chip v-show="mode === 'client'" color="danger">Accès au scénario désactivé le temps de sa présentation</ion-chip>
-                    <ion-button @click="handleClick" expand="block" style="width: 100%" :disabled="!canAccess">Accéder à l'application</ion-button>
+                    <ion-chip v-if="isDisabled" color="danger">Ce scénario est indisponible car le serveur est hors ligne</ion-chip>
+                    <ion-button @click="handleClick" expand="block" style="width: 100%" :disabled="isDisabled">Accéder à l'application</ion-button>
                 </div>
             </div>
         </ion-content>
@@ -51,8 +43,9 @@
 </template>
 
 <script setup lang="ts">
-import { IonBackButton, IonButton, IonButtons, IonChip, IonCol, IonContent, IonGrid, IonHeader, IonItem, IonList, IonPage, IonRow, IonText, IonTitle, IonToggle, IonToolbar } from "@ionic/vue";
-import { onMounted, ref } from "vue";
+import { Zocket } from "@/services/Zocket";
+import { IonBackButton, IonButton, IonButtons, IonChip, IonCol, IonContent, IonGrid, IonHeader, IonItem, IonList, IonPage, IonRow, IonText, IonTitle, IonToolbar } from "@ionic/vue";
+import { computed, inject, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 
 enum Scenario {
@@ -74,9 +67,10 @@ interface ScenarioData {
     stress: StressType[];
 }
 
-const mode = ref<"client" | "operator">(localStorage.getItem("mode") === "operator" ? "operator" : "client");
-const isDisabled = ref(true); // TODO: Update this value with socket data
-const canAccess = ref(mode.value === "operator" || !isDisabled);
+const socket = inject("socket") as Zocket;
+const config = socket.getConfig();
+
+const isDisabled = computed(() => config.value ? !config.value.modules.server.isConnected : true);
 
 const baseUrl = `http://${import.meta.env.VITE_IP_SERVER}:5000/app/`;
 
@@ -111,8 +105,6 @@ const handleClick = () => {
         location.href = scenario.url;
     }
 };
-
-const onParameterToggle = () => {};
 
 onMounted(() => {
     const scenario = data.find((d) => d.scenario === route.name);
