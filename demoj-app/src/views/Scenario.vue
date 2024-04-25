@@ -72,7 +72,7 @@ const config = socket.getConfig();
 
 const isDisabled = computed(() => config.value ? !config.value.modules.server.isConnected : true);
 
-const baseUrl = `http://${import.meta.env.VITE_IP_SERVER}:5000/app/`;
+const baseUrl = `http://${import.meta.env.VITE_IP_SERVER}:5000/`;
 
 const route = useRoute();
 
