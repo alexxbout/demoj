@@ -1,8 +1,6 @@
 #!/bin/bash
 # shellcheck shell=bash source=/dev/null disable=SC2154
 
-# ! NEED TO BE TESTED
-
 : '
 This script downloads a video from a URL and saves it to the working directory.
 '

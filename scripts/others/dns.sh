@@ -4,6 +4,8 @@
 # ! NEED TO BE TESTED
 
 : '
+This script initializes the DNS server.
+The DNS server is configured to redirect all traffic comming from port 5000 to port 80.
 '
 
 # Including utility functions
@@ -21,6 +23,10 @@ fi
 
 # Displaying initialization message
 echo "Initializing DNS"
+
+# Update dns in /etc/dhcpcd.conf
+# echo "Updating default DNS values of RaspAP"
+# sed -i 's/static domain_name_server=9.9.9.9 1.1.1.1/static domain_name_server=10.3.141.1 10.3.141.1/' /etc/dhcpcd.conf >> "$log_file" 2>&1 || die "Failed to update DNS values in dhcpcd.conf"
 
 # Redirect port 80 to 5000
 echo "Redirecting port 80 to 5000"
@@ -42,8 +48,12 @@ echo "Restarting dnsmasq"
 systemctl restart dnsmasq >> "$log_file" 2>&1 || die "Failed to restart dnsmasq"
 
 # Saving iptables rules
-apt-get install iptables-persistent -y >> "$log_file" 2>&1 || die "Failed to install iptables-persistent"
-# ! Maybe need to do something more to save the rules
+echo "Saving iptables rules"
+apt install iptables-persistent -y >> "$log_file" 2>&1 || die "Failed to install iptables-persistent"
+
+# Saving iptables rules
+echo "Saving iptables rules"
+iptables-save > /etc/iptables/rules.v4 >> "$log_file" 2>&1 || die "Failed to save iptables rules"
 
 # Finalization message
 echo -e "${GREEN}DNS initialized ${RESET}"
