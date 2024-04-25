@@ -1,5 +1,5 @@
 import json
-from const import IP_TERMINAL, IP_NETWORK, IP_SERVER, RESTART_CMD, STOP_CMD, STRESS_LVL_1_CMD, STRESS_LVL_2_CMD, STRESS_LVL_3_CMD
+from const import IP_TERMINAL, IP_NETWORK, IP_SERVER, RESTART_CMD, STOP_CMD, STRESS_CMD
 from utils import execute_command, update_and_write_json, get_device_from_addr
 
 from flask import Flask, jsonify, request, render_template, redirect, url_for
@@ -137,34 +137,22 @@ def update_module_status(data):
 def stress_module(data):
     """
     Event handler triggered when a stress command is sent to a module.
-    data: { "device": "module", "level": 1/2/3, "time": "10s" }
+    data: { "device": "module", "time": "10s" }
     """
-    device = get_device_from_addr(request.remote_addr)
-    level = data["level"]
+    device = data["device"]
     time = data["time"]
 
     if device == "client":
         msg = "Invalid module: {}".format(device)
         return jsonify({"error": msg})
     
-    if level != 1 and level != 2 and level != 3:
-        print("Invalid level:", level)
-        return
-    
-    # Update time (last parameter) of stress command
-    cmd = None
-    if level == 1:
-        cmd = STRESS_LVL_1_CMD
-    elif level == 2:
-        cmd = STRESS_LVL_2_CMD
-    else:
-        cmd = STRESS_LVL_3_CMD
+    cmd = STRESS_CMD
 
+    # Update time (last parameter) of stress command
     cmd[-1] = time
 
     if device != "network":
-        # TODO: Emit stress event to the corresponding module
-        # sio.emit("stress", {"level": level}, room=device)
+        sio.emit("stress", room=device)
         pass
     else:
         execute_command(cmd)
