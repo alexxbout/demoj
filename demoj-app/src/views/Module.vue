@@ -22,7 +22,7 @@
                 </ion-toolbar>
             </ion-header>
 
-            <ion-button @click="isOpen = true" expand="block" class="ion-padding">Configurer les afficheurs</ion-button>
+            <ion-button @click="isOpen = true" expand="block" class="ion-padding" :disabled="!isConnected">Configurer les afficheurs</ion-button>
             <ion-modal :is-open="isOpen" :presenting-element="presenting" @willDismiss="handleDismiss">
                 <ion-header>
                     <ion-toolbar>
