@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request, render_template, redirect, url_for, m
 from flask_cors import CORS
 from demojcompute import compute
 
+VIDEOS_FOLDER = "../videos"
 APP_FOLDER = "../app"
 APP_URL = "/app/"
 HTTP_SERVER_PORT = 5000
@@ -40,10 +41,6 @@ def index():
 @app.route("/api/scenarios/calculator/<string:value>")
 def calculator(value):
     return make_response(jsonify({"result": compute(value)}), 200)
-
-# TODO: Streaming video
-    
-# TODO: Image processing
 
 #################################################################
 # Main
