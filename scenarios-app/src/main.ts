@@ -5,24 +5,24 @@ import "./style.css";
 
 const routes: Array<RouteRecordRaw> = [
     {
-        path: "/app/calculator",
+        path: "/calculator",
         name: "calculator",
         component: () => import("./scenarios/Calculator.vue"),
     },
     {
-        path: "/app/ai",
+        path: "/ai",
         name: "ai",
         component: () => import("./scenarios/AI.vue"),
     },
     {
-        path: "/app/streaming",
+        path: "/streaming",
         name: "streaming",
         component: () => import("./scenarios/Streaming.vue"),
     }
 ];
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHistory(import.meta.env.BASE_URL),
     routes,
 });
 
