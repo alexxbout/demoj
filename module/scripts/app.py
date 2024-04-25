@@ -114,9 +114,9 @@ def disconnect():
 def update_module_status(data):
     """
     Event handler triggered when updating the connection status of a module.
-    data: { "device": "module", "status": "restart/stop" }
+    data: { "device": "module", "action": "stop" | "restart" }
     """
-    device = get_device_from_addr(request.remote_addr)
+    device = data["device"]
     action = data["action"]
 
     if device == "terminal" or device == "server" or device == "network":
