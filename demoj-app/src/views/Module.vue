@@ -1,5 +1,5 @@
 <template>
-    <ion-page>
+    <ion-page ref="page">
         <ion-header>
             <ion-toolbar>
                 <ion-title>{{ name }}</ion-title>
@@ -22,19 +22,20 @@
                 </ion-toolbar>
             </ion-header>
 
-            <Tower />
-
-            <!-- <ion-list v-if="config" class="ion-margin" :inset="true">
-                <ion-item v-for="param in config.modules[props.device].parameters">
-                    <ion-grid>
-                        <ion-row>
-                            <ion-toggle v-model="param.isActive" @ion-change="onParameterToggle(param)" :disabled="!isConnected">{{ param.name }}</ion-toggle>
-                            <ion-range v-if="param.type == 'percentage'" v-model="param.value" @ion-change="onParameterUpdate(param)" v-show="param.isActive" :pin="true" :pin-formatter="pinFormatter" :disabled="!isConnected" />
-                            <ion-input v-else-if="param.type == 'number'" v-model="param.value" @ion-change="onParameterUpdate(param)" v-show="param.isActive" label="Valeur" type="number"></ion-input>
-                        </ion-row>
-                    </ion-grid>
-                </ion-item>
-            </ion-list> -->
+            <ion-button @click="isOpen = true" expand="block" class="ion-padding">Configurer les afficheurs</ion-button>
+            <ion-modal :is-open="isOpen" :presenting-element="presenting" @willDismiss="handleDismiss">
+                <ion-header>
+                    <ion-toolbar>
+                        <ion-title>Configuration des jauges</ion-title>
+                        <ion-buttons slot="end">
+                            <ion-button @click="isOpen = false">Retour</ion-button>
+                        </ion-buttons>
+                    </ion-toolbar>
+                </ion-header>
+                <ion-content class="ion-margin">
+                    <Tower />
+                </ion-content>
+            </ion-modal>
         </ion-content>
 
         <ion-footer class="ion-padding">
@@ -55,7 +56,7 @@ import Tower from "@/components/Tower.vue";
 import { SoundEnum, SoundManager } from "@/services/SoundManager";
 import { Zocket } from "@/services/Zocket";
 import { DeviceActions, type DeviceType } from "@/types/IConfig";
-import { ActionSheetButton, IonActionSheet, IonButton, IonCol, IonContent, IonFooter, IonGrid, IonHeader, IonPage, IonRow, IonTitle, IonToast, IonToolbar } from "@ionic/vue";
+import { ActionSheetButton, IonActionSheet, IonButton, IonButtons, IonCol, IonContent, IonFooter, IonGrid, IonHeader, IonModal, IonPage, IonRow, IonTitle, IonToast, IonToolbar } from "@ionic/vue";
 import { checkmarkCircle } from "ionicons/icons";
 import { computed, inject, onMounted, ref } from "vue";
 
@@ -109,7 +110,14 @@ const toastMessage = ref("Action effectuée avec succès");
 const toastDuration = ref(5000);
 const toastOpen = ref(false);
 
-// const pinFormatter = (value: number) => `${value}%`;
+const isOpen = ref(false);
+
+const handleDismiss = () => {
+    isOpen.value = false;
+};
+
+const page = ref();
+const presenting = ref<any>();
 
 const handleRestart = async (event: CustomEvent) => {
     if (event.detail.role == "destructive") {
@@ -127,15 +135,9 @@ const handleStop = async (event: CustomEvent) => {
     }
 };
 
-// const onParameterToggle = async (parameter: IParameter) => {
-//     await API.setParameterState(props.device, parameter.id, parameter.isActive);
-// };
-
-// const onParameterUpdate = async (parameter: IParameter) => {
-//     await API.setParameterValue(props.device, parameter.id, parameter.value!);
-// };
-
 onMounted(() => {
+    presenting.value = page.value.$el;
+
     soundManager.loadSounds([SoundEnum.NAVIGATION_SELECTION_COMPLETE_CELEBRATION]);
 });
 </script>

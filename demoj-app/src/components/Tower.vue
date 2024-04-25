@@ -1,6 +1,6 @@
 <template>
-    <div style="width: 100%; margin-top: 60px; display: flex; flex-direction: column; align-items: center; justify-content: center; justify-items: center">
-        <div style="display: flex; background-color: rgb(0 0 0); width: 180px; height: 45svh; border-radius: 5px; border: solid; border-width: 1px; border-color: lightgray">
+    <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; justify-items: center">
+        <div style="display: flex; background-color: rgb(0 0 0); width: 180px; height: 60%; max-height: 450px; border-radius: 5px; border: solid; border-width: 1px; border-color: lightgray">
             <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; justify-items: center; padding-top: 30px; padding-bottom: 30px">
                 <div @click="setOpen(true, 'left')" style="height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; justify-items: center; margin-right: 30px">
                     <div style="background-color: #686868; width: 27px; height: 100%; margin-bottom: 20px; border-radius: 5px"></div>
