@@ -1,5 +1,5 @@
 <template>
-    <ion-button @click="isOpen = true" expand="block" color="danger">{{ header }}</ion-button>
+    <ion-button @click="isOpen = true" expand="block" color="danger" class="ion-padding">{{ header }}</ion-button>
     <ion-modal :is-open="isOpen" :presenting-element="props.presenting" @willDismiss="handleDismiss">
         <ion-header>
             <ion-toolbar>
@@ -12,18 +12,8 @@
         <ion-content class="ion-margin">
             <ion-list :inset="true">
                 <ion-item>
-                    <ion-select :value="moduleSelect" :label="moduleLabel" :placeholder="modulePlaceholder">
-                        <ion-select-option value="terminal">Terminal</ion-select-option>
-                        <ion-select-option value="network">Réseau</ion-select-option>
-                        <ion-select-option value="server">Serveur</ion-select-option>
-                    </ion-select>
-                </ion-item>
-
-                <ion-item>
-                    <ion-select :value="levelSelect" :label="levelLabel" :placeholder="levelPlaceholder">
-                        <ion-select-option :value="1">Faible stress</ion-select-option>
-                        <ion-select-option :value="2">Stress modéré</ion-select-option>
-                        <ion-select-option :value="3">Stress élevé</ion-select-option>
+                    <ion-select v-model="moduleSelect" :label="moduleLabel" :placeholder="modulePlaceholder">
+                        <ion-select-option v-for="value in values" :value="value.value" :disabled="value.disabled">{{ value.text }}</ion-select-option>
                     </ion-select>
                 </ion-item>
 
@@ -34,14 +24,14 @@
         </ion-content>
 
         <ion-footer>
-            <ion-button expand="block" class="ion-padding" color="danger" :disabled="isButtonDisabled">{{ buttonText }}</ion-button>
+            <ion-button @click="sendStress" expand="block" class="ion-padding" color="danger" :disabled="isButtonDisabled">{{ buttonText }}</ion-button>
         </ion-footer>
     </ion-modal>
 </template>
 
 <script setup lang="ts">
 import { Zocket } from "@/services/Zocket";
-import { DeviceTypes } from "@/types/IConfig";
+import { DeviceType } from "@/types/IConfig";
 import { IonButton, IonButtons, IonContent, IonFooter, IonHeader, IonInput, IonItem, IonList, IonModal, IonSelect, IonSelectOption, IonTitle, IonToolbar } from "@ionic/vue";
 import { computed, inject, ref } from "vue";
 
@@ -49,43 +39,54 @@ const props = defineProps<{
     presenting: any;
 }>();
 
+const emits = defineEmits<{
+    (e: "@stress", module: DeviceType, time: number): void;
+}>();
+
 const socket = inject("socket") as Zocket;
+const config = socket.getConfig();
 
 const isOpen = ref(false);
 const header = ref("Stresser un module");
 
 const moduleLabel = ref("Module");
 const modulePlaceholder = ref("Choisir un module");
-const moduleSelect = ref<DeviceTypes>("terminal");
-
-const levelLabel = ref("Niveau");
-const levelPlaceholder = ref("Choisir un niveau");
-const levelSelect = ref<1 | 2 | 3>(1);
+const moduleSelect = ref<DeviceType | null>(null);
 
 const timeLabel = ref("Durée (en secondes)");
 const timeInput = ref(10);
-const timeMin = ref(1);
-const timeMax = ref(60*5);
+const timeMin = 1;
+const timeMax = 60 * 5;
 
 const buttonText = ref("Stresser le module");
-const isButtonDisabled = computed(() => timeInput.value < timeMin.value || timeInput.value > timeMax.value);
+const isButtonDisabled = computed(() => timeInput.value < timeMin || timeInput.value > timeMax || !moduleSelect.value);
+
+const values = computed<{ value: string; text: string; disabled: boolean }[]>(() => [
+    { value: "terminal", text: "Terminal", disabled: config.value ? !config.value.modules.terminal.isConnected : true },
+    { value: "network", text: "Réseau", disabled: config.value ? !config.value.modules.network.isConnected : true },
+    { value: "server", text: "Serveur", disabled: config.value ? !config.value.modules.server.isConnected : false },
+]);
 
 const handleTimeInput = (event: CustomEvent) => {
     const input = event.target as HTMLIonInputElement;
     timeInput.value = input.value as number;
 };
 
-const stressModule = () => {
-    socket.stressModule(moduleSelect.value, levelSelect.value, timeInput.value);
-    isOpen.value = false;
+const sendStress = () => {
+    console.log("Sending stress to module %s for %d seconds", moduleSelect.value, timeInput.value);
+
+    if (moduleSelect.value) {
+        isOpen.value = false;
+
+        socket.sendStress(moduleSelect.value, timeInput.value);
+
+        emits("@stress", moduleSelect.value, timeInput.value);
+    }
 };
 
 const handleDismiss = () => {
-    moduleSelect.value = "terminal";
-    levelSelect.value = 1;
     timeInput.value = 10;
 
     isOpen.value = false;
 };
 </script>
-@/services/Zocket

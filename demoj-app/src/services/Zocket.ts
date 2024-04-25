@@ -1,4 +1,4 @@
-import { DeviceActions, DeviceStates, DeviceTypes, IConfig } from "@/types/IConfig";
+import { DeviceActions, DeviceStates, DeviceType, IConfig } from "@/types/IConfig";
 import { Socket, io } from "socket.io-client";
 import { Ref, ref } from "vue";
 import API from "./API";
@@ -66,7 +66,7 @@ export class Zocket {
          * Custom events
          */
 
-        this.socket.on("module_status", (data: { device: DeviceTypes; status: DeviceStates }) => {
+        this.socket.on("module_status", (data: { device: DeviceType; status: DeviceStates }) => {
             console.info(`Socket ${data.device} status: ${data.status}`);
             this.soundManager.playSound(data.status == DeviceStates.ON ? SoundEnum.NAVIGATION_FORWARD_SELECTION : SoundEnum.NAVIGATION_BACKWARD_SELECTION);
 
@@ -91,12 +91,12 @@ export class Zocket {
         return this.socket?.connected;
     }
 
-    public updateModuleStatus(module: DeviceTypes, action: DeviceActions) {
-        if (this.socket) this.socket.emit("update_module_status", { device: module, action: action });
+    public sendAction(module: DeviceType, action: DeviceActions) {
+        if (this.socket) this.socket.emit("action", { device: module, action: action });
     }
 
-    public stressModule(module: DeviceTypes, level: 1 | 2 | 3, time: number) {
-        if (this.socket) this.socket.emit("stress_module", { device: module, level: level, time: time });
+    public sendStress(module: DeviceType, time: number) {
+        if (this.socket) this.socket.emit("stress", { device: module, time: time });
     }
 
     public getConfig() {

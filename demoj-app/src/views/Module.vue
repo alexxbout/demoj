@@ -54,13 +54,13 @@ import ConnectStatus from "@/components/ConnectStatus.vue";
 import Tower from "@/components/Tower.vue";
 import { SoundEnum, SoundManager } from "@/services/SoundManager";
 import { Zocket } from "@/services/Zocket";
-import { DeviceActions, type DeviceTypes } from "@/types/IConfig";
+import { DeviceActions, type DeviceType } from "@/types/IConfig";
 import { ActionSheetButton, IonActionSheet, IonButton, IonCol, IonContent, IonFooter, IonGrid, IonHeader, IonPage, IonRow, IonTitle, IonToast, IonToolbar } from "@ionic/vue";
 import { checkmarkCircle } from "ionicons/icons";
 import { computed, inject, onMounted, ref } from "vue";
 
 const props = defineProps<{
-    device: DeviceTypes;
+    device: DeviceType;
 }>();
 
 const soundManager = new SoundManager();
@@ -113,7 +113,7 @@ const toastOpen = ref(false);
 
 const handleRestart = async (event: CustomEvent) => {
     if (event.detail.role == "destructive") {
-        socket.updateModuleStatus(props.device, DeviceActions.RESTART);
+        socket.sendAction(props.device, DeviceActions.RESTART);
         soundManager.playSound(SoundEnum.NAVIGATION_SELECTION_COMPLETE_CELEBRATION);
         toastOpen.value = true;
     }
@@ -121,7 +121,7 @@ const handleRestart = async (event: CustomEvent) => {
 
 const handleStop = async (event: CustomEvent) => {
     if (event.detail.role == "destructive") {
-        socket.updateModuleStatus(props.device, DeviceActions.STOP);
+        socket.sendAction(props.device, DeviceActions.STOP);
         soundManager.playSound(SoundEnum.NAVIGATION_SELECTION_COMPLETE_CELEBRATION);
         toastOpen.value = true;
     }

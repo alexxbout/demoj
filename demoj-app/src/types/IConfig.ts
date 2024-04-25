@@ -1,10 +1,10 @@
-export type DeviceTypes = "terminal" | "network" | "server";
-export type ParameterTypes = "number" | "percentage" | "boolean";
+export type DeviceType = "terminal" | "network" | "server";
+export type ParameterType = "number" | "percentage" | "boolean";
 
 export interface IParameter {
     id: number;
     name: string;
-    type: ParameterTypes;
+    type: ParameterType;
     isActive: boolean;
     value?: number;
 };
@@ -17,7 +17,7 @@ export interface IScenario {
 };
 
 export interface IConfig {
-    modules: { [key in DeviceTypes]: { isConnected: boolean, parameters?: IParameter[] } };
+    modules: { [key in DeviceType]: { isConnected: boolean, parameters?: IParameter[] } };
     scenarios: IScenario[];
 };
 
