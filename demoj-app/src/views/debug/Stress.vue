@@ -64,7 +64,7 @@ const isButtonDisabled = computed(() => timeInput.value < timeMin || timeInput.v
 const values = computed<{ value: string; text: string; disabled: boolean }[]>(() => [
     { value: "terminal", text: "Terminal", disabled: config.value ? !config.value.modules.terminal.isConnected : true },
     { value: "network", text: "Réseau", disabled: config.value ? !config.value.modules.network.isConnected : true },
-    { value: "server", text: "Serveur", disabled: config.value ? !config.value.modules.server.isConnected : false },
+    { value: "server", text: "Serveur", disabled: config.value ? !config.value.modules.server.isConnected : true },
 ]);
 
 const handleTimeInput = (event: CustomEvent) => {
