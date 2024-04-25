@@ -3,12 +3,10 @@ from flask_cors import CORS
 from demojcompute import compute
 
 VIDEOS_FOLDER = "../videos"
-APP_FOLDER = "../app"
-APP_URL = "/app/"
 HTTP_SERVER_PORT = 5000
 CURRENT_MODULE = "server"
 
-app = Flask(__name__, template_folder=APP_FOLDER, static_folder=APP_FOLDER, static_url_path=APP_URL)
+app = Flask(__name__, template_folder="dist", static_folder="dist/static", static_url_path="/static")
 CORS(app)
 
 #################################################################
@@ -23,15 +21,9 @@ def api():
 # Scenarios app
 #################################################################
 
-@app.errorhandler(404)
-def not_found():
-    if request.path.startswith("/app"):
-        return redirect(url_for("index"))
-    return jsonify({"error": "Not found"}), 404
-
-@app.route("/")
-@app.route("/app")
-def index():
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
+def index(path):
     return render_template("index.html")
     
 #################################################################
