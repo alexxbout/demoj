@@ -3,7 +3,9 @@
         <ion-grid>
             <ion-row class="ion-align-items-center ion-justify-content-center" style="height: 100%">
                 <ion-col size="10">
-                    <ion-img @click="handleClick" src="/app/assets/images/demoj.png"></ion-img>
+                    <ion-img @click="handleClick" src="/app/assets/images/demoj.png" style="z-index: 1; position: relative"></ion-img>
+
+                    <ConfettiExplosion v-if="visible" :colors="colors" :particleCount="200" :force="0.5" :stageHeight="1500" :stageWidth="1200" style="z-index: 0; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%)" />
                 </ion-col>
             </ion-row>
         </ion-grid>
@@ -21,11 +23,12 @@
 
 <script setup lang="ts">
 import { IonAlert, IonButton, IonCol, IonFooter, IonGrid, IonImg, IonPage, IonRow, IonToast, useIonRouter } from "@ionic/vue";
-import { onMounted, ref } from "vue";
+import { nextTick, onMounted, ref } from "vue";
+import ConfettiExplosion from "vue-confetti-explosion";
 
 const router = useIonRouter();
 
-const maxClickCount = 15;
+const maxClickCount = 5;
 const clickCount = ref(0);
 const debug = ref(false);
 
@@ -36,7 +39,10 @@ const toastColor = ref();
 
 const isAlertOpen = ref(false);
 
-const handleClick = () => {
+const visible = ref(false);
+const colors = ref(["#38b000", "#ccff33", "#ffff3f", "#affc41", "#29bf12"]);
+
+const handleClick = async () => {
     clickCount.value++;
 
     if (clickCount.value === maxClickCount) {
@@ -48,6 +54,12 @@ const handleClick = () => {
         toastMessage.value = debug.value ? "Mode développeur activé" : "Mode développeur désactivé";
         toastColor.value = debug.value ? "success" : "danger";
         toastOpen.value = true;
+
+        if (debug.value) {
+            visible.value = false;
+            await nextTick();
+            visible.value = true;
+        }
     }
 };
 
