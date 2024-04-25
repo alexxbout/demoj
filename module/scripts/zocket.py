@@ -45,9 +45,11 @@ def restart():
     execute_command(RESTART_CMD)
 
 @sio.event
-def stress_test():
+def stress(time):
     print("Stressing module...")
-    execute_command(STRESS_CMD)
+    cmd = STRESS_CMD
+    cmd[-1] = str(time)
+    execute_command(cmd)
 
 #################################################################
 # Main
