@@ -5,7 +5,7 @@
                 <ion-col size="10">
                     <ion-img @click="handleClick" src="/app/assets/images/demoj.png" style="z-index: 1; position: relative"></ion-img>
 
-                    <ConfettiExplosion v-if="visible" :colors="colors" :particleCount="250" :force="0.4" :duration="7000" :stageHeight="1500" :stageWidth="1200" style="z-index: 0; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%)" />
+                    <ConfettiExplosion v-if="visible" :colors="colors" :particleCount="250" :force="0.4" :duration="6000" :stageHeight="1500" :stageWidth="1200" style="z-index: 0; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%)" />
                 </ion-col>
             </ion-row>
         </ion-grid>
@@ -28,7 +28,7 @@ import ConfettiExplosion from "vue-confetti-explosion";
 
 const router = useIonRouter();
 
-const maxClickCount = 5;
+const maxClickCount = 15;
 const clickCount = ref(0);
 const debug = ref(false);
 
