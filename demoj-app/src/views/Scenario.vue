@@ -28,7 +28,7 @@
                                         <p>{{ current.description }}</p>
                                     </ion-text>
                                 </ion-row>
-                                <ion-row class="">
+                                <ion-row>
                                     <ion-col>
                                         <ion-text>
                                             <h2>Impact sur le système</h2>

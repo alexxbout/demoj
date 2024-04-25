@@ -11,16 +11,18 @@
                 <ion-toolbar>
                     <ion-grid style="--ion-grid-padding: 0px">
                         <ion-row class="ion-align-items-center ion-justify-content-between">
-                            <ion-col size="auto" style="--ion-grid-column-padding: 0px; padding-right: 5px;">
+                            <ion-col size="auto" style="--ion-grid-column-padding: 0px; padding-right: 5px">
                                 <ion-title size="large">{{ name }}</ion-title>
                             </ion-col>
-                            <ion-col size="auto" style="--ion-grid-column-padding: 0px; padding-right: 5px;">
+                            <ion-col size="auto" style="--ion-grid-column-padding: 0px; padding-right: 5px">
                                 <connect-status :is-connected="isConnected" />
                             </ion-col>
                         </ion-row>
                     </ion-grid>
                 </ion-toolbar>
             </ion-header>
+
+            <Tower />
 
             <!-- <ion-list v-if="config" class="ion-margin" :inset="true">
                 <ion-item v-for="param in config.modules[props.device].parameters">
@@ -49,6 +51,7 @@
 
 <script setup lang="ts">
 import ConnectStatus from "@/components/ConnectStatus.vue";
+import Tower from "@/components/Tower.vue";
 import { SoundEnum, SoundManager } from "@/services/SoundManager";
 import { Zocket } from "@/services/Zocket";
 import { DeviceActions, type DeviceTypes } from "@/types/IConfig";

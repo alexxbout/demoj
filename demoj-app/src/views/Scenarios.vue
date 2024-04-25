@@ -36,17 +36,17 @@ const scenarios = ref<IScenario[]>([
         icon: calculator,
     },
     {
-        name: "ai",
-        title: "Intelligence Artificielle",
-        description: "Générez du texte avec une IA conversationnelle similaire à ChatGPT.",
-        icon: sparkles,
-    },
-    {
         name: "streaming",
         title: "Streaming Vidéo",
         description: "Regardez des vidéos en streaming avec des fonctionnalités de contrôle similaires à Youtube.",
         icon: logoYoutube,
-    }
+    },
+    {
+        name: "ai",
+        title: "IA",
+        description: "Générez du texte avec une IA conversationnelle similaire à ChatGPT.",
+        icon: sparkles,
+    },
 ]);
 
 const mode = ref<"client" | "operator">("client");
