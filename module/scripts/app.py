@@ -111,7 +111,7 @@ def disconnect():
         sio.emit("module_status", {"device": device, "status": "off"}, room="client")
 
 @sio.event
-def update_module_status(data):
+def action(data):
     """
     Event handler triggered when updating the connection status of a module.
     data: { "device": "module", "action": "stop" | "restart" }
@@ -134,7 +134,7 @@ def update_module_status(data):
                 execute_command(STOP_CMD)
     
 @sio.event
-def stress_module(data):
+def stress(data):
     """
     Event handler triggered when a stress command is sent to a module.
     data: { "device": "module", "time": "10s" }
@@ -146,15 +146,12 @@ def stress_module(data):
         msg = "Invalid module: {}".format(device)
         return jsonify({"error": msg})
     
-    cmd = STRESS_CMD
-
-    # Update time (last parameter) of stress command
-    cmd[-1] = time
+    cmd = STRESS_CMD    
 
     if device != "network":
-        sio.emit("stress", room=device)
-        pass
+        sio.emit("stress", { time: time }, room=device)
     else:
+        cmd[-1] = time
         execute_command(cmd)
 
 #################################################################
