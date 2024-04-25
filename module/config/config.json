@@ -4,26 +4,10 @@
       "isConnected": false
     },
     "network": {
-      "isConnected": true,
-      "parameters": [
-        {
-          "id": 0,
-          "name": "Perte de paquets",
-          "type": "percentage",
-          "isActive": false,
-          "value": 100
-        }
-      ]
+      "isConnected": true
     },
     "server": {
       "isConnected": false
     }
-  },
-  "scenarios": [
-    {
-      "name": "Calculs complexes",
-      "description": "Effectuez des calculs avanc\u00e9s. Choisissez le niveau de complexit\u00e9 et l'endroit o\u00f9 le calcul sera effectu\u00e9.",
-      "id": 0
-    }
-  ]
+  }
 }

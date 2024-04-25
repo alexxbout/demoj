@@ -137,7 +137,7 @@ def action(data):
 def stress(data):
     """
     Event handler triggered when a stress command is sent to a module.
-    data: { "device": "module", "time": "10s" }
+    data: { "device": "module", "time": 10 }
     """
     device = data["device"]
     time = data["time"]
@@ -151,7 +151,7 @@ def stress(data):
     if device != "network":
         sio.emit("stress", { time: time }, room=device)
     else:
-        cmd[-1] = time
+        cmd[-1] = str(time)
         execute_command(cmd)
 
 #################################################################
@@ -166,3 +166,5 @@ if __name__ == "__main__":
 
     print("Starting server...")
     sio.run(app, debug=True, host="0.0.0.0", port=5000, allow_unsafe_werkzeug=True)
+
+    # TODO: See for production deployment here: https://flask.palletsprojects.com/en/2.3.x/deploying/gunicorn/
