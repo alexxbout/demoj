@@ -1,6 +1,8 @@
 #!/bin/bash
 # shellcheck shell=bash source=/dev/null disable=SC2154
 
+# ! NEED TO BE TESTED
+
 : '
 This script initializes the scenario application.
 The application is built and moved to the final directory.
