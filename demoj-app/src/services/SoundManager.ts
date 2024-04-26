@@ -29,7 +29,7 @@ class SoundManager {
 
     loadSounds(soundList: SoundEnum[]) {
         for (const sound of soundList) {
-            this.sounds[sound] = new Audio(`/app/assets/sounds/${sound}`);
+            this.sounds[sound] = new Audio(`/assets/sounds/${sound}`);
             this.sounds[sound].autoplay = true;
             this.sounds[sound].muted = true;
         }

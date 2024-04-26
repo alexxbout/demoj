@@ -11,9 +11,7 @@ export default defineConfig({
             "@": path.resolve(__dirname, "./src"),
         },
     },
-    base: "/app",
-    build: { // For Flask
-        assetsDir: ".",
-        outDir: "./app",
-    }
+    build: {
+        assetsDir: "static",
+    },
 });
