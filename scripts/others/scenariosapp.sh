@@ -80,7 +80,7 @@ fi
 
 # Moving the application to the final directory
 echo "Moving app to /home/$user/demoj/module"
-mv "$tmp_dir/dist" "$dir/module" >> "$log_file" 2>&1 || die "Failed to move app to $dir/module"
+mv "$tmp_dir/dist" "$dir/module/scripts" >> "$log_file" 2>&1 || die "Failed to move app to $dir/module"
 
 # Finalization message
 echo -e "${GREEN}Scenario application initialized ${RESET}"
