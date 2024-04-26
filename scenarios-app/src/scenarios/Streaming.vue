@@ -41,7 +41,7 @@ const url = ref<string>("");
 const handleExecute = async () => {
     console.log("Loading video with quality: ", selected.value);
 
-    url.value = base + "/api/scenarios/streaming/" + selected.value;
+    url.value = base + ":5000" + "/videos/" + selected.value + ".mp4";
 };
 
 onMounted(() => {
