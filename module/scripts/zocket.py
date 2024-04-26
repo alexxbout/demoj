@@ -35,13 +35,11 @@ def disconnect():
 @sio.event
 def stop():
     print("Stopping module...")
-    sio.disconnect()
     execute_command(STOP_CMD)
 
 @sio.event
 def restart():
     print("Restarting module...")
-    sio.disconnect()
     execute_command(RESTART_CMD)
 
 @sio.event
