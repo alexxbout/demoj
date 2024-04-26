@@ -45,26 +45,20 @@
 
         <ion-action-sheet :trigger="actionSheetRestartTrigger" :header="actionSheetHeader" @didDismiss="handleRestart" :buttons="actionSheetButtonsRestart"></ion-action-sheet>
         <ion-action-sheet :trigger="actionSheetStopTrigger" :header="actionSheetHeader" @didDismiss="handleStop" :buttons="actionSheetButtonsStop"></ion-action-sheet>
-
-        <ion-toast @didDismiss="toastOpen = false" @click="toastOpen = false" :is-open="toastOpen" swipe-gesture="vertical" position="top" :message="toastMessage" :duration="toastDuration" :icon="checkmarkCircle" color="success"></ion-toast>
     </ion-page>
 </template>
 
 <script setup lang="ts">
 import ConnectStatus from "@/components/ConnectStatus.vue";
 import Tower from "@/components/Tower.vue";
-import { SoundEnum, SoundManager } from "@/services/SoundManager";
 import { Zocket } from "@/services/Zocket";
 import { DeviceActions, type DeviceType } from "@/types/IConfig";
-import { ActionSheetButton, IonActionSheet, IonButton, IonButtons, IonCol, IonContent, IonFooter, IonGrid, IonHeader, IonModal, IonPage, IonRow, IonTitle, IonToast, IonToolbar } from "@ionic/vue";
-import { checkmarkCircle } from "ionicons/icons";
+import { ActionSheetButton, IonActionSheet, IonButton, IonButtons, IonCol, IonContent, IonFooter, IonGrid, IonHeader, IonModal, IonPage, IonRow, IonTitle, IonToolbar } from "@ionic/vue";
 import { computed, inject, onMounted, ref } from "vue";
 
 const props = defineProps<{
     device: DeviceType;
 }>();
-
-const soundManager = new SoundManager();
 
 const socket = inject("socket") as Zocket;
 const config = socket.getConfig();
@@ -106,10 +100,6 @@ const actionSheetButtonsStop = ref<ActionSheetButton[]>([
     },
 ]);
 
-const toastMessage = ref("Action effectuée avec succès");
-const toastDuration = ref(5000);
-const toastOpen = ref(false);
-
 const isOpen = ref(false);
 
 const handleDismiss = () => {
@@ -122,23 +112,17 @@ const presenting = ref<any>();
 const handleRestart = async (event: CustomEvent) => {
     if (event.detail.role == "destructive") {
         socket.sendAction(props.device, DeviceActions.RESTART);
-        soundManager.playSound(SoundEnum.NAVIGATION_SELECTION_COMPLETE_CELEBRATION);
-        toastOpen.value = true;
     }
 };
 
 const handleStop = async (event: CustomEvent) => {
     if (event.detail.role == "destructive") {
         socket.sendAction(props.device, DeviceActions.STOP);
-        soundManager.playSound(SoundEnum.NAVIGATION_SELECTION_COMPLETE_CELEBRATION);
-        toastOpen.value = true;
     }
 };
 
 onMounted(() => {
     presenting.value = page.value.$el;
-
-    soundManager.loadSounds([SoundEnum.NAVIGATION_SELECTION_COMPLETE_CELEBRATION]);
 });
 </script>
 @/services/Zocket
