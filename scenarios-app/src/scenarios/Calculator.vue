@@ -18,7 +18,7 @@
             <div class="flex items-center justify-end min-w-full px-5 pt-5 h-11 w-max">
                 <span v-show="showPreviousFormula" class="absolute text-slate-400">{{ previousFormula }}</span>
             </div>
-            <div class="flex items-center justify-end h-24 min-w-full px-5 pb-5 w-max">
+            <div class="flex items-center justify-end min-h-20 h-max min-w-full px-5 pb-5 w-max">
                 <span class="text-6xl font-medium text-slate-700 dark:text-gray-200">{{ formula }}</span>
             </div>
         </div>
