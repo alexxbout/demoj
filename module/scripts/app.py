@@ -2,12 +2,10 @@ import json
 from const import IP_TERMINAL, IP_NETWORK, IP_SERVER, RESTART_CMD, STOP_CMD, STRESS_CMD
 from utils import execute_command, update_and_write_json, get_device_from_addr
 
-from flask import Flask, jsonify, request, render_template, redirect, url_for
+from flask import Flask, jsonify, request, render_template, redirect, url_for, send_from_directory
 from flask_socketio import SocketIO, join_room, leave_room
 from flask_cors import CORS
 
-APP_FOLDER = "../app"
-APP_URL = "/app/"
 CONFIG_PATH = "/home/network/demoj/module/config/config.json"
 SERVER_PORT = 5000
 
@@ -17,7 +15,7 @@ devices = {
     "network": IP_NETWORK
 }
 
-app = Flask(__name__, template_folder=APP_FOLDER, static_folder=APP_FOLDER, static_url_path=APP_URL)
+app = Flask(__name__, static_folder="dist/static", template_folder="dist", static_url_path="/static")
 sio = SocketIO(app, cors_allowed_origins="*")
 CORS(app)
 
@@ -25,16 +23,14 @@ CORS(app)
 # * DémoJ Connect API Routes
 #################################################################
 
-@app.errorhandler(404)
-def not_found():
-    if request.path.startswith("/app"):
-        return redirect(url_for("index"))
-    return jsonify({"error": "Not found"}), 404
-
-@app.route("/")
-@app.route("/app")
-def index():
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
+def index(path):
     return render_template("index.html")
+
+@app.route("/assets/<path:filename>")
+def serve_assets(filename):
+    return send_from_directory("dist/assets", filename)
 
 #################################################################
 # API
