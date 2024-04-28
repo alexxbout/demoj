@@ -3,8 +3,8 @@
         <span class="text-4xl font-semibold dark:text-white">Streaming</span>
 
         <div class="w-full my-20">
-            <video v-if="url.length > 0" class="rounded-xl shadow-2xl w-full" controls muted>
-                <source :src="url" type="video/mp4" />
+            <video v-if="url.length > 0" class="w-full shadow-2xl rounded-xl" width="100%" height="100%" preload= "auto" controls muted autoplay loop playsinline>
+                <source :src="url" type="video/webm" />
             </video>
         </div>
 
@@ -25,12 +25,16 @@ const base = `http://${import.meta.env.VITE_API_ENDPOINT}`;
 
 const options = ref<{ value: string; text: string }[]>([
     {
-        value: "low",
+        value: "480",
         text: "Vidéo basse qualité",
     },
     {
-        value: "high",
+        value: "1080",
         text: "Vidéo haute qualité",
+    },
+    {
+        value: "4k",
+        text: "Vidéo très haute qualité",
     },
 ]);
 
@@ -47,7 +51,7 @@ const handleExecute = async () => {
 
     await nextTick();
 
-    url.value = base + ":5000" + "/videos/" + selected.value + ".mp4";
+    url.value = base + ":5000" + "/static/" + selected.value + ".webm";
 };
 
 onMounted(() => {
