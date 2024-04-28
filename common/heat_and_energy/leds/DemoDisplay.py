@@ -154,8 +154,9 @@ class Gauges:
         colored_leds: int = int((averagedTemp - self.__min_temp ) * self.__tempStep)
         if colored_leds < 0:
             colored_leds = 0
+        color_end = self.__ledsPerGauge - colored_leds
         self.__colorizeLedsTemp(colored_leds)
-        self.__clearLeds(0, colored_leds)
+        self.__clearLeds(0, color_end)
         self.__strip.show()
 
     def displayWatts(self, miliWatts: float): 
