@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col w-screen h-screen p-5 overflow-x-hidden justify-stretch">
+    <div class="flex flex-col w-screen h-full p-5 overflow-x-hidden justify-stretch">
         <div class="flex flex-col w-full h-max gap-y-5">
             <div class="flex items-center justify-between">
                 <span class="text-4xl font-semibold dark:text-white">Calculatrice</span>
@@ -14,7 +14,7 @@
             </div>
         </div>
 
-        <div ref="field" class="w-screen p-5 overflow-x-auto scroll-smooth scrollbar-hide">
+        <div ref="field" class="w-screen px-5 overflow-x-auto scroll-smooth scrollbar-hide">
             <div class="flex items-center justify-end min-w-full px-5 pt-5 h-11 w-max">
                 <span v-show="showPreviousFormula" class="absolute text-slate-400">{{ previousFormula }}</span>
             </div>

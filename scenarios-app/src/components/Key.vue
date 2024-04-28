@@ -1,5 +1,5 @@
 <template>
-    <button @click.prevent="emits('@click')" :class="props.span ? 'w-full justify-start' : 'w-20 flex justify-center'" class="flex items-center h-20 p-6 text-3xl transition-all duration-200 rounded-full disabled:grayscale" :style="styles" :disabled="props.disabled">
+    <button @click.prevent="emits('@click')" :class="props.span ? 'w-full justify-start' : 'w-20 flex justify-center'" class="flex items-center h-20 p-4 text-3xl transition-all duration-200 rounded-full disabled:grayscale" :style="styles" :disabled="props.disabled">
         <span>{{ props.text }}</span>
     </button>
 </template>
@@ -39,7 +39,7 @@ const styles = computed<StyleValue>(() => {
             styles.color = "#000000";
             break;
         case "function":
-            styles.backgroundColor = "#EEAA21";
+            styles.backgroundColor = "#895cfa";
             styles.color = "#FFFFFF";
     }
 
