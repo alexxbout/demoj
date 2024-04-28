@@ -2,7 +2,6 @@ from flask import Flask, jsonify, request, render_template, redirect, url_for, m
 from flask_cors import CORS
 from demojcompute import compute
 
-VIDEOS_FOLDER = "../../videos"
 HTTP_SERVER_PORT = 5000
 CURRENT_MODULE = "server"
 
@@ -20,10 +19,6 @@ def api():
 #################################################################
 # Scenarios app
 #################################################################
-
-@app.route('/videos/<path:filename>')
-def serve_video(filename):
-    return send_from_directory(app.static_folder + "/videos", filename)
 
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")
