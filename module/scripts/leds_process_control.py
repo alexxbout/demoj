@@ -1,8 +1,8 @@
 from multiprocessing import Lock, Semaphore, Process
 import time
-from leds.DemoDisplay import Gauges
-from temperature.temp import getCPUtemperature
-from wattmeter.DemoWattmeter import *
+from DemoDisplay import Gauges
+from temp import getCPUtemperature
+from DemoWattmeter import *
 from rpi_ws281x import Color
 from rpi_ws281x import RGBW
 
