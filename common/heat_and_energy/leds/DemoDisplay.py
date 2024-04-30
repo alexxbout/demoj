@@ -4,7 +4,7 @@ from rpi_ws281x import PixelStrip, Color, RGBW
 import time
 #import time if you want to add cool transitions
 
-MAX_TEMP = 45
+MAX_TEMP = 43
 MIN_TEMP = 36
 MIN_WATTS = 1600
 MAX_WATTS = 2700 # value reached at approximatly 50 degrees
@@ -34,13 +34,13 @@ class Gauges:
         # LED strip configuration:
 
         #self.__min_temp = min_temp - 5
-        self.__min_temp = 25
+        self.__min_temp = MIN_TEMP
 
         self.__min_watt = MIN_WATTS
     
         #self.__max_temp = min_temp + 20
 
-        self.__max_temp = 55
+        self.__max_temp = MAX_TEMP
         #print(f"temperature_max : {self.__max_temp}")
         #print(f"temperature_min : {self.__min_temp}")
         self.__max_watt = MAX_WATTS
@@ -121,7 +121,7 @@ class Gauges:
             - maxStep The max value for a step
         """
         for i in range(0, leds):
-            self.__strip.setPixelColor(self.__ledsPerGauge+i-1, self.__colorize(i, self.__ledsPerGauge))
+            self.__strip.setPixelColor(self.__ledsPerGauge-i-1, self.__colorize(i, self.__ledsPerGauge))
         
     def __colorizeLedsWatts(self, leds: int):
         """
@@ -156,6 +156,8 @@ class Gauges:
             colored_leds = 0
         color_end = self.__ledsPerGauge - colored_leds
         self.__colorizeLedsTemp(colored_leds)
+        print("end : ", color_end)
+        print("colored", colored_leds)
         self.__clearLeds(0, color_end)
         self.__strip.show()
 
