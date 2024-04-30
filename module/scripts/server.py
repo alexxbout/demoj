@@ -1,7 +1,8 @@
-from flask import Flask, jsonify, request, render_template, redirect, url_for, make_response, send_from_directory
+from flask import Flask, jsonify, request, render_template, redirect, url_for, make_response, send_file
 from flask_cors import CORS
 from demojcompute import compute
 
+VIDEOS_FOLDER = "../videos"
 HTTP_SERVER_PORT = 5000
 CURRENT_MODULE = "server"
 

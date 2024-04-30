@@ -1,4 +1,4 @@
-#TODO from leds_process_control import DemoLedsController
+from leds_process_control import DemoLedsController
 from multiprocessing import Process, Condition
 from zocket import socket_routine
 from server import server_routine
@@ -15,21 +15,21 @@ def termination():
     server_proc.close()
 
 if __name__ == "__main__":
-    # leds = DemoLedsController()
+    leds = DemoLedsController()
     
     try:
         while True: #restart the server if it crash
             cond = Condition()
             socket_proc = Process(target=socket_routine, args=(cond,))
             server_proc = Process(target=server_routine)
-            # leds.loading(255, 0, 0)
+            leds.loading(255, 0, 0)
             socket_proc.start()
             server_proc.start()
             cond.acquire()
             cond.wait() # wait for socket connection
-            # leds.loading_done()
+            leds.loading_done()
 
-            # leds.demoj()
+            leds.demoj()
             cond.wait() # wait for crash. or finish?
             cond.release()
             termination()
@@ -37,4 +37,4 @@ if __name__ == "__main__":
         pass
     finally:
         termination()
-        # leds.close()
+        leds.close()
