@@ -154,7 +154,7 @@ def stress(data):
 # Main
 #################################################################
 
-if __name__ == "__main__":
+def server_routine():
     print("Restoring default config...")
     update_and_write_json(CONFIG_PATH, "modules.terminal.isConnected", False)
     update_and_write_json(CONFIG_PATH, "modules.server.isConnected", False)
