@@ -22,7 +22,7 @@ if __name__ == "__main__":
             cond = Condition()
             socket_proc = Process(target=socket_routine, args=(cond,))
             server_proc = Process(target=server_routine)
-            leds.loading(255, 0, 0)
+            leds.loading(0, 255, 0)
             socket_proc.start()
             server_proc.start()
             cond.acquire()
