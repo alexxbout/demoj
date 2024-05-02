@@ -33,10 +33,6 @@ mkdir -p "$dir/videos" >> "$log_file" 2>&1 || die "Failed to create videos direc
 # Changing directory to working directory
 cd "$dir" >> "$log_file" 2>&1 || die "Failed to change directory to $dir"
 
-# Downloading video
-echo "Downloading video"
-wget -O "videos/low.mp4" "https://www.pexels.com/download/video/4193130/?fps=23.976&h=240&w=426" >> "$log_file" 2>&1 || die "Failed to download video"
-
 # Finalization message
 echo -e "${GREEN}Streaming application initialized ${RESET}"
 exit 0
