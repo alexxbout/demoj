@@ -1,6 +1,5 @@
-import sys
 import re
-import random
+import sys
 from decimal import Decimal
 
 global_index = None
@@ -233,7 +232,8 @@ def addition(nb1, nb2):
 	return nb1 + nb2 #lul
 
 #for now maximum fact computable is 1558 due to integer string conversion
-def fact(n):
+#return the factorial of n
+def fact(n: int) -> int:
 	if n < 0:
 		return None
 	elif n == 0:
@@ -244,59 +244,111 @@ def fact(n):
 			res = multiply(res, i)
 		return res
 
-def fib(n):
-    if n <= 0:
-        return None
-    elif n == 1:
-        return 0
-    elif n == 2:
-        return 1
-    else:
-        fib_sequence = [0, 1]
-        for i in range(2, n):
-            fib_sequence.append(fib_sequence[-1] + fib_sequence[-2])
-        return fib_sequence[-1]
+#return the n-th number of the fibonacci sequence
+def fib(n: int) -> int:
+	if n == 0:
+		return 0
+	elif n == 1:
+		return 1
+	else:
+		fib1 = 0
+		fib2 = 1
+		for i in range(2, n + 1):
+			fib1, fib2 = fib2, addition(fib1, fib2)
+		return fib2
 
-def fib(n):
-    if (n <= 0):
-    	return 0;
-    if (n == 1):
-    	return 1;
-    return fib(n - 1) + fib(n - 2);
+#return 1 if n is prime, 0 otherwise
+def prime(n: int) -> int:
+	if n <= 2:
+		return 0
+	for i in range(2, n):
+		if n % i == 0:
+			return 0
+	return 1
 
-def fact_sub(match):
+def fact_sub(match: re.Match) -> str:
 	return str(Decimal(fact(int(match.group(1)))))
 
-def fib_sub(match):
+def fib_sub(match: re.Match) -> str:
 	return str(Decimal(fib(int(match.group(1)))))
 
-#Parsing the expresion given by the user
-def clean_expr():
-	global expr
+def prime_sub(match: re.Match) -> str:
+	return str(Decimal(prime(int(match.group(1)))))
 
+#parse the expresion given by the user and unsure no error are in the expression
+def parser(expr: str) -> str:
+	#replace all the function fib, fact and prime by their result
 	expr = re.sub(r"fib\((\d+)\)", fib_sub, expr)
 	expr = re.sub(r"fact\((\d+)\)", fact_sub, expr)
+	expr = re.sub(r"prime\((\d+)\)", prime_sub, expr)
+
+	#ensure that the expression doesn't end with operator or open parenthesis
+	expr = re.sub(r'[+\-*/%\(]+\s*\Z', '', expr)
+
+	#delete all the begin and end spaces
+	expr = expr.strip()
+
+	#delete all double spaces
+	expr = re.sub(r'\s+', ' ', expr)
+
+	#replace all the "div" strings by division operator
 	expr = re.sub(r'div', r'/', expr)
+
+	#delete all the deplicated points, and add a 0 after the point if there is no number after
+	expr = re.sub(r'\.+', '.', expr)
+	expr = re.sub(r'\.([^0-9\s]|$)', r'.0\1', expr)
+
+	#add a .0 after all the integer
 	expr = re.sub(r'(?<!\d\.)(?<!\d)(\d+)(?![.\d])', r'\1.0', expr)
-	expr = re.sub(r'(\d+\.\d+)\((\d+\.\d+)\)', r'\1 * (\2)', expr)
-	expr = re.sub(r'\+(?=\d)', r'', expr)
+
+	#add a multiplication operator between a number and a parenthesis
+	expr = re.sub(r'(\d+)(?=\()', r'\1 * ', expr)
+
+	#add spaces between addition operator and numbers, and delete duplacates
+	expr = re.sub(r'\++', '+', expr)
+	expr = re.sub(r'\+(?=\d)', r'+ ', expr)
+	expr = re.sub(r'(?<=\d)\+', r' +', expr)
+
+	#add spaces between subtraction operator and numbers, and delete duplicates
+	expr = re.sub(r'-{3,}', '--', expr)
+	expr = re.sub(r'(?<=\d)\-', r' -', expr)
+
+	#add spaces between multiplication operator and numbers, and delete duplicates
+	expr = re.sub(r'\*+', '*', expr)
+	expr = re.sub(r'\*(?=\d)', r'* ', expr)
+	expr = re.sub(r'(?<=\d)\*', r' *', expr)
+
+	#add spaces between division operator and numbers, and delete duplicates
+	expr = re.sub(r'\/+', '/', expr)
+	expr = re.sub(r'\/(?=\d)', r'/ ', expr)
+	expr = re.sub(r'(?<=\d)\/', r' /', expr)
+
+	#add spaces between modulo operator and numbers, and delete duplicates
+	expr = re.sub(r'\%+', '%', expr)
+	expr = re.sub(r'\%(?=\d)', r'% ', expr)
+	expr = re.sub(r'(?<=\d)\%', r' %', expr)
+
+	#add multiplication operator between parenthesis and numbers
+	expr = re.sub(r'\)(\s*)(\d)', r')* \2', expr)
+	expr = re.sub(r'\)(\s*)(\()', r')* \2', expr)
+	expr = re.sub(r'\)(\S)', r') \1', expr)
+
+	#TODO verify if the expression doesn't contain numbers like: 1.2.3
+	#TODO verify if operators aren't merged like: 1+*2
 	return (expr)
 
-def compute(value):
+def compute(user_expr):
 	global expr
 	global global_index
 	global stress
 	
 	stress = True
 	global_index = 0
-	expr = value
 
-	clean_expr()
+	expr = parser(user_expr)
 	res = parse_sum();
-	print(res)
+	#print(res)
 	return res
 
-if __name__ == "__main__":
-	compute(sys.argv[1])
-
-#TODO fact and fib doesn't need more parsing (change)
+# if __name__ == "__main__":
+# 	compute(sys.argv[1])
