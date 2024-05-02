@@ -2,6 +2,7 @@ from leds_process_control import DemoLedsController
 from multiprocessing import Process, Condition
 from zocket import socket_routine
 import time
+from rpi_ws281x import Color
 
 def termination():
     if socket_proc.is_alive():
@@ -16,7 +17,7 @@ if __name__ == "__main__":
         while True: #restart the server if it crash
             cond = Condition()
             socket_proc = Process(target=socket_routine, args=(cond,))
-            leds.loading(255, 0, 0)
+            leds.loading(Color(255, 0, 0))
             socket_proc.start()
             cond.acquire()
             cond.wait() # wait for socket connection
