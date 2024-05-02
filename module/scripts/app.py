@@ -9,6 +9,7 @@ def termination():
         socket_proc.terminate()
     socket_proc.join()
     socket_proc.close()
+    print("Terminated")
 
 if __name__ == "__main__":
     leds = DemoLedsController(Color(255, 0, 0))
