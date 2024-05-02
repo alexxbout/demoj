@@ -21,6 +21,10 @@ echo "Updating system"
 apt update -y >> "$log_file" 2>&1 || die "Failed to update system"
 apt -y full-upgrade >> "$log_file" 2>&1 || die "Failed to upgrade system"
 
+# Installing stress
+echo "Installing stress"
+apt install stress -y >> "$log_file" 2>&1 || die "Failed to install stress"
+
 # Installing pip
 echo "Installing pip"
 apt install python3-pip -y >> "$log_file" 2>&1 || die "Failed to install pip"
