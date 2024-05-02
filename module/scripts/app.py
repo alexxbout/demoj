@@ -11,13 +11,13 @@ def termination():
     socket_proc.close()
 
 if __name__ == "__main__":
-    leds = DemoLedsController()
+    leds = DemoLedsController(Color(255, 0, 0))
     
     try:
         while True: #restart the server if it crash
             cond = Condition()
             socket_proc = Process(target=socket_routine, args=(cond,))
-            leds.loading(Color(255, 0, 0))
+            leds.loading()
             socket_proc.start()
             cond.acquire()
             cond.wait() # wait for socket connection
