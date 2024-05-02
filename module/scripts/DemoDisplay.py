@@ -45,8 +45,8 @@ class Gauges:
         #print(f"temperature_min : {self.__min_temp}")
         self.__max_watt = MAX_WATTS
 
+        self.__led_count = led_count # Number of LED pixels.
         self.__ledsPerGauge = int(led_count/NB_OF_GAUGES)
-        self.__ledsForTemp = self.__ledsPerGauge-1 # because we had a problem we had to cut one led
         self.__tempStep = self.__ledsPerGauge/(self.__max_temp - self.__min_temp)
         #print(f"temp par led : {self.__tempStep}")
         self.__wattStep = self.__ledsPerGauge/(self.__max_watt - self.__min_watt)
@@ -59,8 +59,9 @@ class Gauges:
         LED_BRIGHTNESS = 128  # Set to 0 for darkest and 255 for brightest
         LED_INVERT = False    # True to invert the signal (when using NPN transistor level shift)
         LED_CHANNEL = channel      
-        self.__led_count = led_count -1 # Number of LED pixels.
-        self.__strip = PixelStrip(self.__led_count, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
+        self.__begin_color = Color(0, 255, 0) #GREEN
+        self.__ending_color = Color(255, 0, 0) #RED
+        self.__strip = PixelStrip(led_count, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
         self.__begin()
 
     def __colorize(self, step: int, maxStep: int) -> RGBW: 
@@ -120,7 +121,7 @@ class Gauges:
             - maxStep The max value for a step
         """
         for i in range(0, leds):
-            self.__strip.setPixelColor(self.__ledsForTemp-i-1, self.__colorize(i, self.__ledsPerGauge))
+            self.__strip.setPixelColor(self.__ledsPerGauge-i-1, self.__colorize(i, self.__ledsPerGauge))
         
     def __colorizeLedsWatts(self, leds: int):
         """
@@ -136,7 +137,7 @@ class Gauges:
         for i in range(0, leds):
             color: RGBW = self.__colorize(i, self.__ledsPerGauge)
             #print(f"coloring :  {self.__led_count-1-i} r {color.r} g {color.g} b {color.b}")
-            self.__strip.setPixelColor(self.__ledsForTemp+i, color)
+            self.__strip.setPixelColor(self.__ledsPerGauge+i, color)
 
     
 
@@ -153,10 +154,7 @@ class Gauges:
         colored_leds: int = int((averagedTemp - self.__min_temp ) * self.__tempStep)
         if colored_leds < 0:
             colored_leds = 0
-        # for the led cut
-        if colored_leds > self.__ledsForTemp:
-            colored_leds = self.__ledsForTemp
-        color_end = self.__ledsForTemp - colored_leds
+        color_end = self.__ledsPerGauge - colored_leds
         self.__colorizeLedsTemp(colored_leds)
         print("end : ", color_end)
         print("colored", colored_leds)
@@ -176,7 +174,7 @@ class Gauges:
         colored_leds: int = int((averagedMW - self.__min_watt) * self.__wattStep)
         if colored_leds < 0:
             colored_leds = 0
-        colorEnd: int = self.__ledsForTemp+colored_leds
+        colorEnd: int = self.__ledsPerGauge+colored_leds
         self.__clearLeds(colorEnd, self.__led_count)
         self.__colorizeLedsWatts(colored_leds)
         self.__strip.show()
@@ -218,7 +216,7 @@ class Gauges:
         """
         filling a color with a smooth animation
         """
-        mid = self.__ledsForTemp
+        mid = self.__ledsPerGauge
         print(mid)
         for i in range(0, mid):
             self.__strip.setPixelColor(i, color)
