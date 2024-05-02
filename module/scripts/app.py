@@ -2,7 +2,6 @@ from leds_process_control import DemoLedsController
 from multiprocessing import Process, Condition
 from server import server_routine
 import time
-from rpi_ws281x import Color
 
 if __name__ == "__main__":
     leds = DemoLedsController()
