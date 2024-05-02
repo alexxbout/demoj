@@ -1,8 +1,8 @@
 from multiprocessing import Lock, Semaphore, Process
 import time
-from leds.DemoDisplay import Gauges
-from temperature.temp import getCPUtemperature
-from wattmeter.DemoWattmeter import *
+from DemoDisplay import Gauges
+from temp import getCPUtemperature
+from DemoWattmeter import *
 from rpi_ws281x import Color
 from rpi_ws281x import RGBW
 
@@ -26,14 +26,14 @@ class DemoLedsController:
     """
     A small class to coordinates processes in order to mannipulate the DemoJ Leds with some animations senarios.
     """
-    def __init__(self):
+    def __init__(self, loading_color: RGBW):
         try:
             self.__wattmeter = Wattmeter()
             self.__gauges = Gauges(LED_COUNT, CHANNEL, LED_PIN)
         except WattmeterTimeout:
             print("Wattmeter timed out on init")
         self.__gauges.clearAll()
-        self.__loading_color: RGBW = RED
+        self.__loading_color: RGBW = loading_color
         self.__demoj_process = Process(target=self.__demoj_routine, args=(self.__gauges, self.__wattmeter,), daemon=True)
         self.__loading_process =  Process(target=self.__loading_routine, args=(self.__gauges,), daemon=True)
         self.__current: Process = self.__demoj_process
