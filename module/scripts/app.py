@@ -5,8 +5,8 @@ import time
 from rpi_ws281x import Color
 
 if __name__ == "__main__":
+    leds = DemoLedsController()
     try:
-        leds = DemoLedsController()
 
         server_proc = Process(target=server_routine)
         server_proc.start()
