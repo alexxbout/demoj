@@ -14,7 +14,7 @@ if __name__ == "__main__":
         leds.loading(0, 0, 255)
 
         # Fake loading time for network module since it does not have a loading process based on sockets
-        time.sleep(5)
+        time.sleep(15)
 
         leds.loading_done()
 
