@@ -6,7 +6,7 @@ import time
 
 MAX_TEMP = 43
 MIN_TEMP = 36
-MIN_WATTS = 1600
+MIN_WATTS = 1700
 MAX_WATTS = 2700 # value reached at approximatly 50 degrees
 NB_OF_GAUGES = 2
 NO_COLOR = Color(0, 0, 0, 0)
