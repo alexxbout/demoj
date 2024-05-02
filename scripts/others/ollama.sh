@@ -36,9 +36,7 @@ systemctl start ollama >> "$log_file" 2>&1 || die "Failed to start Ollama"
 
 # Pulling the model
 echo "Pulling the model"
-ollama pull "$model" >> "$log_file" 2>&1 || die "Failed to pull $model"
-
-
+ollama pull "$model"
 
 echo -e "${GREEN}Successfully installed Ollama ${RESET}"
 exit 0
