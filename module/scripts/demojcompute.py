@@ -114,8 +114,8 @@ def multiply(nb1, nb2):
 	if not stress:
 		return nb1 * nb2
 
-	NB_INT = 6
-	NB_DEC = 2
+	NB_INT = 10
+	NB_DEC = 10
 
 	nb1_str = "{:+0{nb_int}.{nb_dec}f}".format(Decimal(nb1), nb_int=NB_INT, nb_dec=NB_DEC)
 	nb2_str = "{:+0{nb_int}.{nb_dec}f}".format(Decimal(nb2), nb_int=NB_INT, nb_dec=NB_DEC)
@@ -244,18 +244,21 @@ def fact(n: int) -> int:
 			res = multiply(res, i)
 		return res
 
-#return the n-th number of the fibonacci sequence
-def fib(n: int) -> int:
-	if n == 0:
-		return 0
-	elif n == 1:
-		return 1
-	else:
-		fib1 = 0
-		fib2 = 1
-		for i in range(2, n + 1):
-			fib1, fib2 = fib2, addition(fib1, fib2)
-		return fib2
+	
+#return the n-th number of the fibonacci sequence in a "recursive" version
+#but instead of using the stack we use a buffer.
+def fib(n):
+    if n <= 0:
+        return 0
+    elif n == 1:
+        return 1
+    
+    fib = [0] * (n + 1)
+    fib[1] = 1
+    
+    for i in range(2, n + 1):
+        fib[i] = fib[i - 1] + fib[i - 2]    
+    return fib[n]
 
 #return 1 if n is prime, 0 otherwise
 def prime(n: int) -> int:
@@ -280,7 +283,7 @@ def parser(expr: str) -> str:
 	#replace all the function fib, fact and prime by their result
 	expr = re.sub(r"fib\((\d+)\)", fib_sub, expr)
 	expr = re.sub(r"fact\((\d+)\)", fact_sub, expr)
-	expr = re.sub(r"prime\((\d+)\)", prime_sub, expr)
+	expr = re.sub(r"prim\((\d+)\)", prime_sub, expr)
 
 	#ensure that the expression doesn't end with operator or open parenthesis
 	expr = re.sub(r'[+\-*/%\(]+\s*\Z', '', expr)
@@ -345,10 +348,13 @@ def compute(user_expr):
 	stress = True
 	global_index = 0
 
-	expr = parser(user_expr)
-	res = parse_sum();
-	#print(res)
+	try:
+		expr = parser(user_expr)
+		res = parse_sum();
+	except Exception as e:
+		return None
+	print(res)
 	return res
 
-# if __name__ == "__main__":
-# 	compute(sys.argv[1])
+if __name__ == "__main__":
+ 	compute(sys.argv[1])
