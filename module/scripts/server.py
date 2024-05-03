@@ -150,6 +150,16 @@ def stress(data):
         cmd[-1] = str(time)
         execute_command(cmd)
 
+@sio.event
+def terminal_calculation(value):
+    """
+    Event handler triggered when calculation mode is activated on the terminal module.
+    value: true | false
+    """
+    update_and_write_json(CONFIG_PATH, "isBackendCalculator", value)
+
+    sio.emit("calculation", value, room="server")
+
 #################################################################
 # Main
 #################################################################
