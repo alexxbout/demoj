@@ -1,5 +1,7 @@
 from utils import execute_command
 from const import STOP_CMD, RESTART_CMD, IP_NETWORK, STRESS_CMD
+from stressTerm import stress
+import multiprocessing as mp
 import socketio
 import time
 
@@ -9,6 +11,7 @@ CURRENT_MODULE = "terminal"
 
 sio = socketio.Client(reconnection=True, reconnection_attempts=10, reconnection_delay=5, reconnection_delay_max=5)
 cond_global = None
+stress_pid = -1
 
 #################################################################
 # Socket
@@ -17,7 +20,7 @@ cond_global = None
 def notifyMain():
     global cond_global
     with cond_global:
-        cond_global.notify()
+        cond_global.notify()	
 
 @sio.event
 def connect():
@@ -49,6 +52,21 @@ def stress(time):
     cmd[-1] = str(time) + "s"
     print(cmd)
     execute_command(cmd)
+
+@sio.event
+def calculation(value):
+    global stress_pid
+    if (value == True):
+    	print("Stressing terminal...")
+    	proc = mp.Process(target=stress)
+    	proc.start()
+    	stress_pid = proc.pid
+    	proc.join() # Never reached
+    else:
+        print("Stop stressing terminal...")
+        if (stress_pid != -1)
+            execute_command("kill " + str(stress_pid))
+        stress_pid = -1
 
 #################################################################
 # Main
