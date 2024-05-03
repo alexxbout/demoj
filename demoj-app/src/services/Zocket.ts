@@ -99,6 +99,10 @@ export class Zocket {
         if (this.socket) this.socket.emit("stress", { device: module, time: time });
     }
 
+    public sendTerminalCalculation(value: boolean) {
+        if (this.socket) this.socket.emit("terminal_calculation", value);
+    }
+
     public getConfig() {
         return this.config;
     }

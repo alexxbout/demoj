@@ -25,8 +25,14 @@
                                         <ion-text>
                                             <h2>Impact sur le système</h2>
                                         </ion-text>
-                                        <ion-chip v-for="stress in current.stress" :key="stress" color="danger" class="ion-no-margin" style="margin-right: 10px;">{{ stress }}</ion-chip>
+                                        <ion-chip v-for="stress in current.stress" :key="stress" color="danger" class="ion-no-margin" style="margin-right: 10px">{{ stress }}</ion-chip>
                                     </ion-col>
+                                </ion-row>
+                                <ion-row v-if="mode == 'operator' && current.scenario == Scenario.Calculator">
+                                    <ion-text>
+                                        <h2>Calculs côté terminal</h2>
+                                    </ion-text>
+                                    <ion-toggle @ionChange="handleBackendCalculator" v-model="isBackendCalculator" :disabled="isDisabled">Executer des calculs en fond de tâche</ion-toggle>
                                 </ion-row>
                             </ion-grid>
                         </ion-item>
@@ -34,7 +40,15 @@
                 </div>
 
                 <div style="height: max-content; width: 100%; display: flex; flex-direction: column; align-items: center">
-                    <ion-chip v-if="isDisabled" color="danger">Ce scénario est indisponible car le serveur est hors ligne</ion-chip>
+                    <ion-chip v-if="isDisabled" color="danger">
+                        <span>
+                            <span>Ce scénario est indisponible car </span>
+                            <span v-for="(need, index) in current.needs" :key="index">{{ need + " " }}</span>
+
+                            <span v-show="current.needs.length == 1">n'est pas connecté</span>
+                            <span v-show="current.needs.length > 1">ne sont pas connectés</span>
+                        </span>
+                    </ion-chip>
                     <ion-button @click="handleClick" expand="block" style="width: 100%" :disabled="isDisabled">Accéder à l'application</ion-button>
                 </div>
             </div>
@@ -44,7 +58,8 @@
 
 <script setup lang="ts">
 import { Zocket } from "@/services/Zocket";
-import { IonBackButton, IonButton, IonButtons, IonChip, IonCol, IonContent, IonGrid, IonHeader, IonItem, IonList, IonPage, IonRow, IonText, IonTitle, IonToolbar } from "@ionic/vue";
+import { DeviceType } from "@/types/IConfig";
+import { IonBackButton, IonButton, IonButtons, IonChip, IonCol, IonContent, IonGrid, IonHeader, IonItem, IonList, IonPage, IonRow, IonText, IonTitle, IonToggle, IonToolbar } from "@ionic/vue";
 import { computed, inject, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 
@@ -65,12 +80,23 @@ interface ScenarioData {
     description: string;
     url: string;
     stress: StressType[];
+    needs: DeviceType[];
 }
 
 const socket = inject("socket") as Zocket;
 const config = socket.getConfig();
 
-const isDisabled = computed(() => config.value ? !config.value.modules.server.isConnected : true);
+const mode = ref<"client" | "operator">(localStorage.getItem("mode") === "operator" ? "operator" : "client");
+
+const isDisabled = computed(() => {
+    for (const need of current.value?.needs || []) {
+        if (!config.value?.modules[need].isConnected) {
+            return true;
+        }
+    }
+
+    return false;
+});
 
 const baseUrl = `http://${import.meta.env.VITE_IP_SERVER}:5000/`;
 
@@ -82,28 +108,40 @@ const data: ScenarioData[] = [
         description: "Cette fonctionnalité permet aux utilisateurs d'effectuer une gamme étendue de calculs, depuis des opérations basiques jusqu'à des fonctions mathématiques avancées comme Fibonacci, factorielle et recherche de nombres premiers. Le tout peut être réalisé côté client ou côté serveur.",
         url: `${baseUrl}calculator`,
         stress: [StressType.CPU, StressType.MEMORY],
+        needs: ["server", "terminal"],
     },
     {
         scenario: Scenario.Streaming,
         description: "Cette fonctionnalité permet aux utilisateurs de regarder des vidéos en streaming avec des fonctionnalités de contrôle similaires à Youtube.",
         url: `${baseUrl}streaming`,
         stress: [StressType.NETWORK],
+        needs: ["server"],
     },
     {
         scenario: Scenario.AI,
         description: "Cette fonctionnalité permet aux utilisateurs de communiquer avec une IA conversationnelle similaire à ChatGPT.",
         url: `${baseUrl}ai`,
         stress: [StressType.MEMORY, StressType.NETWORK],
+        needs: ["server"],
     },
 ];
 
 const current = ref<ScenarioData | null>(null);
+
+const isBackendCalculator = computed(() => config.value?.isBackendCalculator || false);
 
 const handleClick = () => {
     const scenario = data.find((d) => d.scenario === route.name);
     if (scenario) {
         location.href = scenario.url;
     }
+};
+
+const handleBackendCalculator = () => {
+
+        // socket.send("backendCalculator", isBackendCalculator.value);
+        console.log("backendCalculator", isBackendCalculator.value);
+        
 };
 
 onMounted(() => {
