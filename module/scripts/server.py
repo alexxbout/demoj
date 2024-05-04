@@ -38,6 +38,6 @@ def calculator(value):
 # Main
 #################################################################
 
-def server_routine():
+if __name__ == "__main__":
     print("Starting server...")
     app.run(debug=True, host="0.0.0.0", port=HTTP_SERVER_PORT)
