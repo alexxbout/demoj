@@ -5,9 +5,9 @@
                 <ion-col size="10">
                     <ion-img @click="handleClick" src="/assets/images/demoj.png" style="z-index: 1; position: relative"></ion-img>
 
-                    <ion-img src="/assets/images/qr.png" style="margin-top: 20%; width: 60%; height: 60%; margin-left: auto; margin-right: auto"></ion-img>
+                    <!-- <ion-img src="/assets/images/qr.png" style="margin-top: 20%; width: 60%; height: 60%; margin-left: auto; margin-right: auto"></ion-img> -->
 
-                    <ConfettiExplosion v-if="visible" :colors="colors" :particleCount="250" :force="0.4" :duration="6000" :stageHeight="1500" :stageWidth="1200" style="z-index: 0; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%)" />
+                    <ConfettiExplosion v-if="visible" :colors="colors" :particleCount="200" :force="0.4" :duration="6000" :stageHeight="1500" :stageWidth="1200" style="z-index: 0; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%)" />
                 </ion-col>
             </ion-row>
         </ion-grid>
