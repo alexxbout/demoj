@@ -24,9 +24,26 @@ fi
 # Displaying initialization message
 echo "Initializing DNS"
 
-# Update dns in /etc/dhcpcd.conf
-# echo "Updating default DNS values of RaspAP"
-# sed -i 's/static domain_name_server=9.9.9.9 1.1.1.1/static domain_name_server=10.3.141.1 10.3.141.1/' /etc/dhcpcd.conf >> "$log_file" 2>&1 || die "Failed to update DNS values in dhcpcd.conf"
+# Update dns in /etc/dnsmasq.d/090_wlan0.conf
+echo "Updating default DNS values of RaspAP"
+echo "dhcp-option=6,10.3.141.1,10.3.141.1" >> /etc/dnsmasq.d/090_wlan0.conf
+
+# Create a service to restore iptables rules
+echo "Creating a service to restore iptables rules"
+echo "[Unit]
+Description=Restore iptables rules
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/sbin/iptables-restore < /etc/iptables/rules.v4
+
+[Install]
+WantedBy=multi-user.target" > /etc/systemd/system/restore-iptables-rules.service
+
+# Enable the service
+echo "Enabling the service"
+systemctl enable restore-iptables-rules >> "$log_file" 2>&1 || die "Failed to enable the service"
 
 # Redirect port 80 to 5000
 echo "Redirecting port 80 to 5000"
@@ -39,14 +56,6 @@ iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 5000 >> "$
 echo "Activating IP forwarding"
 sysctl -w net.ipv4.ip_forward=1 >> "$log_file" 2>&1 || die "Failed to activate IP forwarding"
 
-# Add demoj.fr to dnsmasq.conf
-echo "Adding demoj.fr to dnsmasq.conf"
-echo "address=/demoj.fr/10.3.141.1" >> /etc/dnsmasq.conf
-
-# Restarting dnsmasq
-echo "Restarting dnsmasq"
-systemctl restart dnsmasq >> "$log_file" 2>&1 || die "Failed to restart dnsmasq"
-
 # Saving iptables rules
 echo "Saving iptables rules"
 apt install iptables-persistent -y >> "$log_file" 2>&1 || die "Failed to install iptables-persistent"
@@ -54,6 +63,14 @@ apt install iptables-persistent -y >> "$log_file" 2>&1 || die "Failed to install
 # Saving iptables rules
 echo "Saving iptables rules"
 iptables-save > /etc/iptables/rules.v4 >> "$log_file" 2>&1 || die "Failed to save iptables rules"
+
+# Add demoj.fr to dnsmasq.conf
+echo "Adding demoj.fr to dnsmasq.conf"
+echo "address=/demoj.fr/10.3.141.1" >> /etc/dnsmasq.conf
+
+# Restarting dnsmasq
+echo "Restarting dnsmasq"
+systemctl restart dnsmasq >> "$log_file" 2>&1 || die "Failed to restart dnsmasq"
 
 # Finalization message
 echo -e "${GREEN}DNS initialized ${RESET}"
