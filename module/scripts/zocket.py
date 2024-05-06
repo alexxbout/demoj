@@ -1,6 +1,6 @@
 from utils import execute_command
 from const import STOP_CMD, RESTART_CMD, IP_NETWORK, STRESS_CMD
-from stressTerm import stress
+from stressTerm import stress_compute
 import multiprocessing as mp
 import socketio
 import time
@@ -57,15 +57,15 @@ def stress(time):
 def calculation(value):
     global stress_pid
     if (value == True):
-    	print("Stressing terminal...")
-    	proc = mp.Process(target=stress)
-    	proc.start()
-    	stress_pid = proc.pid
-    	proc.join() # Never reached
+        print("Stressing terminal...")
+        proc = mp.Process(target=stress_compute)
+        proc.start()
+        stress_pid = proc.pid
+        proc.join() # Never reached
     else:
         print("Stop stressing terminal...")
-        if (stress_pid != -1)
-            execute_command("kill " + str(stress_pid))
+        if (stress_pid != -1):
+            execute_command(["kill ", str(stress_pid)])
         stress_pid = -1
 
 #################################################################
