@@ -46,7 +46,7 @@ echo "Starting $service_name"
 systemctl start $service_name >> "$log_file" 2>&1 || die "Failed to start $service_name"
 
 # If we are on server, we need to add an extra service to start server.py
-if [ "$user" == "server" ]; then
+if [ "$user" == "server" ] || [ "$user" == "network" ]; then
     echo "Creating server service file"
     server_service_name="server.service"
     server_script="/home/$user/demoj/module/scripts/server.py"
