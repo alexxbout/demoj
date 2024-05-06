@@ -49,7 +49,7 @@ def restart():
 def stress(time):
     print("Stressing module...")
     cmd = STRESS_CMD
-    cmd[-1] = str(time) + "s"
+    cmd[-1] = str(time)
     print(cmd)
     execute_command(cmd)
 
