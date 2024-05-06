@@ -58,7 +58,7 @@ def calculation(value):
     global stress_pid
     if (value == True):
         print("Stressing terminal...")
-        proc = mp.Process(target=stress)
+        proc = mp.Process(target=stress_compute)
         proc.start()
         stress_pid = proc.pid
         proc.join() # Never reached
