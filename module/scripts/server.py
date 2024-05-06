@@ -158,7 +158,7 @@ def terminal_calculation(value):
     """
     update_and_write_json(CONFIG_PATH, "isBackendCalculator", value)
 
-    sio.emit("calculation", value, room="server")
+    sio.emit("calculation", value, room="terminal")
 
 #################################################################
 # Main
