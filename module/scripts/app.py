@@ -12,6 +12,9 @@ if __name__ == "__main__":
         leds.loading_done()
 
         leds.demoj()
+
+        while (True):
+            time.sleep(10)
     except KeyboardInterrupt:
         pass
     finally:
