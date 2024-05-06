@@ -32,7 +32,7 @@
                                     <ion-text>
                                         <h2>Calculs côté terminal</h2>
                                     </ion-text>
-                                    <ion-toggle @ionChange="handleBackendCalculator" v-model="isBackendCalculator" :disabled="isDisabled">Executer des calculs en fond de tâche</ion-toggle>
+                                    <ion-toggle @ion-change="handleBackendCalculator" v-model="isBackendCalculator" :disabled="isDisabled">Executer des calculs en fond de tâche</ion-toggle>
                                 </ion-row>
                             </ion-grid>
                         </ion-item>
@@ -108,7 +108,7 @@ const data: ScenarioData[] = [
         description: "Cette fonctionnalité permet aux utilisateurs d'effectuer une gamme étendue de calculs, depuis des opérations basiques jusqu'à des fonctions mathématiques avancées comme Fibonacci, factorielle et recherche de nombres premiers. Le tout peut être réalisé côté client ou côté serveur.",
         url: `${baseUrl}calculator`,
         stress: [StressType.CPU, StressType.MEMORY],
-        needs: ["server", "terminal"],
+        needs: [],
     },
     {
         scenario: Scenario.Streaming,
@@ -128,7 +128,8 @@ const data: ScenarioData[] = [
 
 const current = ref<ScenarioData | null>(null);
 
-const isBackendCalculator = computed(() => config.value?.isBackendCalculator || false);
+// TODO: Use a computed property instead of a ref
+const isBackendCalculator = ref(config.value?.isBackendCalculator || false);
 
 const handleClick = () => {
     const scenario = data.find((d) => d.scenario === route.name);
@@ -138,8 +139,9 @@ const handleClick = () => {
 };
 
 const handleBackendCalculator = () => {
-    socket.sendTerminalCalculation(isBackendCalculator.value);
     console.log("backendCalculator", isBackendCalculator.value);
+
+    socket.sendTerminalCalculation(isBackendCalculator.value);
 };
 
 onMounted(() => {
