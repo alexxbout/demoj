@@ -100,7 +100,13 @@ export class Zocket {
     }
 
     public sendTerminalCalculation(value: boolean) {
-        if (this.socket) this.socket.emit("terminal_calculation", value);
+        if (this.socket) {
+            this.socket.emit("terminal_calculation", value);
+
+            if (this.config.value) {
+                this.config.value.isBackendCalculator = value;
+            }
+        }
     }
 
     public getConfig() {

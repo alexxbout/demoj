@@ -138,10 +138,8 @@ const handleClick = () => {
 };
 
 const handleBackendCalculator = () => {
-
-        // socket.send("backendCalculator", isBackendCalculator.value);
-        console.log("backendCalculator", isBackendCalculator.value);
-        
+    socket.sendTerminalCalculation(isBackendCalculator.value);
+    console.log("backendCalculator", isBackendCalculator.value);
 };
 
 onMounted(() => {
