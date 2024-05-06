@@ -266,23 +266,28 @@ class Gauges:
         """
         rStep = color.r / (self.__ledsPerGauge)
         gStep = color.g / (self.__ledsPerGauge)
+        bStep = color.b / (self.__ledsPerGauge)
         for i in range(0, self.__led_count):
             r = float(color.r)
             g = float(color.g)
+            b = float(color.b)
             for j in range(0, self.__ledsPerGauge+1):
                 if j >= 0:
-                    self.__strip.setPixelColor(i-j, Color(int(r), int(g), 0))
+                    self.__strip.setPixelColor(i-j, Color(int(r), int(g), int(b)))
                 r -= rStep
                 g -= gStep
+                b -= bStep
             self.__strip.show()
             time.sleep(ANIM_SPEED)
         for i in range(0, self.__led_count-1):
             r = float(color.r)
             g = float(color.g)
+            b = float(color.b)
             for j in range(0, self.__ledsPerGauge+1):
                 if j >= 0:
-                    self.__strip.setPixelColor(self.__led_count-1-i+j, Color(int(r), int(g), 0))
+                    self.__strip.setPixelColor(self.__led_count-1-i+j, Color(int(r), int(g), int(b)))
                 r -= rStep
                 g -= gStep
+                b -= bStep
             self.__strip.show()
             time.sleep(ANIM_SPEED)
