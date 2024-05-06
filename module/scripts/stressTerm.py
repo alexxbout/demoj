@@ -2,7 +2,7 @@ from demojcompute import compute
 import random
 import time
 
-def stress():
+def stress_compute():
 	wait_time = 0
 	compute_value = 0
 	while (True):
