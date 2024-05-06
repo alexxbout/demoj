@@ -88,7 +88,7 @@ const alertButtons = ref([
 const alertInputs = ref([
     {
         placeholder: "Code",
-        type: "number",
+        type: "password",
         min: 1,
     },
 ]);
