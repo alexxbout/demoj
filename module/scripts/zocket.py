@@ -57,14 +57,14 @@ def stress(time):
 def calculation(value):
     global stress_pid
     if (value == True):
-    	print("Stressing terminal...")
-    	proc = mp.Process(target=stress)
-    	proc.start()
-    	stress_pid = proc.pid
-    	proc.join() # Never reached
+        print("Stressing terminal...")
+        proc = mp.Process(target=stress)
+        proc.start()
+        stress_pid = proc.pid
+        proc.join() # Never reached
     else:
         print("Stop stressing terminal...")
-        if (stress_pid != -1)
+        if (stress_pid != -1):
             execute_command("kill " + str(stress_pid))
         stress_pid = -1
 
