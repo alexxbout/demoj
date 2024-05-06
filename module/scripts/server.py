@@ -164,7 +164,7 @@ def terminal_calculation(value):
 # Main
 #################################################################
 
-def server_routine():
+if __name__ == "__main__":
     print("Restoring default config...")
     update_and_write_json(CONFIG_PATH, "modules.terminal.isConnected", False)
     update_and_write_json(CONFIG_PATH, "modules.server.isConnected", False)
