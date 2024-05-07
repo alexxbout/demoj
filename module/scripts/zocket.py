@@ -12,6 +12,7 @@ CURRENT_MODULE = "terminal"
 sio = socketio.Client(reconnection=True, reconnection_attempts=10, reconnection_delay=5, reconnection_delay_max=5)
 cond_global = None
 stress_pid = -1
+stress_pid2 = -1
 
 #################################################################
 # Socket
@@ -56,17 +57,22 @@ def stress(time):
 @sio.event
 def calculation(value):
     global stress_pid
+    global stress_pid2
     if (value == True and stress_pid == -1):
         print("Stressing terminal...")
         proc = mp.Process(target=stress_compute)
         proc.start()
         stress_pid = proc.pid
-        proc.join() # Never reached
+        proc2 = mp.Process(target=stress_compute)
+        proc2.start()
+        stress_pid2 = proc2.pid
     else:
         print("Stop stressing terminal...")
         if (value == False and stress_pid != -1):
             execute_command(["kill", str(stress_pid)])
+            execute_command(["kill", str(stress_pid2)])
             stress_pid = -1
+            stress_pid2 = -1
 
 #################################################################
 # Main
