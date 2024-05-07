@@ -65,7 +65,7 @@ def calculation(value):
     else:
         print("Stop stressing terminal...")
         if (value == False and stress_pid != -1):
-            execute_command(["kill ", str(stress_pid)])
+            execute_command(["kill", str(stress_pid)])
             stress_pid = -1
 
 #################################################################
