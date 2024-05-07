@@ -56,7 +56,7 @@ def stress(time):
 @sio.event
 def calculation(value):
     global stress_pid
-    if (value == True):
+    if (value == True and stress_pid == -1):
         print("Stressing terminal...")
         proc = mp.Process(target=stress_compute)
         proc.start()
@@ -64,9 +64,9 @@ def calculation(value):
         proc.join() # Never reached
     else:
         print("Stop stressing terminal...")
-        if (stress_pid != -1):
+        if (value == False and stress_pid != -1):
             execute_command(["kill ", str(stress_pid)])
-        stress_pid = -1
+            stress_pid = -1
 
 #################################################################
 # Main
