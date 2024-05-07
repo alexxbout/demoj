@@ -108,7 +108,7 @@ const data: ScenarioData[] = [
         description: "Cette fonctionnalité permet aux utilisateurs d'effectuer une gamme étendue de calculs, depuis des opérations basiques jusqu'à des fonctions mathématiques avancées comme Fibonacci, factorielle et recherche de nombres premiers. Le tout peut être réalisé côté client ou côté serveur.",
         url: `${baseUrl}calculator`,
         stress: [StressType.CPU, StressType.MEMORY],
-        needs: [],
+        needs: ["server", "terminal"],
     },
     {
         scenario: Scenario.Streaming,
