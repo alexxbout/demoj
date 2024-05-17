@@ -2,7 +2,7 @@
 
 <div align="center"><img src="docs/logos/demoj.png" width="500"><img src="docs/logos/demotech.png" width="200"></div>
 
-#### Repository for the DemoJ project by DemoTech
+> Repository for the DemoJ project by DemoTech
 
 # Authors
 
@@ -16,15 +16,28 @@
 - Anaelle Daumand
 - Charly Piaud
 
+Under the supervision of Olivier Ridoux who teached and helped us a lot during this project.
+
+# Contacts
+
+For more information related to this project please contact :
+
+- Arthur Adam 
+- Alexandre Boutinaud
+- Olivier Palvadeau
+- Hadrien Moulhérat
+- Olivier Ridoux (Teacher at the university of Rennes)
+
 # Summary
 
-1. [Authors](#authors) 
-2. [Branches description](#branches)
-3. [Libraries and frameworks used](#libraries--frameworks)
-4. [Reports and documents](#reports-and-docs)
-5. [Setup](#setup)
+1. [Authors](#authors)
+2. [Contacts](#contacts)
+3. [Branches description](#branches)
+4. [Libraries and frameworks used](#libraries--frameworks)
+5. [Reports and documents](#reports-and-docs)
+6. [Setup](#setup)
 
-# Branches
+## Branches
 
 Our project is divided into 3 modules and one web application.
 
@@ -34,10 +47,10 @@ Each module has common code available in master branch. They also have their own
 The code for the web application is available into the common.
 
 
-The master branch is used for documentation and common parts.
+The master branch is used for documentation and common parts such as insallation scripts and elctronics.
 
 
-# Libraries & frameworks
+## Libraries & frameworks
 
 - DFRobot INA 219
 - Rpi ws281x
@@ -45,7 +58,7 @@ The master branch is used for documentation and common parts.
 - VueJS
 - Ionic
 
-# Reports and docs
+## Reports and docs
 
 We made two reports for our projects available [here](/docs/reports)
 
@@ -57,27 +70,21 @@ For any other document look [here](/docs)
 
 1. Download and install Raspberry OS Lite on your Raspberry Pi device :
     - By using [Raspberry Pi Imager](https://www.raspberrypi.com/software/) 
-    - If you are on linux, you can use our [installation script](/install_script/raspi_os_install.sh).
     - By using your own script
 
-    Don't forget to enable ssh and connection before installing if you don't have a screen.
+    Don't forget to enable ssh and connection before installing.
 
 2. Launch and connect to your Raspberry Pi : ```ssh username@host.local```
 
 3. Install git : ```sudo apt install git```
 
 4. Clone our repository :  
-    - HTTPS ```git clone https://gitlab.istic.univ-rennes1.fr/arthadam/demoj.git```
-    - SSH ```git clone git@gitlab.istic.univ-rennes1.fr:arthadam/demoj.git```
+    - HTTPS ```git clone https://github.com/alexxbout/demoj.git```
+    - SSH ```git clone git@github.com:alexxbout/demoj.git```
 
-5. Run the [setup.sh](/setup.sh) script to install dependencies and setup environment. 
-    1. ```cd demoj``` 
+5. Run the [setup.sh](/setup.sh) script to install dependencies and setup environment for the module (terminal, network or sevrer) you want. 
+   - ```cd demoj ; cd scripts```
+   - ```./setup.sh```
+   - Choose your installation
 
-
-    2. ```source ./setup.sh```
-
-6. You are good to run anything you want from this repo.
-
-## TODO
-- raspap.sh: Change default Raspap web interface password
-- build the flask server: https://flask.palletsprojects.com/en/2.3.x/tutorial/deploy/
+7. Disconnect, and if the network module is also setted up, you may have to disconnect your personal Wifi and use the DemoJ wifi instead.
