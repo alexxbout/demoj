@@ -16,17 +16,17 @@
 - Anaelle Daumand
 - Charly Piaud
 
-Under the supervision of Olivier Ridoux who teached and helped us a lot during this project.
+Under the supervision of Olivier Ridoux who taught and helped us a lot during this project.
 
 # Contacts
 
 For more information related to this project please contact :
 
 - Arthur Adam 
-- Alexandre Boutinaud
-- Olivier Palvadeau
+- [Alexandre Boutinaud](https://fr.linkedin.com/in/alexandre-boutinaud)
+- [Olivier Palvadeau](https://fr.linkedin.com/in/olivier-palvadeau-6ab04a2a4)
 - Hadrien Moulhérat
-- Olivier Ridoux (Teacher at the university of Rennes)
+- [Olivier Ridoux](http://www.irisa.fr/lande/ridoux/) (Teacher at the university of Rennes)
 
 # Summary
 
@@ -87,4 +87,4 @@ For any other document look [here](/docs)
    - ```./setup.sh```
    - Choose your installation
 
-7. Disconnect, and if the network module is also setted up, you may have to disconnect your personal Wifi and use the DemoJ wifi instead.
+7. Disconnect, and if the network module is also set up, you may have to disconnect your personal Wifi and use the DemoJ wifi instead.
