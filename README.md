@@ -3,6 +3,7 @@
 <div align="center"><img src="docs/logos/demoj.png" width="500"><img src="docs/logos/demotech.png" width="200"></div>
 
 > Repository for the DemoJ project by DemoTech
+> Made at the University of Rennes during 2023/2024
 
 # Authors
 
@@ -43,7 +44,7 @@ For more information related to this project please contact :
 
 ## Project
 
-When you are using your phone or computer, you are aware that your device is consuming energy since you will have to supply energy to your device. But what you can't directly see is the energy comsumed by the servers and routers which your applications are communicating with. A lot of computations are delocalized while you are using your device and you get the results on it as well. But the real computation usually really happens out of your device. Applied to only one person with only one device this impact on the energy consumption is small but applied to a lot of people, bots, with multiple devices... the impact is more significant. 
+When you are using your phone or computer, you are aware that your device is consuming energy since you will have to supply energy to your device. But what you can't directly see is the energy consumed by the servers and routers which your applications are communicating with. A lot of computations are delocalized while you are using your device and you get the results on it as well. But the real computation usually really happens out of your device. Applied to only one person with only one device this impact on the energy consumption is small but applied to a lot of people, bots, with multiple devices... the impact is more significant. 
 
 With our project DemoJ we built a demonstrator of the energy consumed by using computer systems in order to raise awareness among an audience. DemoJ is a dynamic model of a computer system with the aim of being presented to an audience by an operator.
 > DemoJ : Demo = Demonstrator, J = Joules
