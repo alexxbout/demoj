@@ -23,7 +23,7 @@ Under the supervision of Olivier Ridoux who taught and helped us a lot during th
 
 For more information related to this project please contact :
 
-- Arthur Adam 
+- [Arthur Adam](https://www.linkedin.com/in/arthur-adam-a93014273/) 
 - [Alexandre Boutinaud](https://fr.linkedin.com/in/alexandre-boutinaud)
 - [Olivier Palvadeau](https://fr.linkedin.com/in/olivier-palvadeau-6ab04a2a4)
 - Hadrien Moulhérat
