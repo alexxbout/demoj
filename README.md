@@ -73,7 +73,7 @@ All the scenarios can be launched using the Web application on the DemoJ wifi at
 
 <div align="center"><img src="docs/demoj_connect/demojconnect_scenarios.png" width="200"></div>
 
-For more detailed description of the project please read the [reports and doculentations](#reports-and-docs)
+For more detailed description of the project please read the [reports and documentations](#reports-and-docs)
 
 ## Branches
 
