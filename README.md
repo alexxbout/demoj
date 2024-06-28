@@ -26,7 +26,7 @@ For more information related to this project please contact :
 - [Arthur Adam](https://www.linkedin.com/in/arthur-adam-a93014273/) 
 - [Alexandre Boutinaud](https://fr.linkedin.com/in/alexandre-boutinaud)
 - [Olivier Palvadeau](https://fr.linkedin.com/in/olivier-palvadeau-6ab04a2a4)
-- Hadrien Moulhérat
+- [Hadrien Moulhérat](https://www.linkedin.com/in/hadrien-lopes-583212210/)
 - [Olivier Ridoux](http://www.irisa.fr/lande/ridoux/) (Teacher at the university of Rennes)
 
 # Table of contents
